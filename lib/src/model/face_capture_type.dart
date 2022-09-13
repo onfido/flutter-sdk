@@ -1,0 +1,1 @@
+enum FaceCaptureType { photo, video }
