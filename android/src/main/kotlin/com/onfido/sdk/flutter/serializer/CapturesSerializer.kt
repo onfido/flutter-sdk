@@ -1,6 +1,7 @@
 package com.onfido.sdk.flutter.serializer
 
 import com.onfido.android.sdk.capture.upload.Captures
+import com.onfido.android.sdk.capture.upload.Document
 import com.onfido.android.sdk.capture.upload.Face
 
 
@@ -22,7 +23,7 @@ private fun Face.deserialize(): Map<*, *> {
     return mapOf("id" to id, "variant" to this.variant.ordinal)
 }
 
-private fun Captures.Document.deserialize(): Map<*, *> {
+private fun Document.deserialize(): Map<*, *> {
     val map = mutableMapOf<String, Any>()
 
     map["typeSelected"] = this.type.toString().lowercase()

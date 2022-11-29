@@ -1,0 +1,7 @@
+.git
+build
+scripts
+.gitlab-ci.yml
+.bitrise.yml
+.gitlab
+CONTRIBUTING.md
