@@ -43,6 +43,10 @@ extension OnfidoConfig {
             try configFaceCapture(value: faceCapture, onfidoBuilder: onfidoBuilder)
         }
 
+        if let enableNFC = flowSteps["enableNFC"] as? Bool, enableNFC {
+            onfidoBuilder.withNFCReadFeatureEnabled()
+        }
+
         guard let enterpriseFeatures = dictionary["enterpriseFeatures"] as? NSDictionary else { return onfidoBuilder }
         onfidoBuilder.withEnterpriseFeatures(EnterpriseFeatures.builder(with: enterpriseFeatures, assetProvider: assetProvider))
 

@@ -37,12 +37,12 @@ void main() {
           hideOnfidoLogo: true,
         ),
         flowSteps: FlowSteps(
-          welcome: false,
-          proofOfAddress: true,
-          documentCapture:
-              DocumentCapture(countryCode: CountryCode.UGA, documentType: DocumentType.nationalIdentityCard),
-          faceCapture: FaceCaptureType.video,
-        ),
+            welcome: false,
+            proofOfAddress: true,
+            documentCapture:
+                DocumentCapture(countryCode: CountryCode.UGA, documentType: DocumentType.nationalIdentityCard),
+            faceCapture: FaceCaptureType.video,
+            enableNFC: true),
       );
 
       expect(callCounter, 1);

@@ -35,6 +35,11 @@ It offers a number of benefits to help you create the best identity verification
 -   Advanced image quality detection technology to ensure the quality of the captured images meets the requirement of the Onfido identity verification process, guaranteeing the best success rate
 -   Direct image upload to the Onfido service, to simplify integration
 
+
+> ℹ️ 
+> 
+> If you are integrating using Onfido Studio please see our [Studio integration guide](ONFIDO_STUDIO.md)
+
 ⚠️ Note: The SDK is only responsible for capturing and uploading photos and videos. You still need to access the [Onfido API](https://documentation.onfido.com/) to manage applicants and perform checks.
 
 ## Getting started
@@ -164,6 +169,7 @@ startOnfido() async {
     * **`DocumentCapture.countryCode`**: Required if documentType is specified. Valid values in `country_code.dart`.
 
   * **`FlowSteps.faceCapture`**: Optional. In the Face step, a user can use the front camera to capture either a live photo of their face, or a live video. Valid values in `face_capture_type.dart`.
+  * **`FlowSteps.enableNFC`**: Optional.  This toggles the ePassport NFC extraction feature. If omitted, this feature is not enabled in the flow. There is also application configuration changes needed to use this feature. To do that please follow [Onfido Developer Hub](#https://developers.onfido.com/guide/document-report-nfc#enable-nfc-in-the-onfido-sdks)
 
 ### 3. Handling responses
 
@@ -261,6 +267,34 @@ final Onfido onfido = Onfido(
       secondaryBackgroundPressedColor: Colors.yourColor),
 );
 ```
+
+## Error handling
+
+The `Error` object returned as part of `PlatformException` which translate the errors from native side to Dart. You can identify the type of the error from the error message
+
+```dart
+    // This happens if the user denies permission to the SDK during the flow
+    PlatformException(error, The operation couldn’t be completed. (Onfido.OnfidoFlowError error 2.), cameraPermission, null)
+    
+    // This happens when the SDK tries to save capture to disk, maybe due to a lack of space
+    PlatformException(error, The operation couldn’t be completed. (Onfido.OnfidoFlowError error 2.), failedToWriteToDisk, null)
+
+    // This happens when the user denies permission for microphone usage by the app during the flow
+    PlatformException(error, The operation couldn’t be completed. (Onfido.OnfidoFlowError error 2.), microphonePermission, null)
+
+    // This happens when the SDK receives an error from an API call see [https://documentation.onfido.com/#errors](https://documentation.onfido.com/#errors) for more information
+    PlatformException(error, The operation couldn’t be completed. (Onfido.OnfidoFlowError error 2.), upload, null)
+
+    // This happens when an unexpected error occurs. Please contact [ios-sdk@onfido.com](mailto:ios-sdk@onfido.com?Subject=ISSUE%3A) when this happens
+    PlatformException(error, The operation couldn’t be completed. (Onfido.OnfidoFlowError error 2.), exception, null)
+
+    // This happens when you are using an older version of the iOS SDK and trying to access a new functionality from workflow. You can fix this by updating the SDK
+    PlatformException(error, The operation couldn’t be completed. (Onfido.OnfidoFlowError error 2.), versionInsufficient, null)
+
+    // The flow was exited prematurely by the user. The reason can be `.userExit` or `.consentDenied`
+    PlatformException(exit, "User canceled the flow", null, null)
+```
+
 
 ## Going live
 

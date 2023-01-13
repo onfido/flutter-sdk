@@ -1,7 +1,6 @@
 package com.onfido.sdk.flutter.bridge
 
-import com.onfido.android.sdk.workflow.OnfidoWorkflow
-import com.onfido.android.sdk.workflow.WorkflowConfig
+import com.onfido.workflow.OnfidoWorkflow
 import com.onfido.sdk.flutter.api.FlutterActivityProvider
 import com.onfido.sdk.flutter.serializer.deserializeWorkflowConfig
 import io.flutter.plugin.common.MethodCall

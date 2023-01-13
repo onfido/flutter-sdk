@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## next-version
 
+## [2.1.0] - 2023-01-13
+
+- Public: Added NFC support
+
 ## [2.0.0] - 2022-11-25
 
 ### Changed:
