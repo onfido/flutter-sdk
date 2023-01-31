@@ -6,7 +6,8 @@ const startMockRequestBody = {
     'welcome': false,
     'proofOfAddress': true,
     'documentCapture': {'documentType': 'nationalIdentityCard', 'countryCode': 'UGA'},
-    'faceCapture': 'video'
+    'faceCapture': 'video',
+    'enableNFC': true
   },
   'iosLocalizationFileName': 'file',
   'iosAppearance': {

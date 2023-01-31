@@ -22,6 +22,8 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
 
   bool _welcomeStep = true;
   bool _proofOfAddressStep = true;
+  bool _enableNFC = false;
+
   bool _hideOnfidoLogo = false;
   FaceCaptureType _faceCaptureType = FaceCaptureType.photo;
   DocumentTypes _documentType = DocumentTypes.nationalIdentityCard;
@@ -51,6 +53,7 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
           welcome: _welcomeStep,
           documentCapture: DocumentCapture(documentType: _documentType.toOnfido(), countryCode: _countryCode),
           faceCapture: _faceCaptureType,
+          enableNFC: _enableNFC,
         ),
       );
       _showDialog("Success", "Result it ${response.toString()}");
@@ -66,145 +69,157 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
       appBar: AppBar(
         title: const Text('Onfido Checks'),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              const Text(
-                "Applicant Configuration",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
-                ),
-              ),
-              TextField(
-                controller: firstNameController,
-                decoration: const InputDecoration(
-                  labelText: 'First Name',
-                ),
-              ),
-              TextField(
-                controller: lastNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Last Name',
-                ),
-              ),
-              TextField(
-                controller: emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                ),
-              ),
-              const SizedBox(height: 30.0),
-              const Text(
-                "General Configuration",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
-                ),
-              ),
-              LabeledCheckbox(
-                label: 'Hide Onfido Logo',
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                value: _hideOnfidoLogo,
-                onChanged: (bool newValue) {
-                  setState(() {
-                    _hideOnfidoLogo = newValue;
-                  });
-                },
-              ),
-              const SizedBox(height: 16.0),
-              const Text(
-                "SDK Flow Customisation",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
-                ),
-              ),
-              LabeledCheckbox(
-                label: 'Welcome Screen',
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                value: _welcomeStep,
-                onChanged: (bool newValue) {
-                  setState(() {
-                    _welcomeStep = newValue;
-                  });
-                },
-              ),
-              LabeledCheckbox(
-                label: 'Proof of Address',
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                value: _proofOfAddressStep,
-                onChanged: (bool newValue) {
-                  setState(() {
-                    _proofOfAddressStep = newValue;
-                  });
-                },
-              ),
-              const SizedBox(height: 16.0),
-              const Text(
-                "Document Capture",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
-                ),
-              ),
-              Row(
-                children: [
-                  ElevatedButton(
-                    child: Row(
-                      children: const [
-                        Text("Document Type"),
-                        SizedBox(width: 6),
-                        Icon(Icons.arrow_drop_down, color: Colors.white),
-                      ],
-                    ),
-                    onPressed: () async => {showDocumentPicker(context)},
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                const Text(
+                  "Applicant Configuration",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
                   ),
-                  const SizedBox(width: 16.0),
-                  ElevatedButton(
-                    child: Row(
-                      children: const [
-                        Text("Country"),
-                        SizedBox(width: 6),
-                        Icon(Icons.arrow_drop_down, color: Colors.white),
-                      ],
-                    ),
-                    onPressed: () async => {showCountryPicker(context)},
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16.0),
-              const Text(
-                "Face Capture",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ElevatedButton(
-                    child: Row(
-                      children: const [
-                        Text("Face Capture"),
-                        SizedBox(width: 6),
-                        Icon(Icons.arrow_drop_down, color: Colors.white),
-                      ],
-                    ),
-                    onPressed: () async => {showFaceCapturePicker(context)},
+                TextField(
+                  controller: firstNameController,
+                  decoration: const InputDecoration(
+                    labelText: 'First Name',
                   ),
-                ],
-              ),
-              const SizedBox(height: 30.0),
-              ElevatedButton(
-                child: const Text("Launch Onfido"),
-                onPressed: () async => {startOnfido()},
-              ),
-            ],
+                ),
+                TextField(
+                  controller: lastNameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Last Name',
+                  ),
+                ),
+                TextField(
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                  ),
+                ),
+                const SizedBox(height: 30.0),
+                const Text(
+                  "General Configuration",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  ),
+                ),
+                LabeledCheckbox(
+                  label: 'Hide Onfido Logo',
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  value: _hideOnfidoLogo,
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      _hideOnfidoLogo = newValue;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                const Text(
+                  "SDK Flow Customisation",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  ),
+                ),
+                LabeledCheckbox(
+                  label: 'Welcome Screen',
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  value: _welcomeStep,
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      _welcomeStep = newValue;
+                    });
+                  },
+                ),
+                LabeledCheckbox(
+                  label: 'Proof of Address',
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  value: _proofOfAddressStep,
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      _proofOfAddressStep = newValue;
+                    });
+                  },
+                ),
+                LabeledCheckbox(
+                  label: 'Enable NFC',
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  value: _enableNFC,
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      _enableNFC = newValue;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                const Text(
+                  "Document Capture",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  ),
+                ),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      child: Row(
+                        children: const [
+                          Text("Document Type"),
+                          SizedBox(width: 6),
+                          Icon(Icons.arrow_drop_down, color: Colors.white),
+                        ],
+                      ),
+                      onPressed: () async => {showDocumentPicker(context)},
+                    ),
+                    const SizedBox(width: 16.0),
+                    ElevatedButton(
+                      child: Row(
+                        children: const [
+                          Text("Country"),
+                          SizedBox(width: 6),
+                          Icon(Icons.arrow_drop_down, color: Colors.white),
+                        ],
+                      ),
+                      onPressed: () async => {showCountryPicker(context)},
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16.0),
+                const Text(
+                  "Face Capture",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ElevatedButton(
+                      child: Row(
+                        children: const [
+                          Text("Face Capture"),
+                          SizedBox(width: 6),
+                          Icon(Icons.arrow_drop_down, color: Colors.white),
+                        ],
+                      ),
+                      onPressed: () async => {showFaceCapturePicker(context)},
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 30.0),
+                ElevatedButton(
+                  child: const Text("Launch Onfido"),
+                  onPressed: () async => {startOnfido()},
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -214,7 +229,7 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
   showFaceCapturePicker(BuildContext context) {
     Picker picker = Picker(
         adapter: PickerDataAdapter<FaceCaptureType>(
-          pickerdata: FaceCaptureType.values,
+          pickerData: FaceCaptureType.values,
         ),
         selecteds: [FaceCaptureType.values.indexOf(_faceCaptureType)],
         changeToFirst: false,
@@ -229,7 +244,7 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
   showDocumentPicker(BuildContext context) {
     Picker picker = Picker(
         adapter: PickerDataAdapter<DocumentTypes>(
-          pickerdata: DocumentTypes.values,
+          pickerData: DocumentTypes.values,
         ),
         selecteds: [DocumentTypes.values.indexOf(_documentType)],
         changeToFirst: false,
@@ -244,7 +259,7 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
   showCountryPicker(BuildContext context) {
     Picker picker = Picker(
         adapter: PickerDataAdapter<CountryCode>(
-          pickerdata: CountryCode.values,
+          pickerData: CountryCode.values,
         ),
         selecteds: [CountryCode.values.indexOf(_countryCode)],
         changeToFirst: false,

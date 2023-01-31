@@ -1,6 +1,6 @@
 package com.onfido.sdk.flutter.serializer
 
-import com.onfido.android.sdk.workflow.WorkflowConfig
+import com.onfido.workflow.WorkflowConfig
 
 fun Any.deserializeWorkflowConfig(): WorkflowConfig {
     if (this !is Map<*, *>) throw Exception("Invalid arguments for start method")

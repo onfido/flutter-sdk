@@ -1,9 +1,9 @@
 PODS:
   - Flutter (1.0.0)
-  - Onfido (27.0.0)
+  - Onfido (27.4.0)
   - onfido_sdk (0.0.1):
     - Flutter
-    - Onfido (= 27.0.0)
+    - Onfido (= 27.4.0)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -21,8 +21,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  Onfido: bdbc3ed45598aa106ab2ea021d94e2e28c6b5be3
-  onfido_sdk: f896f14ed9b1dd5e4e9e60d834e25031bdd057b5
+  Onfido: e36f284b865adcf99d9c905590a64ac09d4a576b
+  onfido_sdk: 4e393e51b9b9e57377ca9820c17b1ea4f1dd2f28
 
 PODFILE CHECKSUM: b5c9e6f0565041472ddf8660fd13c905cedfd655
 

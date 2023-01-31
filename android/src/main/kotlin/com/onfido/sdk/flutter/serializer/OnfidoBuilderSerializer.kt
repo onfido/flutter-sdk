@@ -42,6 +42,10 @@ internal fun Any?.deserializeOnfidoBuilder(
         steps.add(FlowStep.PROOF_OF_ADDRESS)
     }
 
+    if (flowSteps["enableNFC"] == true) {
+        builder.withNFCReadFeature()
+    }
+
     val captureDocument = flowSteps["documentCapture"] as? Map<*, *>
     val docType = (captureDocument?.get("documentType") as? String)
     val country = captureDocument?.get("countryCode") as? String
