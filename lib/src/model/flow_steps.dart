@@ -8,8 +8,9 @@ class FlowSteps {
   final bool? proofOfAddress;
   final DocumentCapture? documentCapture;
   final FaceCaptureType? faceCapture;
+  final bool? enableNFC;
 
-  FlowSteps({this.welcome, this.proofOfAddress, this.documentCapture, this.faceCapture});
+  FlowSteps({this.welcome, this.proofOfAddress, this.documentCapture, this.faceCapture, this.enableNFC});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -17,6 +18,7 @@ class FlowSteps {
     data['proofOfAddress'] = proofOfAddress;
     data['documentCapture'] = documentCapture?.toJson();
     data['faceCapture'] = faceCapture == null ? null : describeEnum(faceCapture!);
+    data['enableNFC'] = enableNFC;
 
     return data;
   }
