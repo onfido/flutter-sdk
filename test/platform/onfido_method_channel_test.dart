@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:onfido_sdk/onfido_sdk.dart';
@@ -37,12 +35,12 @@ void main() {
           hideOnfidoLogo: true,
         ),
         flowSteps: FlowSteps(
-          welcome: false,
-          proofOfAddress: true,
-          documentCapture:
-              DocumentCapture(countryCode: CountryCode.UGA, documentType: DocumentType.nationalIdentityCard),
-          faceCapture: FaceCaptureType.video,
-        ),
+            welcome: false,
+            proofOfAddress: true,
+            documentCapture:
+                DocumentCapture(countryCode: CountryCode.UGA, documentType: DocumentType.nationalIdentityCard),
+            faceCapture: FaceCaptureType.video,
+            enableNFC: true),
       );
 
       expect(callCounter, 1);

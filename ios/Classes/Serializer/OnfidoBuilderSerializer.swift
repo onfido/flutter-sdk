@@ -43,6 +43,10 @@ extension OnfidoConfig {
             try configFaceCapture(value: faceCapture, onfidoBuilder: onfidoBuilder)
         }
 
+        if let enableNFC = flowSteps["enableNFC"] as? Bool, enableNFC {
+            onfidoBuilder.withNFCReadFeatureEnabled()
+        }
+
         guard let enterpriseFeatures = dictionary["enterpriseFeatures"] as? NSDictionary else { return onfidoBuilder }
         onfidoBuilder.withEnterpriseFeatures(EnterpriseFeatures.builder(with: enterpriseFeatures, assetProvider: assetProvider))
 
@@ -54,19 +58,19 @@ fileprivate func configDocumentCapture(documentCapture: NSDictionary, onfidoBuil
     if let docType = documentCapture["documentType"] as? String, let countryCode = documentCapture["countryCode"] as? String {
         switch docType {
         case "passport":
-            onfidoBuilder.withDocumentStep(ofType: .passport(config: PassportConfiguration()))
+            onfidoBuilder.withDocumentStep(type: .passport(config: PassportConfiguration()))
         case "drivingLicence":
-            onfidoBuilder.withDocumentStep(ofType: .drivingLicence(config: DrivingLicenceConfiguration(country: countryCode)))
+            onfidoBuilder.withDocumentStep(type: .drivingLicence(config: DrivingLicenceConfiguration(country: countryCode)))
         case "nationalIdentityCard":
-            onfidoBuilder.withDocumentStep(ofType: .nationalIdentityCard(config: NationalIdentityConfiguration(country: countryCode)))
+            onfidoBuilder.withDocumentStep(type: .nationalIdentityCard(config: NationalIdentityConfiguration(country: countryCode)))
         case "residencePermit":
-            onfidoBuilder.withDocumentStep(ofType: .residencePermit(config: ResidencePermitConfiguration(country: countryCode)))
+            onfidoBuilder.withDocumentStep(type: .residencePermit(config: ResidencePermitConfiguration(country: countryCode)))
         case "visa":
-            onfidoBuilder.withDocumentStep(ofType: .visa(config: VisaConfiguration(country: countryCode)))
+            onfidoBuilder.withDocumentStep(type: .visa(config: VisaConfiguration(country: countryCode)))
         case "workPermit":
-            onfidoBuilder.withDocumentStep(ofType: .workPermit(config: WorkPermitConfiguration(country: countryCode)))
+            onfidoBuilder.withDocumentStep(type: .workPermit(config: WorkPermitConfiguration(country: countryCode)))
         case "generic":
-            onfidoBuilder.withDocumentStep(ofType: .generic(config: GenericDocumentConfiguration(country: countryCode)))
+            onfidoBuilder.withDocumentStep(type: .generic(config: GenericDocumentConfiguration(country: countryCode)))
         default:
             throw NSError(domain: "Unsupported document type", code: 0)
         }

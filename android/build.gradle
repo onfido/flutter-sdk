@@ -47,5 +47,6 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "com.onfido.sdk.capture:onfido-capture-sdk:14.0.0"
+    implementation "com.onfido.sdk.capture:onfido-capture-sdk:16.0.1"
+    implementation "com.onfido.sdk:onfido-workflow:16.0.1"
 }

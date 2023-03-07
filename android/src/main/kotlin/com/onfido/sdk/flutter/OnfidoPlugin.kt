@@ -2,14 +2,13 @@ package com.onfido.sdk.flutter
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import androidx.annotation.NonNull
 import com.onfido.android.sdk.capture.ExitCode
 import com.onfido.android.sdk.capture.Onfido
 import com.onfido.android.sdk.capture.OnfidoFactory
 import com.onfido.android.sdk.capture.errors.OnfidoException
 import com.onfido.android.sdk.capture.upload.Captures
-import com.onfido.android.sdk.workflow.OnfidoWorkflow
+import com.onfido.workflow.OnfidoWorkflow
 import com.onfido.sdk.flutter.api.FlutterActivityProvider
 import com.onfido.sdk.flutter.bridge.BaseMethod
 import com.onfido.sdk.flutter.bridge.StartMethod
