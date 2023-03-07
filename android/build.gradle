@@ -1,8 +1,11 @@
 group 'com.onfido.sdk.flutter'
 version '1.0-SNAPSHOT'
 
+def onfidoSdkVersion = '16.1.0' 
+
 buildscript {
     ext.kotlin_version = '1.6.10'
+
     repositories {
         google()
         mavenCentral()
@@ -47,6 +50,6 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "com.onfido.sdk.capture:onfido-capture-sdk:16.0.1"
-    implementation "com.onfido.sdk:onfido-workflow:16.0.1"
+    implementation "com.onfido.sdk.capture:onfido-capture-sdk:$onfidoSdkVersion"
+    implementation "com.onfido.sdk:onfido-workflow:$onfidoSdkVersion"
 }
