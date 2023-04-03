@@ -1,17 +1,9 @@
 package com.onfido.sdk.flutter.serializer
 
-import android.app.Activity
 import android.content.Context
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
-import android.util.Log
-import com.onfido.android.sdk.capture.DocumentType
 import com.onfido.android.sdk.capture.EnterpriseFeatures
 import com.onfido.android.sdk.capture.OnfidoConfig
-import com.onfido.android.sdk.capture.R
-import com.onfido.android.sdk.capture.config.EnterpriseConfig
 import com.onfido.android.sdk.capture.ui.camera.face.stepbuilder.FaceCaptureStepBuilder
-import com.onfido.android.sdk.capture.ui.options.CaptureScreenStep
 import com.onfido.android.sdk.capture.ui.options.FlowStep
 import com.onfido.android.sdk.capture.ui.options.stepbuilder.DocumentCaptureStepBuilder
 import com.onfido.android.sdk.capture.utils.CountryCode
@@ -100,17 +92,16 @@ internal fun Any?.deserializeOnfidoBuilder(
 
     val enterpriseFeatures =
         this["enterpriseFeatures"] as? Map<*, *> ?: return builder
-
-    val features = EnterpriseFeatures.buildFromMap(enterpriseFeatures, context, assets)
-    builder.withEnterpriseFeatures(features)
+    enterpriseFeatures?.let {
+        val features = EnterpriseFeatures.buildFromMap(it)
+        builder.withEnterpriseFeatures(features)
+    }
 
     return builder
 }
 
 fun EnterpriseFeatures.Companion.buildFromMap(
-    map: Map<*, *>,
-    context: Context,
-    assets: FlutterPlugin.FlutterAssets
+    map: Map<*, *>
 ): EnterpriseFeatures {
     val builder = EnterpriseFeatures.Builder()
 

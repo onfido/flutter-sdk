@@ -170,6 +170,35 @@ startOnfido() async {
 
   * **`FlowSteps.faceCapture`**: Optional. In the Face step, a user can use the front camera to capture either a live photo of their face, or a live video. Valid values in `face_capture_type.dart`.
   * **`FlowSteps.enableNFC`**: Optional.  This toggles the ePassport NFC extraction feature. If omitted, this feature is not enabled in the flow. There is also application configuration changes needed to use this feature. To do that please follow [Onfido Developer Hub](#https://developers.onfido.com/guide/document-report-nfc#enable-nfc-in-the-onfido-sdks)
+  
+#### 2.1.1 Android Project Prerequisites
+
+NFC dependencies are not included in the SDK to avoid increasing the SDK size when the NFC feature is disabled. To use the NFC feature, you need to include the following dependencies (with the specified versions) in your build script:
+
+```
+implementation "net.sf.scuba:scuba-sc-android:0.0.23"
+implementation "org.jmrtd:jmrtd:0.7.34"
+implementation "com.madgag.spongycastle:prov:1.58.0.0"
+```
+
+You also need to add the following Proguard rules to your `proguard-rules.pro` file:
+
+```
+-keep class org.jmrtd.** { *; }
+-keep class net.sf.scuba.** {*;}
+-keep class org.bouncycastle.** {*;}
+-keep class org.spongycastle.** {*;}
+-keep class org.ejbca.** {*;}
+
+-dontwarn kotlin.time.jdk8.DurationConversionsJDK8Kt
+-dontwarn org.ejbca.**
+-dontwarn org.bouncycastle.**
+-dontwarn org.spongycastle.**
+
+-dontwarn module-info
+-dontwarn org.jmrtd.**
+-dontwarn net.sf.scuba.**
+```
 
 ### 3. Handling responses
 

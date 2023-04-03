@@ -17,6 +17,9 @@ extension WorkflowConfiguration {
 
         self.init(workflowRunId: workflowRunId, sdkToken: token)
 
+        if let enterpriseFeatures = dictionary["enterpriseFeatures"] as? NSDictionary { 
+            self.enterpriseFeatures = EnterpriseFeatures.builder(with: enterpriseFeatures)
+         }
         if let fileName = dictionary["iosLocalizationFileName"] as? String {
             self.localisation = (Bundle.self.main, fileName)
         }

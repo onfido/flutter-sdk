@@ -9,7 +9,7 @@ import Foundation
 import Onfido
 
 extension OnfidoConfig {
-
+/// convert the dictionary to actual iOS SDK APIs
     static func builder(with dictionary: NSDictionary, assetProvider: FlutterPluginRegistrar) throws -> OnfidoConfigBuilder {
         let onfidoBuilder = Self.builder()
 
@@ -48,7 +48,7 @@ extension OnfidoConfig {
         }
 
         guard let enterpriseFeatures = dictionary["enterpriseFeatures"] as? NSDictionary else { return onfidoBuilder }
-        onfidoBuilder.withEnterpriseFeatures(EnterpriseFeatures.builder(with: enterpriseFeatures, assetProvider: assetProvider))
+        onfidoBuilder.withEnterpriseFeatures(EnterpriseFeatures.builder(with: enterpriseFeatures))
 
         return onfidoBuilder
     }

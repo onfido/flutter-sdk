@@ -1,0 +1,51 @@
+format_version: "3"
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+project_type: ios
+workflows:
+  Primary:
+    steps:
+    - script@1.1.5:
+        title: Create env variable with valid values
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+            ./scripts/setup_env.sh
+    - certificate-and-profile-installer@1: {}
+    - flutter-installer@0: {}
+    - restore-dart-cache@1: {}
+    - cache-pull@2: {}
+    - script@1:
+        title: Dart format
+        inputs:
+        - content: dart format ./ --line-length 120 --fix --set-exit-if-changed
+    - flutter-analyze@0: {}
+    - script@1:
+        title: Dart Analyze
+        inputs:
+        - content: dart pub publish --dry-run
+    - flutter-test@1:
+        inputs:
+        - generate_code_coverage_files: "yes"
+    - flutter-build@0:
+        inputs:
+        - project_location: example/
+        - android_additional_params: --release --build-number=$BITRISE_BUILD_NUMBER
+        - is_debug_mode: "true"
+    - xcode-archive@4.7:
+        title: Build Example App
+        inputs:
+        - project_path: example/ios/Runner.xcworkspace
+        - scheme: Runner
+        - distribution_method: enterprise
+        - xcodebuild_options: -derivedDataPath example/derived_data -quiet
+        - output_tool: xcpretty
+    - save-dart-cache@1: {}
+    - cache-push@2: {}
+    - deploy-to-bitrise-io@2: {}
+  on-pull-request:
+    before_run:
+    - Primary
+  on-push:
+    before_run:
+    - Primary

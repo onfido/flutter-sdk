@@ -1,7 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:onfido_sdk/src/model/flow_steps.dart';
-import 'package:onfido_sdk/src/onfido.dart';
-import 'package:onfido_sdk/src/platform/onfido_platform.dart';
+import 'package:onfido_sdk/onfido_sdk.dart';
 
 import 'platform/mock/mock_onfido_platform.dart';
 
