@@ -39,6 +39,7 @@ class Onfido {
         sdkToken: _sdkToken,
         workflowRunId: workflowRunId,
         iosAppearance: _iosAppearance,
-        iosLocalizationFileName: _iOSLocalizationFileName);
+        iosLocalizationFileName: _iOSLocalizationFileName,
+        enterpriseFeatures: _enterpriseFeatures);
   }
 }

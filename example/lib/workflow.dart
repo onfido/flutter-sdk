@@ -15,6 +15,9 @@ class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
   TextEditingController firstNameController = TextEditingController(text: "first");
   TextEditingController lastNameController = TextEditingController(text: "last");
   TextEditingController emailController = TextEditingController(text: "email@email.com");
+  TextEditingController coBrandTextController = TextEditingController();
+  bool hideLogo = false;
+  bool disableMobileSDKAnalytics = false;
 
   startWorkflow() async {
     try {
@@ -28,9 +31,12 @@ class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
       final workflowRunId = await OnfidoApi.instance.getWorkflowRunId(applicantId);
 
       final Onfido onfido = Onfido(
-        sdkToken: sdkToken,
-        iosLocalizationFileName: "onfido_ios_localisation",
-      );
+          sdkToken: sdkToken,
+          iosLocalizationFileName: "onfido_ios_localisation",
+          enterpriseFeatures: EnterpriseFeatures(
+              hideOnfidoLogo: hideLogo,
+              cobrandingText: coBrandTextController.text,
+              disableMobileSDKAnalytics: disableMobileSDKAnalytics));
 
       await onfido.startWorkflow(workflowRunId);
       _showDialog("Success", "Workflow run successfully");
@@ -76,6 +82,40 @@ class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
                 decoration: const InputDecoration(
                   labelText: 'Email',
                 ),
+              ),
+              const SizedBox(height: 30.0),
+              const Text("Enterprise Settings",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  )),
+              TextField(
+                controller: coBrandTextController,
+                decoration: const InputDecoration(
+                  labelText: 'Cobranding',
+                ),
+              ),
+              CheckboxListTile(
+                title: const Text('Hide Logo Configuration'),
+                value: hideLogo,
+                onChanged: (bool? newValue) {
+                  setState(() {
+                    hideLogo = newValue!;
+                  });
+                },
+                contentPadding: EdgeInsets.zero,
+                controlAffinity: ListTileControlAffinity.leading,
+              ),
+              CheckboxListTile(
+                title: const Text('Disable mobile SDK analytics'),
+                value: disableMobileSDKAnalytics,
+                onChanged: (bool? newValue) {
+                  setState(() {
+                    disableMobileSDKAnalytics = newValue!;
+                  });
+                },
+                contentPadding: EdgeInsets.zero,
+                controlAffinity: ListTileControlAffinity.leading,
               ),
               const SizedBox(height: 30.0),
               ElevatedButton(

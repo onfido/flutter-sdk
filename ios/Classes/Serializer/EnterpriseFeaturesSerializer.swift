@@ -9,7 +9,7 @@ import Foundation
 import Onfido
 
 extension EnterpriseFeatures {
-    static func builder(with dictionary: NSDictionary, assetProvider: FlutterPluginRegistrar) -> EnterpriseFeatures {
+    static func builder(with dictionary: NSDictionary) -> EnterpriseFeatures {
         let enterpriseBuilder = EnterpriseFeatures.Builder()
 
         if let hideOnfidoLogo = dictionary["hideOnfidoLogo"] as? Bool, hideOnfidoLogo {

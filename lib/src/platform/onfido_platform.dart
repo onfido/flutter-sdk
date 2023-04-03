@@ -16,5 +16,6 @@ abstract class OnfidoPlatform {
       {required String sdkToken,
       required String workflowRunId,
       IOSAppearance? iosAppearance,
-      String? iosLocalizationFileName});
+      String? iosLocalizationFileName,
+      EnterpriseFeatures? enterpriseFeatures});
 }

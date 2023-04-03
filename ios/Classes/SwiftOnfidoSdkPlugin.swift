@@ -1,7 +1,8 @@
 import Flutter
 import UIKit
 import Onfido
-
+/// Connecting the onfido ios sdk with flutter API
+/// Flutter api send [method-name:args dictionary] [here is bridge] calls the method and pass to it the args.
 public class SwiftOnfidoSdkPlugin: NSObject, FlutterPlugin {
 
     lazy var methods: [String: BaseBridge] = {

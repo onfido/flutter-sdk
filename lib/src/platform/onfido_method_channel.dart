@@ -30,13 +30,14 @@ class MethodChannelOnfido extends OnfidoPlatform {
       {required String sdkToken,
       required String workflowRunId,
       IOSAppearance? iosAppearance,
-      String? iosLocalizationFileName}) async {
+      String? iosLocalizationFileName,
+      EnterpriseFeatures? enterpriseFeatures}) async {
     final arguments = StartStudioSerializer.serialize(
         sdkToken: sdkToken,
         workflowRunId: workflowRunId,
         iosAppearance: iosAppearance,
-        iosLocalizationFileName: iosLocalizationFileName);
-
+        iosLocalizationFileName: iosLocalizationFileName,
+        enterpriseFeatures: enterpriseFeatures);
     await methodChannel.invokeMethod('startStudio', arguments);
   }
 }

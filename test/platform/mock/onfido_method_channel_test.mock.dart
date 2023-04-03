@@ -40,7 +40,8 @@ const startStudioMockRequestBody = {
     'fontRegular': 'avenir',
     'fontBold': 'avenir-heavy',
     'supportDarkMode': false
-  }
+  },
+  "enterpriseFeatures": null
 };
 
 const startMockResponse = [
