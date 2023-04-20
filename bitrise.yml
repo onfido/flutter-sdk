@@ -4,7 +4,7 @@ project_type: ios
 workflows:
   Primary:
     steps:
-    - script@1.1.5:
+    - script@1.2:
         title: Create env variable with valid values
         inputs:
         - content: |-
@@ -13,7 +13,6 @@ workflows:
             ./scripts/setup_env.sh
     - certificate-and-profile-installer@1: {}
     - flutter-installer@0: {}
-    - restore-dart-cache@1: {}
     - cache-pull@2: {}
     - script@1:
         title: Dart format
@@ -40,7 +39,6 @@ workflows:
         - distribution_method: enterprise
         - xcodebuild_options: -derivedDataPath example/derived_data -quiet
         - output_tool: xcpretty
-    - save-dart-cache@1: {}
     - cache-push@2: {}
     - deploy-to-bitrise-io@2: {}
   on-pull-request:
