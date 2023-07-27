@@ -20,9 +20,9 @@ internal class StartStudioMethod(
         val activity = activityProvider.provide() ?: throw Exception("Invalid activity")
 
         client.startActivityForResult(
-            activity,
-            startRequestCode,
-            call.arguments.deserializeWorkflowConfig()
+            activity = activity,
+            requestCode = startRequestCode,
+            workflowConfig = call.arguments.deserializeWorkflowConfig()
         )
     }
 }

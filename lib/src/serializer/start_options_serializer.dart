@@ -5,13 +5,17 @@ class StartOptionsSerializer {
       {required String sdkToken,
       required FlowSteps flowSteps,
       IOSAppearance? iosAppearance,
+      bool? shouldUseMediaCallback,
       EnterpriseFeatures? enterpriseFeatures,
-      String? iosLocalizationFileName}) {
+      String? iosLocalizationFileName,
+      bool? disableNFC}) {
     return {
       'sdkToken': sdkToken,
       'flowSteps': flowSteps.toJson(),
       'iosAppearance': iosAppearance?.toJson(),
       'iosLocalizationFileName': iosLocalizationFileName,
+      'disableNFC': disableNFC,
+      'shouldUseMediaCallback': shouldUseMediaCallback,
       'enterpriseFeatures': enterpriseFeatures?.toJson()
     };
   }

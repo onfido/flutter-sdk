@@ -17,15 +17,19 @@ extension WorkflowConfiguration {
 
         self.init(workflowRunId: workflowRunId, sdkToken: token)
 
-        if let enterpriseFeatures = dictionary["enterpriseFeatures"] as? NSDictionary { 
-            self.enterpriseFeatures = EnterpriseFeatures.builder(with: enterpriseFeatures)
+        if let enterpriseFeatures = dictionary["enterpriseFeatures"] as? NSDictionary {
+            withEnterpriseFeatures(EnterpriseFeatures.builder(with: enterpriseFeatures))
          }
         if let fileName = dictionary["iosLocalizationFileName"] as? String {
-            self.localisation = (Bundle.self.main, fileName)
+            withCustomLocalization(withTableName: fileName, in: Bundle.self.main)
         }
 
         if let iosAppearance = dictionary["iosAppearance"] as? NSDictionary {
-            self.appearance = (Appearance.from(dictionary: iosAppearance))
+            withAppearance(Appearance.from(dictionary: iosAppearance))
+        }
+
+        if let shouldUseMediaCallback = dictionary["shouldUseMediaCallback"] as? Bool, shouldUseMediaCallback {
+            withMediaCallback(mediaCallback: CustomMediaCallback())
         }
     }
 }

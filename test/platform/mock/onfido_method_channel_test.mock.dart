@@ -6,10 +6,15 @@ const startMockRequestBody = {
     'welcome': false,
     'proofOfAddress': true,
     'documentCapture': {'documentType': 'nationalIdentityCard', 'countryCode': 'UGA'},
-    'faceCapture': 'video',
-    'enableNFC': true
+    'faceCapture': {
+      'type': 'video',
+      'withIntroVideo': null,
+      'withConfirmationVideoPreview': null,
+      'withManualLivenessCapture': null
+    },
   },
   'iosLocalizationFileName': 'file',
+  'shouldUseMediaCallback': false,
   'iosAppearance': {
     'primaryColor': '#0012c4b4',
     'primaryTitleColor': null,
@@ -22,13 +27,15 @@ const startMockRequestBody = {
     'fontBold': 'avenir-heavy',
     'supportDarkMode': false
   },
-  'enterpriseFeatures': {'hideOnfidoLogo': true, 'cobrandingText': 'text', 'disableMobileSDKAnalytics': false}
+  'enterpriseFeatures': {'hideOnfidoLogo': true, 'cobrandingText': 'text', 'disableMobileSDKAnalytics': false},
+  'disableNFC': false,
 };
 
 const startStudioMockRequestBody = {
   'sdkToken': 'sdkToken',
   'workflowRunId': 'workflowRunId',
   'iosLocalizationFileName': 'iosFileName',
+  'shouldUseMediaCallback': false,
   'iosAppearance': {
     'primaryColor': '#0012c4b4',
     'primaryTitleColor': null,
@@ -50,6 +57,7 @@ const startMockResponse = [
       'front': {'id': '123'},
       'typeSelected': 'typeSelected',
       'countrySelected': 'countrySelected',
+      'nfcMediaId': 'nfcMediaUuid'
     },
     'face': {'id': '123', 'variant': 1},
     'proofOfAddress': {'id': '123', 'type': 'type', 'issuingCountry': 'country'}
@@ -58,10 +66,10 @@ const startMockResponse = [
 
 final mockedResultObject = OnfidoResult(
   document: DocumentResult(
-    front: DocumentSideResult(id: "123"),
-    typeSelected: "typeSelected",
-    countrySelected: "countrySelected",
-  ),
+      front: DocumentSideResult(id: "123"),
+      typeSelected: "typeSelected",
+      countrySelected: "countrySelected",
+      nfcMediaId: "nfcMediaUuid"),
   face: FaceResult(
     id: "123",
     variant: FaceCaptureType.video,
@@ -72,3 +80,8 @@ final mockedResultObject = OnfidoResult(
     issuingCountry: "country",
   ),
 );
+
+final mockedMediaResultObject = OnfidoMediaResult(
+    resultType: OnfidoMediaResultType.documentResult,
+    fileData: OnfidoMediaFile(fileData: "abcd" as Uint8List, fileType: "jpeg", fileName: "abcd.jpeg"),
+    documentMetadata: OnfidoDocumentMetadata(side: "front", type: "passport", issuingCountry: "USA"));

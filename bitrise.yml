@@ -23,6 +23,10 @@ workflows:
         title: Dart Analyze
         inputs:
         - content: dart pub publish --dry-run
+    - script@1:
+        title: Reactivate JunitReport
+        inputs:
+        - content: flutter pub global activate junitreport
     - flutter-test@1:
         inputs:
         - generate_code_coverage_files: "yes"
@@ -31,7 +35,7 @@ workflows:
         - project_location: example/
         - android_additional_params: --release --build-number=$BITRISE_BUILD_NUMBER
         - is_debug_mode: "true"
-    - xcode-archive@4.7:
+    - xcode-archive@4.8:
         title: Build Example App
         inputs:
         - project_path: example/ios/Runner.xcworkspace

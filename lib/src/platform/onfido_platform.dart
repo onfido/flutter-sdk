@@ -10,12 +10,15 @@ abstract class OnfidoPlatform {
       required FlowSteps flowSteps,
       String? iosLocalizationFileName,
       IOSAppearance? iosAppearance,
-      EnterpriseFeatures? enterpriseFeatures});
+      EnterpriseFeatures? enterpriseFeatures,
+      bool? disableNFC,
+      OnfidoMediaCallback? mediaCallback});
 
   Future<void> startWorkflow(
       {required String sdkToken,
       required String workflowRunId,
       IOSAppearance? iosAppearance,
+      OnfidoMediaCallback? mediaCallback,
       String? iosLocalizationFileName,
       EnterpriseFeatures? enterpriseFeatures});
 }

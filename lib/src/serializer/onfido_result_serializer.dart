@@ -25,7 +25,8 @@ class OnfidoResultSerializer {
         back: value["back"] != null ? _deserializeDocumentSideResult(value["back"]) : null,
         front: value["front"] != null ? _deserializeDocumentSideResult(value["front"]) : null,
         countrySelected: value["countrySelected"],
-        typeSelected: value["typeSelected"]);
+        typeSelected: value["typeSelected"],
+        nfcMediaId: value["nfcMediaId"]);
   }
 
   static DocumentSideResult _deserializeDocumentSideResult(dynamic value) {

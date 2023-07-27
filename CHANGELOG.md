@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2023-07-27
+
+- Public: Introduced a breaking change to the `FlowSteps.faceCapture` implementation to offer more flexibility and control over face capture configurations. Please refer to [MIGRATION.md](MIGRATION.md) for migration guidance.
+- Public: Added support for custom media callbacks.
+- Public: Updated underlying Onfido native SDK versions:
+  - Android 19.1.+ (up from 16.3.1)
+  - iOS 29.2.+ (up from 28.3.0)
+
 ## [3.3.0] - 2023-04-20
 
 - Public: Update underlying Onfido native SDK versions:

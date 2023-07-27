@@ -9,7 +9,7 @@ import Foundation
 import Onfido
 
 /// Dart language passes a dictionary to the Start Bridge class as a parameter,
-/// The start bridge checks the values of the dictionary and then maps it to swift APIs
+/// The start bridge checks the values of the dictionary and then maps it to Swift APIs
 struct StartBridge: BaseBridge {
 
     let name: String = "start"

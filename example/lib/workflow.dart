@@ -3,6 +3,7 @@ import 'package:onfido_sdk/onfido_sdk.dart';
 
 import 'components/alert_dialog.dart';
 import 'http/onfido_api.dart';
+import 'model/media_callback.dart';
 
 class OnfidoWorkflowSample extends StatefulWidget {
   const OnfidoWorkflowSample({super.key});
@@ -17,6 +18,7 @@ class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
   TextEditingController emailController = TextEditingController(text: "email@email.com");
   TextEditingController coBrandTextController = TextEditingController();
   bool hideLogo = false;
+  bool withMediaCallback = false;
   bool disableMobileSDKAnalytics = false;
 
   startWorkflow() async {
@@ -33,6 +35,7 @@ class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
       final Onfido onfido = Onfido(
           sdkToken: sdkToken,
           iosLocalizationFileName: "onfido_ios_localisation",
+          mediaCallback: withMediaCallback ? ExampleMediaCallback() : null,
           enterpriseFeatures: EnterpriseFeatures(
               hideOnfidoLogo: hideLogo,
               cobrandingText: coBrandTextController.text,
@@ -101,6 +104,17 @@ class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
                 onChanged: (bool? newValue) {
                   setState(() {
                     hideLogo = newValue!;
+                  });
+                },
+                contentPadding: EdgeInsets.zero,
+                controlAffinity: ListTileControlAffinity.leading,
+              ),
+              CheckboxListTile(
+                title: const Text('Use custom media callbacks'),
+                value: withMediaCallback,
+                onChanged: (bool? newValue) {
+                  setState(() {
+                    withMediaCallback = newValue!;
                   });
                 },
                 contentPadding: EdgeInsets.zero,

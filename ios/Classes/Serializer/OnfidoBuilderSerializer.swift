@@ -39,13 +39,17 @@ extension OnfidoConfig {
             try configDocumentCapture(documentCapture: documentCapture, onfidoBuilder: onfidoBuilder)
         }
 
-        if let faceCapture = flowSteps["faceCapture"] as? String {
-            try configFaceCapture(value: faceCapture, onfidoBuilder: onfidoBuilder)
+        if let faceCapture = flowSteps["faceCapture"] as? NSDictionary {
+            try configFaceCapture(faceCapture: faceCapture, onfidoBuilder: onfidoBuilder)
         }
 
-        if let enableNFC = flowSteps["enableNFC"] as? Bool, enableNFC {
-            onfidoBuilder.withNFCReadFeatureEnabled()
+        if let disableNFC = dictionary["disableNFC"] as? Bool, disableNFC {
+            onfidoBuilder.disableNFC()
         }
+
+        if let shouldUseMediaCallback = dictionary["shouldUseMediaCallback"] as? Bool, shouldUseMediaCallback {
+            onfidoBuilder.withMediaCallback(mediaCallback: CustomMediaCallback())
+         }
 
         guard let enterpriseFeatures = dictionary["enterpriseFeatures"] as? NSDictionary else { return onfidoBuilder }
         onfidoBuilder.withEnterpriseFeatures(EnterpriseFeatures.builder(with: enterpriseFeatures))
@@ -79,13 +83,66 @@ fileprivate func configDocumentCapture(documentCapture: NSDictionary, onfidoBuil
     }
 }
 
-fileprivate func configFaceCapture(value: String, onfidoBuilder: OnfidoConfigBuilder) throws {
-    switch value {
-    case "photo":
-        onfidoBuilder.withFaceStep(ofVariant: .photo(withConfiguration: nil))
-    case "video":
-        onfidoBuilder.withFaceStep(ofVariant: .video(withConfiguration: nil))
-    default:
-        throw NSError(domain: "Unsupported faceStep type", code: 0)
+fileprivate func configFaceCapture(faceCapture: NSDictionary, onfidoBuilder: OnfidoConfigBuilder) throws {
+    if let type = faceCapture["type"] as? String {
+        switch type {
+        case "photo":
+            onfidoBuilder.withFaceStep(ofVariant: .photo(withConfiguration: getPhotoStepConfiguration(faceCapture: faceCapture)))
+        case "video":
+            onfidoBuilder.withFaceStep(ofVariant: .video(withConfiguration: getVideoStepConfiguration(faceCapture: faceCapture)))
+        case "motion":
+            onfidoBuilder.withFaceStep(ofVariant: .motion(withConfiguration: getMotionStepConfiguration(faceCapture: faceCapture)))
+        default:
+            throw NSError(domain: "Unsupported faceStep type", code: 0)
+        }
     }
+}
+
+fileprivate func getPhotoStepConfiguration(faceCapture: NSDictionary) -> PhotoStepConfiguration? {
+    if let showIntroScreen = faceCapture["withIntroScreen"] as? Bool {
+        return PhotoStepConfiguration(showSelfieIntroScreen: showIntroScreen)
+    }
+    return nil
+}
+
+fileprivate func getVideoStepConfiguration(faceCapture: NSDictionary) -> VideoStepConfiguration? {
+    let showIntroVideo: Bool? = faceCapture["withIntroVideo"] as? Bool
+    let manualLivenessCapture: Bool? = faceCapture["withManualLivenessCapture"] as? Bool
+
+    if let showIntroVideo = showIntroVideo, let manualLivenessCapture = manualLivenessCapture {
+        return VideoStepConfiguration(showIntroVideo: showIntroVideo, manualLivenessCapture: manualLivenessCapture)
+    } else if let showIntroVideo = showIntroVideo {
+        return VideoStepConfiguration(showIntroVideo: showIntroVideo, manualLivenessCapture: false)
+    } else if let manualLivenessCapture = manualLivenessCapture {
+        return VideoStepConfiguration(showIntroVideo: true, manualLivenessCapture: manualLivenessCapture)
+    }
+
+    return nil
+}
+
+fileprivate func getMotionStepConfiguration(faceCapture: NSDictionary) -> MotionStepConfiguration? {
+    let recordAudio: Bool? = faceCapture["withAudio"] as? Bool
+    var captureFallback: MotionStepCaptureFallback? = nil
+
+    if let fallbackDictionary = faceCapture["withCaptureFallback"] as? NSDictionary,
+       let fallbackType = fallbackDictionary["type"] as? String {
+        switch fallbackType {
+        case "photo":
+            captureFallback = MotionStepCaptureFallback(photoFallbackWithConfiguration: getPhotoStepConfiguration(faceCapture: fallbackDictionary))
+        case "video":
+            captureFallback = MotionStepCaptureFallback(videoFallbackWithConfiguration: getVideoStepConfiguration(faceCapture: fallbackDictionary))
+        default:
+            break // No fallback
+        }
+    }
+
+    if let recordAudio = recordAudio, let captureFallback = captureFallback {
+        return MotionStepConfiguration(captureFallback: captureFallback, recordAudio: recordAudio)
+    } else if let recordAudio = recordAudio {
+        return MotionStepConfiguration(recordAudio: recordAudio)
+    } else if let captureFallback = captureFallback {
+        return MotionStepConfiguration(captureFallback: captureFallback)
+    }
+
+    return nil
 }

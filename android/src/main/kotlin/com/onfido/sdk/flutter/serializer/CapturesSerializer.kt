@@ -27,6 +27,7 @@ private fun Document.deserialize(): Map<*, *> {
     val map = mutableMapOf<String, Any>()
 
     map["typeSelected"] = this.type.toString().lowercase()
+    map["nfcMediaId"] = this.nfcMediaUUID.toString()
 
     front?.let {
         map["front"] = mapOf("id" to it.id)

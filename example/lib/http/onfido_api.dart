@@ -30,7 +30,7 @@ class OnfidoApi {
       {"applicant_id": applicantId, "workflow_id": workflowId},
     );
 
-    final response = await http.post(Uri.parse("$_baseUrl/v4/workflow_runs"), headers: _headers, body: body);
+    final response = await http.post(Uri.parse("$_baseUrl/v3.5/workflow_runs"), headers: _headers, body: body);
 
     if (response.statusCode == 201) {
       return Workflow.fromJson(jsonDecode(response.body)).id!;
