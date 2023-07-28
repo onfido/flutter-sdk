@@ -7,12 +7,14 @@ class StartStudioSerializer {
       required String workflowRunId,
       IOSAppearance? iosAppearance,
       String? iosLocalizationFileName,
+      bool? shouldUseMediaCallback,
       EnterpriseFeatures? enterpriseFeatures}) {
     return {
       'sdkToken': sdkToken,
       'workflowRunId': workflowRunId,
       'iosAppearance': iosAppearance?.toJson(),
       'iosLocalizationFileName': iosLocalizationFileName,
+      'shouldUseMediaCallback': shouldUseMediaCallback,
       'enterpriseFeatures': enterpriseFeatures?.toJson()
     };
   }

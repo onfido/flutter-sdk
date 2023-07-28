@@ -2,7 +2,6 @@ package com.onfido.sdk.flutter
 
 import android.app.Activity
 import android.content.Intent
-import androidx.annotation.NonNull
 import com.onfido.android.sdk.capture.ExitCode
 import com.onfido.android.sdk.capture.Onfido
 import com.onfido.android.sdk.capture.OnfidoFactory
@@ -24,7 +23,14 @@ import io.flutter.plugin.common.PluginRegistry
 class OnfidoPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware,
     FlutterActivityProvider, PluginRegistry.ActivityResultListener {
 
-    private lateinit var channel: MethodChannel
+    companion object {
+        lateinit var channel: MethodChannel
+
+        private fun initMethodChannel(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+            channel = MethodChannel(flutterPluginBinding.binaryMessenger, "onfido_sdk")
+        }
+    }
+
     private lateinit var onfido: Onfido
     private lateinit var onfidoWorkflow: OnfidoWorkflow
 
@@ -49,15 +55,17 @@ class OnfidoPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAwa
         }
     }
 
-    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         flutterAssets = flutterPluginBinding.flutterAssets
+
         onfidoWorkflow = OnfidoWorkflow.create(flutterPluginBinding.applicationContext)
         onfido = OnfidoFactory.create(flutterPluginBinding.applicationContext).client
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "onfido_sdk")
+
+        initMethodChannel(flutterPluginBinding)
         channel.setMethodCallHandler(this)
     }
 
-    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         flutterAssets = null
         channel.setMethodCallHandler(null)
     }
@@ -92,6 +100,8 @@ class OnfidoPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAwa
 
         return false
     }
+
+    //region Onfido Results
 
     private fun handleOnfidoChecksResult(resultCode: Int, data: Intent?) {
         onfido.handleActivityResult(resultCode, data, object : Onfido.OnfidoResultListener {
@@ -133,5 +143,7 @@ class OnfidoPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAwa
                 }
             })
     }
+
+    //endregion
 }
 

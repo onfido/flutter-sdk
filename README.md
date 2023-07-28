@@ -17,6 +17,8 @@
       - [Handling responses](#3-handling-responses)
           - [Success handling](#success-handling)
           - [Error handling](#error-handling)
+      - [Custom callbacks](#4-custom-callbacks)
+          - [Media callbacks](#media-callbacks)
   - [Language Customisation](#language-customisation)
   - [UI Customisation](#ui-customisation)
   - [Going live](#going-live)
@@ -26,12 +28,12 @@
       - [How is the Onfido Flutter SDK licensed?](#how-is-the-onfido-flutter-sdk-licensed)
 ## Overview
 
-The Onfido Flutter SDK provides a drop-in set of screens and tools for Flutter applications to capture identity documents and selfie photos and videos for the purpose of identity verification.
+The Onfido Flutter SDK provides a drop-in set of screens and tools for Flutter applications to capture identity documents and selfie photos, videos and motion captures for the purpose of identity verification.
 
 It offers a number of benefits to help you create the best identity verification experience for your customers:
 
--   Carefully designed UI to guide your customers through the photo and video capture process
--   Modular design to help you seamlessly integrate the photo and video capture process into your application flow
+-   Carefully designed UI to guide your customers through the photo, video or motion capture process
+-   Modular design to help you seamlessly integrate the photo, video or motion capture process into your application flow
 -   Advanced image quality detection technology to ensure the quality of the captured images meets the requirement of the Onfido identity verification process, guaranteeing the best success rate
 -   Direct image upload to the Onfido service, to simplify integration
 
@@ -40,7 +42,7 @@ It offers a number of benefits to help you create the best identity verification
 > 
 > If you are integrating using Onfido Studio please see our [Studio integration guide](ONFIDO_STUDIO.md)
 
-⚠️ Note: The SDK is only responsible for capturing and uploading photos and videos. You still need to access the [Onfido API](https://documentation.onfido.com/) to manage applicants and perform checks.
+⚠️ Note: The SDK is only responsible for capturing and uploading  photos, videos and motion capture. You still need to access the [Onfido API](https://documentation.onfido.com/) to manage applicants and perform checks.
 
 ## Getting started
 
@@ -75,7 +77,7 @@ $ curl https://api.onfido.com/v3/applicants \
     -d 'last_name=Smith'
 ```
 
-The JSON response will return an `id` field containing a UUID that identifies the applicant. Once you pass the applicant ID to the SDK, documents and live photos and videos uploaded by that instance of the SDK will be associated with that applicant.
+The JSON response will return an `id` field containing a UUID that identifies the applicant. Once you pass the applicant ID to the SDK, documents, photos, videos and motion captures uploaded by that instance of the SDK will be associated with that applicant.
 
 ### 3. Configure the SDK with token
 
@@ -147,7 +149,9 @@ startOnfido() async {
         proofOfAddress: true,
         welcome: true,
         documentCapture: DocumentCapture(),
-        faceCapture: FaceCaptureType.photo,
+        faceCapture: FaceCapture.photo(
+          withIntroScreen: _introScreen,
+        ),
       ),
     );
     ... handle response
@@ -167,9 +171,19 @@ startOnfido() async {
   * **`FlowSteps.documentCapture`**: Optional. In the Document step, a user can pick the type of document to capture and its issuing country before capturing it with their phone camera. Document selection and country selection are both optional screens. These screens will only show to the end user if specific options are not configured to the SDK.
     * **`DocumentCapture.documentType`**: Required if countryCode is specified. Valid values in `document_type.dart`.
     * **`DocumentCapture.countryCode`**: Required if documentType is specified. Valid values in `country_code.dart`.
-
-  * **`FlowSteps.faceCapture`**: Optional. In the Face step, a user can use the front camera to capture either a live photo of their face, or a live video. Valid values in `face_capture_type.dart`.
-  * **`FlowSteps.enableNFC`**: Optional.  This toggles the ePassport NFC extraction feature. If omitted, this feature is not enabled in the flow. There is also application configuration changes needed to use this feature. To do that please follow [Onfido Developer Hub](#https://developers.onfido.com/guide/document-report-nfc#enable-nfc-in-the-onfido-sdks)
+      
+  * **`FlowSteps.faceCapture`**: Optional. In this step, a user can use the front camera to capture their face in the form of photo, video, or motion capture. You can create a `FaceCapture` object using the corresponding factory constructors: `FaceCapture.photo()`, `FaceCapture.video()`, or `FaceCapture.motion()`. Each capture method can have additional configurations. If any of these optional parameters are not provided, the default values will be used in each platform. Please refer to the respective platform documentation for details on the default behaviors of these parameters. 
+      * `photo`:
+          * `withIntroScreen` (Optional, bool): Whether to show an introduction screen before the photo capture.
+      * `video`:
+          * `withIntroVideo` (Optional, bool): Whether to show video guidance on the introduction screen before the video capture.
+          * `withConfirmationVideoPreview` (Optional, bool) (Android only): Whether to show a preview of the captured video for user confirmation.
+          * `withManualLivenessCapture` (Optional, bool) (iOS only): Whether to enable manual capture during the video recording.
+      * `motion`:
+          * `withAudio` (Optional, bool): Whether to capture audio during the motion sequence.
+          * `withCaptureFallback` (Optional, FaceCapture): An alternative FaceCapture method (Photo or Video) to use as a fallback if the Motion variant is not supported on the user's device due to platform-specific factors:
+              * Android: Device capabilities, Google Play Services availability, and the MLKit Face Detection module can affect support for the Motion variant.
+              * iOS: Minimum device and OS requirements can limit support, such as Motion not being supported on devices older than iPhone 7, on iOS older than 12, or on iPads.
   
 #### 2.1.1 Android Project Prerequisites
 
@@ -234,6 +248,53 @@ You will receive a `PlatformException` if something goes wrong and the SDK will 
 | `exit` | When the user has left the SDK flow without completing. |
 | `error` | When something happens in run time, e.g. camera permission denied by the user. |
 | `configuration` | When something happens before initializing the SDK, may be caused by invalid configuration. |
+
+
+### 4. Custom Callbacks
+
+#### Media Callbacks (beta)
+
+### Introduction
+Onfido provides the possibility to integrate with our Smart Capture SDK, without the requirement of using this data only through the Onfido API. Media callbacks enable you to control the end user data collected by the SDK after the end user has submitted their captured media. As a result, you can leverage Onfido’s advanced on-device technology, including image quality validations, while still being able to handle end users’ data directly. This unlocks additional use cases, including compliance requirements and multi-vendor configurations, that require this additional flexibility.
+
+**This feature must be enabled for your account.** Please contact your Onfido Solution Engineer or Customer Success Manager.
+
+### Implementation
+To use this feature, implement the `OnfidoMediaCallback` interface and provide the callback for `OnfidoMediaResult` for documents, live photos and live videos.
+
+```dart
+class MediaCallback implements OnfidoMediaCallback {
+  @override
+  Future<void> onMediaCaptured({required OnfidoMediaResult result}) async {
+    // Your callback code here
+  }
+}
+```
+
+Then you should pass this class to Onfido SDK builder as a parameter:
+
+```dart
+MediaCallback callback = MediaCallback();
+
+final Onfido onfido = Onfido(
+    sdkToken: sdkToken,
+    mediaCallback: callback,
+    enterpriseFeatures: EnterpriseFeatures(
+        hideOnfidoLogo: _hideOnfidoLogo,
+    )
+);    
+```
+
+
+## NFC Capture
+
+Recent passports, national identity cards and residence permits contain a chip that can be accessed using Near Field Communication (NFC).
+
+The Onfido SDKs provide a set of screens and functionalities to extract this information, verify its authenticity and provide the results as part of a Document report.
+
+With version 4.0.0 of the Onfido Flutter SDK, NFC is enabled by default and offered to customer when both the document and the device support NFC.
+
+For more information on how to configure NFC and the list of supported documents, please refer to the [NFC for Document Report](https://developers.onfido.com/guide/document-report-nfc) guide.
 
 
 ## Language Customisation

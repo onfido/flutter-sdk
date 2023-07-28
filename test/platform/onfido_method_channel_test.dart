@@ -10,7 +10,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   tearDown(() {
-    channel.setMockMethodCallHandler(null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, null);
   });
 
   group('start', () {
@@ -18,7 +18,7 @@ void main() {
       int callCounter = 0;
       MethodCall? receivedCall;
 
-      channel.setMockMethodCallHandler((call) async {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, (call) async {
         callCounter++;
         receivedCall = call;
         return startMockResponse;
@@ -26,22 +26,22 @@ void main() {
 
       final instance = MethodChannelOnfido();
       final result = await instance.start(
-        sdkToken: "sdkToken",
-        iosLocalizationFileName: "file",
-        iosAppearance: mockIosAppearance(),
-        enterpriseFeatures: EnterpriseFeatures(
-          cobrandingText: "text",
-          disableMobileSDKAnalytics: false,
-          hideOnfidoLogo: true,
-        ),
-        flowSteps: FlowSteps(
+          sdkToken: "sdkToken",
+          iosLocalizationFileName: "file",
+          iosAppearance: mockIosAppearance(),
+          enterpriseFeatures: EnterpriseFeatures(
+            cobrandingText: "text",
+            disableMobileSDKAnalytics: false,
+            hideOnfidoLogo: true,
+          ),
+          flowSteps: FlowSteps(
             welcome: false,
             proofOfAddress: true,
             documentCapture:
                 DocumentCapture(countryCode: CountryCode.UGA, documentType: DocumentType.nationalIdentityCard),
-            faceCapture: FaceCaptureType.video,
-            enableNFC: true),
-      );
+            faceCapture: FaceCapture.video(),
+          ),
+          disableNFC: false);
 
       expect(callCounter, 1);
       expect(receivedCall?.method, 'start');
@@ -55,7 +55,7 @@ void main() {
       int callCounter = 0;
       MethodCall? receivedCall;
 
-      channel.setMockMethodCallHandler((call) async {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, (call) async {
         callCounter++;
         receivedCall = call;
         return startMockResponse;

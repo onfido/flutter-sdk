@@ -2,14 +2,17 @@ import 'package:onfido_sdk/onfido_sdk.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockOnfidoPlatform with MockPlatformInterfaceMixin implements OnfidoPlatform {
-  MockOnfidoPlatform({this.startResult});
+  MockOnfidoPlatform({this.startResult, this.mediaResult});
 
   final List<OnfidoResult>? startResult;
+  final OnfidoMediaResult? mediaResult;
   var startCount = 0;
   late String startSdkToken;
   late FlowSteps startFlowSteps;
   late String? startIosLocalizationFileName;
   late EnterpriseFeatures? startEnterpriseFeatures;
+  late bool? withNFCDisabled;
+  late OnfidoMediaCallback? customMediaCallback;
 
   @override
   Future<List<OnfidoResult>> start(
@@ -17,12 +20,16 @@ class MockOnfidoPlatform with MockPlatformInterfaceMixin implements OnfidoPlatfo
       required FlowSteps flowSteps,
       IOSAppearance? iosAppearance,
       String? iosLocalizationFileName,
-      EnterpriseFeatures? enterpriseFeatures}) {
+      EnterpriseFeatures? enterpriseFeatures,
+      bool? disableNFC,
+      OnfidoMediaCallback? mediaCallback}) {
     startCount++;
     startSdkToken = sdkToken;
     startFlowSteps = flowSteps;
     startIosLocalizationFileName = iosLocalizationFileName;
     startEnterpriseFeatures = enterpriseFeatures;
+    withNFCDisabled = disableNFC;
+    customMediaCallback = mediaCallback;
     return Future.value(startResult!);
   }
 
@@ -37,11 +44,13 @@ class MockOnfidoPlatform with MockPlatformInterfaceMixin implements OnfidoPlatfo
       required String workflowRunId,
       String? iosLocalizationFileName,
       IOSAppearance? iosAppearance,
+      OnfidoMediaCallback? mediaCallback,
       EnterpriseFeatures? enterpriseFeatures}) {
     startStudioCount++;
     startStudioSdkToken = sdkToken;
     startStudioWorkflowRunId = workflowRunId;
     startStudioEnterpriseFeatures = enterpriseFeatures;
+    customMediaCallback = mediaCallback;
     return Future.value();
   }
 }

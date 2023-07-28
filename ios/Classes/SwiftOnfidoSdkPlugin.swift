@@ -3,7 +3,10 @@ import UIKit
 import Onfido
 /// Connecting the onfido ios sdk with flutter API
 /// Flutter api send [method-name:args dictionary] [here is bridge] calls the method and pass to it the args.
+
 public class SwiftOnfidoSdkPlugin: NSObject, FlutterPlugin {
+
+    private(set) static var channel: FlutterMethodChannel?
 
     lazy var methods: [String: BaseBridge] = {
         let bridges: [BaseBridge] = [
@@ -25,9 +28,9 @@ public class SwiftOnfidoSdkPlugin: NSObject, FlutterPlugin {
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "onfido_sdk", binaryMessenger: registrar.messenger())
+        channel = FlutterMethodChannel(name: "onfido_sdk", binaryMessenger: registrar.messenger())
         let instance = SwiftOnfidoSdkPlugin(assetProvider: registrar)
-        registrar.addMethodCallDelegate(instance, channel: channel)
+        registrar.addMethodCallDelegate(instance, channel: channel!)
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {

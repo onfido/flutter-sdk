@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_picker/flutter_picker.dart';
@@ -7,6 +8,7 @@ import 'package:onfido_sdk_example/components/alert_dialog.dart';
 import 'components/labeled_checkbox.dart';
 import 'http/onfido_api.dart';
 import 'model/document_type_with_any.dart';
+import 'model/media_callback.dart';
 
 class OnfidoChecksSample extends StatefulWidget {
   const OnfidoChecksSample({super.key});
@@ -20,14 +22,25 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
   TextEditingController lastNameController = TextEditingController(text: "last");
   TextEditingController emailController = TextEditingController(text: "email@email.com");
 
-  bool _welcomeStep = true;
-  bool _proofOfAddressStep = true;
-  bool _enableNFC = false;
-
   bool _hideOnfidoLogo = false;
-  FaceCaptureType _faceCaptureType = FaceCaptureType.photo;
+  bool _withMediaCallback = false;
+  bool _welcomeStep = true;
+  bool _proofOfAddressStep = false;
+
+  bool _disableNFC = false;
+
+  bool _enableDocCapture = false;
   DocumentTypes _documentType = DocumentTypes.nationalIdentityCard;
   CountryCode _countryCode = CountryCode.USA;
+
+  bool _enableFaceCapture = false;
+  FaceCaptureType _faceCaptureType = FaceCaptureType.photo;
+  bool _introScreen = false;
+  bool _introVideo = false;
+  bool _confirmationVideoPreview = false;
+  bool _manualLivenessCapture = false;
+  bool _audio = false;
+  FaceCaptureType? _motionCaptureFallback;
 
   startOnfido() async {
     try {
@@ -42,24 +55,77 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
 
       final Onfido onfido = Onfido(
         sdkToken: sdkToken,
+        mediaCallback: _withMediaCallback ? ExampleMediaCallback() : null,
         enterpriseFeatures: EnterpriseFeatures(
           hideOnfidoLogo: _hideOnfidoLogo,
         ),
+        disableNFC: _disableNFC,
       );
 
       final response = await onfido.start(
         flowSteps: FlowSteps(
           proofOfAddress: _proofOfAddressStep,
           welcome: _welcomeStep,
-          documentCapture: DocumentCapture(documentType: _documentType.toOnfido(), countryCode: _countryCode),
-          faceCapture: _faceCaptureType,
-          enableNFC: _enableNFC,
+          documentCapture: configureDocumentCapture(),
+          faceCapture: configureFaceCapture(),
         ),
       );
-      _showDialog("Success", "Result it ${response.toString()}");
+
+      _showDialog("Success", "Result is ${response.toString()}");
     } on PlatformException catch (error) {
       // Handle error
       _showDialog("Error", "Error ${error.toString()}");
+    }
+  }
+
+  DocumentCapture? configureDocumentCapture() {
+    if (!_enableDocCapture) {
+      return null;
+    }
+
+    return DocumentCapture(documentType: _documentType.toOnfido(), countryCode: _countryCode);
+  }
+
+  FaceCapture? configureFaceCapture() {
+    if (!_enableFaceCapture) {
+      return null;
+    }
+
+    switch (_faceCaptureType) {
+      case FaceCaptureType.photo:
+        return configurePhotoCapture();
+      case FaceCaptureType.video:
+        return configureVideoCapture();
+      case FaceCaptureType.motion:
+        return FaceCapture.motion(
+          withAudio: _audio,
+          withCaptureFallback: configureMotionCaptureFallback(),
+        );
+    }
+  }
+
+  FaceCapture configurePhotoCapture() {
+    return FaceCapture.photo(
+      withIntroScreen: _introScreen,
+    );
+  }
+
+  FaceCapture configureVideoCapture() {
+    return FaceCapture.video(
+      withIntroVideo: _introVideo,
+      withConfirmationVideoPreview: _confirmationVideoPreview,
+      withManualLivenessCapture: _manualLivenessCapture,
+    );
+  }
+
+  FaceCapture? configureMotionCaptureFallback() {
+    switch (_motionCaptureFallback) {
+      case FaceCaptureType.photo:
+        return configurePhotoCapture();
+      case FaceCaptureType.video:
+        return configureVideoCapture();
+      default:
+        return null;
     }
   }
 
@@ -111,11 +177,28 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
                 ),
                 LabeledCheckbox(
                   label: 'Hide Onfido Logo',
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   value: _hideOnfidoLogo,
                   onChanged: (bool newValue) {
                     setState(() {
                       _hideOnfidoLogo = newValue;
+                    });
+                  },
+                ),
+                LabeledCheckbox(
+                  label: 'Disable NFC',
+                  value: _disableNFC,
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      _disableNFC = newValue;
+                    });
+                  },
+                ),
+                LabeledCheckbox(
+                  label: 'Use custom media callbacks',
+                  value: _withMediaCallback,
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      _withMediaCallback = newValue;
                     });
                   },
                 ),
@@ -129,7 +212,6 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
                 ),
                 LabeledCheckbox(
                   label: 'Welcome Screen',
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   value: _welcomeStep,
                   onChanged: (bool newValue) {
                     setState(() {
@@ -139,7 +221,6 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
                 ),
                 LabeledCheckbox(
                   label: 'Proof of Address',
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   value: _proofOfAddressStep,
                   onChanged: (bool newValue) {
                     setState(() {
@@ -147,70 +228,191 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
                     });
                   },
                 ),
-                LabeledCheckbox(
-                  label: 'Enable NFC',
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  value: _enableNFC,
-                  onChanged: (bool newValue) {
-                    setState(() {
-                      _enableNFC = newValue;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16.0),
-                const Text(
-                  "Document Capture",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
-                  ),
-                ),
-                Row(
+                Column(
                   children: [
-                    ElevatedButton(
-                      child: Row(
-                        children: const [
-                          Text("Document Type"),
-                          SizedBox(width: 6),
-                          Icon(Icons.arrow_drop_down, color: Colors.white),
-                        ],
-                      ),
-                      onPressed: () async => {showDocumentPicker(context)},
+                    LabeledCheckbox(
+                      label: "Document Capture",
+                      value: _enableDocCapture,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _enableDocCapture = value;
+                        });
+                      },
                     ),
-                    const SizedBox(width: 16.0),
-                    ElevatedButton(
-                      child: Row(
-                        children: const [
-                          Text("Country"),
-                          SizedBox(width: 6),
-                          Icon(Icons.arrow_drop_down, color: Colors.white),
-                        ],
+                    if (_enableDocCapture) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text("Document Type"),
+                                ElevatedButton(
+                                  child: Row(
+                                    children: [
+                                      Text(describeEnum(_documentType)),
+                                      const SizedBox(width: 6),
+                                      const Icon(Icons.arrow_drop_down, color: Colors.white),
+                                    ],
+                                  ),
+                                  onPressed: () async => {showDocumentPicker(context)},
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text("Country Code"),
+                                ElevatedButton(
+                                  child: Row(
+                                    children: [
+                                      Text(describeEnum(_countryCode)),
+                                      const SizedBox(width: 6),
+                                      const Icon(Icons.arrow_drop_down, color: Colors.white),
+                                    ],
+                                  ),
+                                  onPressed: () async => {showCountryPicker(context)},
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      onPressed: () async => {showCountryPicker(context)},
-                    ),
+                    ],
                   ],
                 ),
-                const SizedBox(height: 16.0),
-                const Text(
-                  "Face Capture",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                Column(
                   children: [
-                    ElevatedButton(
-                      child: Row(
-                        children: const [
-                          Text("Face Capture"),
-                          SizedBox(width: 6),
-                          Icon(Icons.arrow_drop_down, color: Colors.white),
-                        ],
-                      ),
-                      onPressed: () async => {showFaceCapturePicker(context)},
+                    LabeledCheckbox(
+                      label: "Face Capture",
+                      value: _enableFaceCapture,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _enableFaceCapture = value;
+                        });
+                      },
                     ),
+                    if (_enableFaceCapture) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text("Type"),
+                                ElevatedButton(
+                                  child: Row(
+                                    children: [
+                                      Text(describeEnum(_faceCaptureType)),
+                                      const SizedBox(width: 6),
+                                      const Icon(Icons.arrow_drop_down, color: Colors.white),
+                                    ],
+                                  ),
+                                  onPressed: () async => {showFaceCapturePicker(context)},
+                                ),
+                              ],
+                            ),
+                            Visibility(
+                              visible: _faceCaptureType == FaceCaptureType.photo,
+                              child: SwitchListTile(
+                                title: const Text(
+                                  "Intro Screen",
+                                  style: TextStyle(fontSize: 14.0),
+                                ),
+                                value: _introScreen,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    _introScreen = value;
+                                  });
+                                },
+                              ),
+                            ),
+                            Visibility(
+                              visible: _faceCaptureType == FaceCaptureType.video,
+                              child: Column(
+                                children: [
+                                  SwitchListTile(
+                                    title: const Text(
+                                      "Intro Video",
+                                      style: TextStyle(fontSize: 14.0),
+                                    ),
+                                    value: _introVideo,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        _introVideo = value;
+                                      });
+                                    },
+                                  ),
+                                  SwitchListTile(
+                                    title: const Text(
+                                      "Confirmation Video Preview (Android Only)",
+                                      style: TextStyle(fontSize: 14.0),
+                                    ),
+                                    value: _confirmationVideoPreview,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        _confirmationVideoPreview = value;
+                                      });
+                                    },
+                                  ),
+                                  SwitchListTile(
+                                    title: const Text(
+                                      "Manual Liveness Capture (iOS only)",
+                                      style: TextStyle(fontSize: 14.0),
+                                    ),
+                                    value: _manualLivenessCapture,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        _manualLivenessCapture = value;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Visibility(
+                              visible: _faceCaptureType == FaceCaptureType.motion,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text("Capture Fallback"),
+                                      ElevatedButton(
+                                        child: Row(
+                                          children: [
+                                            Text(_motionCaptureFallback != null
+                                                ? describeEnum(_motionCaptureFallback!)
+                                                : "None"),
+                                            const SizedBox(width: 6),
+                                            const Icon(Icons.arrow_drop_down, color: Colors.white),
+                                          ],
+                                        ),
+                                        onPressed: () async => {showMotionCaptureFallbackPicker(context)},
+                                      ),
+                                    ],
+                                  ),
+                                  SwitchListTile(
+                                    title: const Text(
+                                      "Audio",
+                                      style: TextStyle(fontSize: 14.0),
+                                    ),
+                                    value: _audio,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        _audio = value;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ],
                 ),
                 const SizedBox(height: 30.0),
@@ -235,7 +437,26 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
         changeToFirst: false,
         hideHeader: false,
         onConfirm: (Picker picker, List value) {
-          _faceCaptureType = picker.getSelectedValues().first!;
+          setState(() {
+            _faceCaptureType = picker.getSelectedValues().first!;
+          });
+        });
+
+    picker.showModal(context);
+  }
+
+  showMotionCaptureFallbackPicker(BuildContext context) {
+    Picker picker = Picker(
+        adapter: PickerDataAdapter<FaceCaptureType>(
+          pickerData: FaceCaptureType.values.where((type) => type != FaceCaptureType.motion).toList(),
+        ),
+        selecteds: [_motionCaptureFallback != null ? FaceCaptureType.values.indexOf(_motionCaptureFallback!) : 0],
+        changeToFirst: false,
+        hideHeader: false,
+        onConfirm: (Picker picker, List value) {
+          setState(() {
+            _motionCaptureFallback = picker.getSelectedValues().first!;
+          });
         });
 
     picker.showModal(context);
@@ -250,7 +471,9 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
         changeToFirst: false,
         hideHeader: false,
         onConfirm: (Picker picker, List value) {
-          _documentType = picker.getSelectedValues().first!;
+          setState(() {
+            _documentType = picker.getSelectedValues().first!;
+          });
         });
 
     picker.showModal(context);
@@ -265,7 +488,9 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
         changeToFirst: false,
         hideHeader: false,
         onConfirm: (Picker picker, List value) {
-          _countryCode = picker.getSelectedValues().first!;
+          setState(() {
+            _countryCode = picker.getSelectedValues().first!;
+          });
         });
 
     picker.showModal(context);
