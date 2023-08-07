@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Public: Updated underlying Onfido native SDK versions:
   - Android 19.1.+ (up from 16.3.1)
   - iOS 29.2.+ (up from 28.3.0)
+- Public: Introduced automatic dark theme support for Android. By default, the user’s active device theme will be applied to the SDK flow. Please see [here](https://github.com/onfido/flutter-sdk/blob/master/README.md#android-1) for more details
 
 ## [3.3.0] - 2023-04-20
 

@@ -335,8 +335,11 @@ final Onfido onfido = Onfido(
 The SDK supports the customisation of colors and fonts used in the SDK flow.
 
 ### Android
-There is no configuration needed on Flutter SDK to enable it. 
+ - There is no configuration needed on Flutter SDK to enable it. 
 See [UI Customisation section on Android SDK](https://github.com/onfido/onfido-android-sdk#ui-customization) for more details.
+ - Starting from Flutter version 4.0.0, dark mode is now automatically supported. By default, the user’s active device theme will be applied to the SDK flow.
+**Note:**
+Dark mode cannot yet be forced on or off in Flutter. The user’s device theme will always be applied.
 
 ### iOS
 You can use the `IOSAppearance` object to customise the iOS application.
