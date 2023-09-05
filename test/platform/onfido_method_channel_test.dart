@@ -41,7 +41,8 @@ void main() {
                 DocumentCapture(countryCode: CountryCode.UGA, documentType: DocumentType.nationalIdentityCard),
             faceCapture: FaceCapture.video(),
           ),
-          disableNFC: false);
+          disableNFC: false,
+          onfidoTheme: OnfidoTheme.LIGHT);
 
       expect(callCounter, 1);
       expect(receivedCall?.method, 'start');
@@ -66,7 +67,8 @@ void main() {
           sdkToken: "sdkToken",
           workflowRunId: "workflowRunId",
           iosAppearance: mockIosAppearance(),
-          iosLocalizationFileName: "iosFileName");
+          iosLocalizationFileName: "iosFileName",
+          onfidoTheme: null);
 
       expect(callCounter, 1);
       expect(receivedCall?.method, 'startStudio');
@@ -81,5 +83,6 @@ IOSAppearance mockIosAppearance() {
       secondaryTitleColor: const Color.fromARGB(10, 20, 30, 10),
       fontRegular: 'avenir',
       supportDarkMode: false,
-      fontBold: 'avenir-heavy');
+      fontBold: 'avenir-heavy',
+      backgroundColor: BackgroundColor(const Color.fromARGB(10, 20, 30, 10), const Color.fromARGB(30, 20, 10, 10)));
 }

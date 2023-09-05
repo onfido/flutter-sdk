@@ -1,5 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_picker/picker.dart';
 import 'package:onfido_sdk/onfido_sdk.dart';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'components/alert_dialog.dart';
 import 'http/onfido_api.dart';
@@ -16,10 +20,12 @@ class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
   TextEditingController firstNameController = TextEditingController(text: "first");
   TextEditingController lastNameController = TextEditingController(text: "last");
   TextEditingController emailController = TextEditingController(text: "email@email.com");
+  TextEditingController workflowIdController = TextEditingController(text: dotenv.get("WORKFLOW_ID"));
   TextEditingController coBrandTextController = TextEditingController();
   bool hideLogo = false;
   bool withMediaCallback = false;
   bool disableMobileSDKAnalytics = false;
+  OnfidoTheme onfidoTheme = OnfidoTheme.AUTOMATIC;
 
   startWorkflow() async {
     try {
@@ -30,7 +36,7 @@ class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
       );
       final applicantId = applicant.id!;
       final sdkToken = await OnfidoApi.instance.createSdkToken(applicantId);
-      final workflowRunId = await OnfidoApi.instance.getWorkflowRunId(applicantId);
+      final workflowRunId = await OnfidoApi.instance.getWorkflowRunId(applicantId, workflowIdController.text);
 
       final Onfido onfido = Onfido(
           sdkToken: sdkToken,
@@ -39,7 +45,8 @@ class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
           enterpriseFeatures: EnterpriseFeatures(
               hideOnfidoLogo: hideLogo,
               cobrandingText: coBrandTextController.text,
-              disableMobileSDKAnalytics: disableMobileSDKAnalytics));
+              disableMobileSDKAnalytics: disableMobileSDKAnalytics),
+          onfidoTheme: onfidoTheme);
 
       await onfido.startWorkflow(workflowRunId);
       _showDialog("Success", "Workflow run successfully");
@@ -86,6 +93,42 @@ class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
                   labelText: 'Email',
                 ),
               ),
+              TextField(
+                controller: workflowIdController,
+                keyboardType: TextInputType.text,
+                decoration: const InputDecoration(
+                  labelText: 'Workflow Id',
+                ),
+              ),
+              const SizedBox(height: 30.0),
+              const Text(
+                "General Configuration",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
+                ),
+              ),
+              const SizedBox(height: 30.0),
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Column(children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Theme"),
+                        ElevatedButton(
+                          child: Row(
+                            children: [
+                              Text(describeEnum(onfidoTheme)),
+                              const SizedBox(width: 6),
+                              const Icon(Icons.arrow_drop_down, color: Colors.white),
+                            ],
+                          ),
+                          onPressed: () async => {showThemePicker(context)},
+                        ),
+                      ],
+                    )
+                  ])),
               const SizedBox(height: 30.0),
               const Text("Enterprise Settings",
                   style: TextStyle(
@@ -145,5 +188,20 @@ class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
 
   _showDialog(String title, String message) {
     showAlertDialog(context, title, message);
+  }
+
+  showThemePicker(BuildContext context) {
+    Picker picker = Picker(
+        adapter: PickerDataAdapter<OnfidoTheme>(pickerData: OnfidoTheme.values),
+        selecteds: [OnfidoTheme.values.indexOf(onfidoTheme)],
+        changeToFirst: false,
+        hideHeader: false,
+        onConfirm: (Picker picker, List value) {
+          setState(() {
+            onfidoTheme = picker.getSelectedValues().first!;
+          });
+        });
+
+    picker.showModal(context);
   }
 }

@@ -41,6 +41,7 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
   bool _manualLivenessCapture = false;
   bool _audio = false;
   FaceCaptureType? _motionCaptureFallback;
+  OnfidoTheme _onfidoTheme = OnfidoTheme.AUTOMATIC;
 
   startOnfido() async {
     try {
@@ -54,13 +55,13 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
       final sdkToken = await OnfidoApi.instance.createSdkToken(applicantId);
 
       final Onfido onfido = Onfido(
-        sdkToken: sdkToken,
-        mediaCallback: _withMediaCallback ? ExampleMediaCallback() : null,
-        enterpriseFeatures: EnterpriseFeatures(
-          hideOnfidoLogo: _hideOnfidoLogo,
-        ),
-        disableNFC: _disableNFC,
-      );
+          sdkToken: sdkToken,
+          mediaCallback: _withMediaCallback ? ExampleMediaCallback() : null,
+          enterpriseFeatures: EnterpriseFeatures(
+            hideOnfidoLogo: _hideOnfidoLogo,
+          ),
+          disableNFC: _disableNFC,
+          onfidoTheme: _onfidoTheme);
 
       final response = await onfido.start(
         flowSteps: FlowSteps(
@@ -202,6 +203,26 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
                     });
                   },
                 ),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Column(children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Theme"),
+                          ElevatedButton(
+                            child: Row(
+                              children: [
+                                Text(describeEnum(_onfidoTheme)),
+                                const SizedBox(width: 6),
+                                const Icon(Icons.arrow_drop_down, color: Colors.white),
+                              ],
+                            ),
+                            onPressed: () async => {showThemePicker(context)},
+                          ),
+                        ],
+                      )
+                    ])),
                 const SizedBox(height: 16.0),
                 const Text(
                   "SDK Flow Customisation",
@@ -439,6 +460,21 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
         onConfirm: (Picker picker, List value) {
           setState(() {
             _faceCaptureType = picker.getSelectedValues().first!;
+          });
+        });
+
+    picker.showModal(context);
+  }
+
+  showThemePicker(BuildContext context) {
+    Picker picker = Picker(
+        adapter: PickerDataAdapter<OnfidoTheme>(pickerData: OnfidoTheme.values),
+        selecteds: [OnfidoTheme.values.indexOf(_onfidoTheme)],
+        changeToFirst: false,
+        hideHeader: false,
+        onConfirm: (Picker picker, List value) {
+          setState(() {
+            _onfidoTheme = picker.getSelectedValues().first!;
           });
         });
 

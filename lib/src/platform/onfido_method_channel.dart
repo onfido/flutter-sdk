@@ -25,7 +25,8 @@ class MethodChannelOnfido extends OnfidoPlatform {
       IOSAppearance? iosAppearance,
       OnfidoMediaCallback? mediaCallback,
       EnterpriseFeatures? enterpriseFeatures,
-      bool? disableNFC}) async {
+      bool? disableNFC,
+      OnfidoTheme? onfidoTheme}) async {
     final arguments = StartOptionsSerializer.serialize(
         sdkToken: sdkToken,
         flowSteps: flowSteps,
@@ -33,7 +34,8 @@ class MethodChannelOnfido extends OnfidoPlatform {
         shouldUseMediaCallback: mediaCallback != null,
         iosLocalizationFileName: iosLocalizationFileName,
         enterpriseFeatures: enterpriseFeatures,
-        disableNFC: disableNFC);
+        disableNFC: disableNFC,
+        onfidoTheme: onfidoTheme);
 
     _mediaCallback = mediaCallback;
 
@@ -48,14 +50,16 @@ class MethodChannelOnfido extends OnfidoPlatform {
       IOSAppearance? iosAppearance,
       OnfidoMediaCallback? mediaCallback,
       String? iosLocalizationFileName,
-      EnterpriseFeatures? enterpriseFeatures}) async {
+      EnterpriseFeatures? enterpriseFeatures,
+      OnfidoTheme? onfidoTheme}) async {
     final arguments = StartStudioSerializer.serialize(
         sdkToken: sdkToken,
         workflowRunId: workflowRunId,
         iosAppearance: iosAppearance,
         shouldUseMediaCallback: mediaCallback != null,
         iosLocalizationFileName: iosLocalizationFileName,
-        enterpriseFeatures: enterpriseFeatures);
+        enterpriseFeatures: enterpriseFeatures,
+        onfidoTheme: onfidoTheme);
 
     _mediaCallback = mediaCallback;
 

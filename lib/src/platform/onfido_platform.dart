@@ -12,7 +12,8 @@ abstract class OnfidoPlatform {
       IOSAppearance? iosAppearance,
       EnterpriseFeatures? enterpriseFeatures,
       bool? disableNFC,
-      OnfidoMediaCallback? mediaCallback});
+      OnfidoMediaCallback? mediaCallback,
+      OnfidoTheme? onfidoTheme});
 
   Future<void> startWorkflow(
       {required String sdkToken,
@@ -20,5 +21,6 @@ abstract class OnfidoPlatform {
       IOSAppearance? iosAppearance,
       OnfidoMediaCallback? mediaCallback,
       String? iosLocalizationFileName,
-      EnterpriseFeatures? enterpriseFeatures});
+      EnterpriseFeatures? enterpriseFeatures,
+      OnfidoTheme? onfidoTheme});
 }

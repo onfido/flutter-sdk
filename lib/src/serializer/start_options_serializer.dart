@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:onfido_sdk/onfido_sdk.dart';
 
 class StartOptionsSerializer {
@@ -8,7 +9,8 @@ class StartOptionsSerializer {
       bool? shouldUseMediaCallback,
       EnterpriseFeatures? enterpriseFeatures,
       String? iosLocalizationFileName,
-      bool? disableNFC}) {
+      bool? disableNFC,
+      OnfidoTheme? onfidoTheme}) {
     return {
       'sdkToken': sdkToken,
       'flowSteps': flowSteps.toJson(),
@@ -16,7 +18,8 @@ class StartOptionsSerializer {
       'iosLocalizationFileName': iosLocalizationFileName,
       'disableNFC': disableNFC,
       'shouldUseMediaCallback': shouldUseMediaCallback,
-      'enterpriseFeatures': enterpriseFeatures?.toJson()
+      'enterpriseFeatures': enterpriseFeatures?.toJson(),
+      'onfidoTheme': onfidoTheme == null ? null : describeEnum(onfidoTheme)
     };
   }
 }

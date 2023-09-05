@@ -9,48 +9,66 @@ import Foundation
 import Onfido
 
 extension Appearance {
-    static func from(dictionary: NSDictionary) -> Appearance {
-        let appearance = Appearance()
-        appearance.fontBold = dictionary["fontBold"] as? String
-        appearance.fontRegular = dictionary["fontRegular"] as? String
+    func withAttributes(from dictionary: NSDictionary) -> Appearance {
+        fontBold = dictionary["fontBold"] as? String
+        fontRegular = dictionary["fontRegular"] as? String
 
         if let supportDarkMode = dictionary["supportDarkMode"] as? Bool {
-            appearance.supportDarkMode = supportDarkMode
+            self.supportDarkMode = supportDarkMode
+        }
+
+        if
+            let backgroundColor = dictionary["backgroundColor"] as? NSDictionary,
+            let lightColor = extractColor("light", from: backgroundColor),
+            let darkColor = extractColor("dark", from: backgroundColor)
+        {
+            self.backgroundColor = .init(lightColor: lightColor, darkColor: darkColor)
         }
 
         if let buttonCornerRadius = dictionary["buttonCornerRadius"] as? CGFloat {
-            appearance.buttonCornerRadius = buttonCornerRadius
+            self.buttonCornerRadius = buttonCornerRadius
         }
 
-        if let primaryColor = self.getColor(for: "primaryColor", at: dictionary) {
-            appearance.primaryColor = primaryColor
+        if let primaryColor = extractColor("primaryColor", from: dictionary) {
+            self.primaryColor = primaryColor
         }
 
-        if let secondaryBackgroundPressedColor = self.getColor(for: "secondaryBackgroundPressedColor", at: dictionary) {
-            appearance.secondaryBackgroundPressedColor = secondaryBackgroundPressedColor
+        if let secondaryBackgroundPressedColor = extractColor("secondaryBackgroundPressedColor", from: dictionary) {
+            self.secondaryBackgroundPressedColor = secondaryBackgroundPressedColor
         }
 
-        if let primaryBackgroundPressedColor = self.getColor(for: "primaryBackgroundPressedColor", at: dictionary) {
-            appearance.primaryBackgroundPressedColor = primaryBackgroundPressedColor
+        if let primaryBackgroundPressedColor = extractColor("primaryBackgroundPressedColor", from: dictionary) {
+            self.primaryBackgroundPressedColor = primaryBackgroundPressedColor
         }
 
-        if let secondaryTitleColor = self.getColor(for: "secondaryTitleColor", at: dictionary) {
-            appearance.secondaryTitleColor = secondaryTitleColor
+        if let secondaryTitleColor = extractColor("secondaryTitleColor", from: dictionary) {
+            self.secondaryTitleColor = secondaryTitleColor
         }
 
-        if let primaryTitleColor = self.getColor(for: "primaryTitleColor", at: dictionary) {
-            appearance.primaryTitleColor = primaryTitleColor
+        if let primaryTitleColor = extractColor("primaryTitleColor", from: dictionary) {
+            self.primaryTitleColor = primaryTitleColor
         }
 
-        if let bubbleErrorBackgroundColor = self.getColor(for: "bubbleErrorBackgroundColor", at: dictionary) {
-            appearance.bubbleErrorBackgroundColor = bubbleErrorBackgroundColor
+        if let bubbleErrorBackgroundColor = extractColor("bubbleErrorBackgroundColor", from: dictionary) {
+            self.bubbleErrorBackgroundColor = bubbleErrorBackgroundColor
         }
 
-        return appearance
+        return self
     }
+}
 
-    static private func getColor(for name: String, at dictionary: NSDictionary) -> UIColor? {
-        let color = dictionary[name] as? String
-        return UIColor(unsafeHex: color)
+private func extractColor(_ colorName: String, from dictionary: NSDictionary) -> UIColor? {
+    let color = dictionary[colorName] as? String
+    return UIColor(unsafeHex: color)
+}
+
+@available(iOS 12.0, *)
+extension UIUserInterfaceStyle {
+    init(_ stringRepresentation: String) {
+        switch stringRepresentation {
+        case "LIGHT": self = .light
+        case "DARK": self = .dark
+        default: self = .unspecified
+        }
     }
 }

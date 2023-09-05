@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:onfido_sdk/src/serializer/color_serializer.dart';
+import 'background_color.dart';
 
 class IOSAppearance {
   final Color? primaryColor;
@@ -13,6 +14,7 @@ class IOSAppearance {
   final String? fontBold;
   final bool? supportDarkMode;
   final Color? bubbleErrorBackgroundColor;
+  final BackgroundColor? backgroundColor;
 
   IOSAppearance(
       {this.primaryColor,
@@ -24,7 +26,8 @@ class IOSAppearance {
       this.fontRegular,
       this.fontBold,
       this.supportDarkMode,
-      this.bubbleErrorBackgroundColor});
+      this.bubbleErrorBackgroundColor,
+      this.backgroundColor});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -39,6 +42,7 @@ class IOSAppearance {
     data['fontRegular'] = fontRegular;
     data['fontBold'] = fontBold;
     data['supportDarkMode'] = supportDarkMode;
+    data['backgroundColor'] = backgroundColor?.toJson();
 
     return data;
   }

@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.1.0] - 2023-0x-xx
+
+- Public: Introduced Onfido theme selection (LIGHT, DARK, AUTOMATIC) in Onfido configuration parameters.
+- Public: Introduced background color customisation on iOS
+
 ## [4.0.0] - 2023-07-27
 
 - Public: Introduced a breaking change to the `FlowSteps.faceCapture` implementation to offer more flexibility and control over face capture configurations. Please refer to [MIGRATION.md](MIGRATION.md) for migration guidance.
@@ -11,7 +16,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Public: Updated underlying Onfido native SDK versions:
   - Android 19.1.+ (up from 16.3.1)
   - iOS 29.2.+ (up from 28.3.0)
-- Public: Introduced automatic dark theme support for Android. By default, the user’s active device theme will be applied to the SDK flow. Please see [here](https://github.com/onfido/flutter-sdk/blob/master/README.md#android-1) for more details
 
 ## [3.3.0] - 2023-04-20
 

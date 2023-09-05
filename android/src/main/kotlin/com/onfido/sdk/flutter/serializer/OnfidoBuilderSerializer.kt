@@ -101,7 +101,10 @@ internal fun Any?.deserializeOnfidoBuilder(
     if (withMediaCallback) {
         builder.withMediaCallback(mediaCallback = CustomMediaCallback())
     }
-
+    val theme = this["onfidoTheme"] as? String
+    if (theme != null) {
+        builder.withTheme(getTheme(theme))
+    }
     return builder
 }
 
