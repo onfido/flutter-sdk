@@ -4,10 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [4.1.0] - 2023-0x-xx
+## [4.1.0] - 2023-09-06
 
 - Public: Introduced Onfido theme selection (LIGHT, DARK, AUTOMATIC) in Onfido configuration parameters.
 - Public: Introduced background color customisation on iOS
+- Public: Updated underlying Onfido native SDK versions:
+  - Android 19.2.+ (up from 19.1.+)
+  - iOS 29.4.+ (up from 29.2.+)
 
 ## [4.0.0] - 2023-07-27
 
