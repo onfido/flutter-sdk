@@ -9,7 +9,7 @@ void main() {
     const token = "abc";
 
     final flowSteps = FlowSteps();
-    Onfido onfido = Onfido(sdkToken: token);
+    Onfido onfido = Onfido(sdkToken: token, onfidoTheme: OnfidoTheme.AUTOMATIC);
     OnfidoPlatform.instance = platform;
 
     final response = await onfido.start(flowSteps: flowSteps);
@@ -17,6 +17,7 @@ void main() {
     expect(platform.startCount, 1);
     expect(platform.startSdkToken, token);
     expect(platform.startFlowSteps, flowSteps);
+    expect(platform.theme, OnfidoTheme.AUTOMATIC);
     expect([], response);
   });
 
@@ -25,7 +26,7 @@ void main() {
     const token = "abc";
     const workflowRunId = "runId";
 
-    Onfido onfido = Onfido(sdkToken: token);
+    Onfido onfido = Onfido(sdkToken: token, onfidoTheme: OnfidoTheme.DARK);
     OnfidoPlatform.instance = platform;
 
     await onfido.startWorkflow(workflowRunId);
@@ -33,5 +34,6 @@ void main() {
     expect(platform.startStudioCount, 1);
     expect(platform.startStudioSdkToken, token);
     expect(platform.startStudioWorkflowRunId, workflowRunId);
+    expect(platform.theme, OnfidoTheme.DARK);
   });
 }

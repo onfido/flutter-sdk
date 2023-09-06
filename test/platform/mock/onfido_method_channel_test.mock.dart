@@ -25,10 +25,12 @@ const startMockRequestBody = {
     'buttonCornerRadius': null,
     'fontRegular': 'avenir',
     'fontBold': 'avenir-heavy',
-    'supportDarkMode': false
+    'supportDarkMode': false,
+    'backgroundColor': {'dark': '#1e140a0a', 'light': '#0a141e0a'}
   },
   'enterpriseFeatures': {'hideOnfidoLogo': true, 'cobrandingText': 'text', 'disableMobileSDKAnalytics': false},
   'disableNFC': false,
+  "onfidoTheme": "LIGHT"
 };
 
 const startStudioMockRequestBody = {
@@ -46,9 +48,11 @@ const startStudioMockRequestBody = {
     'buttonCornerRadius': null,
     'fontRegular': 'avenir',
     'fontBold': 'avenir-heavy',
-    'supportDarkMode': false
+    'supportDarkMode': false,
+    'backgroundColor': {'dark': '#1e140a0a', 'light': '#0a141e0a'}
   },
-  "enterpriseFeatures": null
+  "enterpriseFeatures": null,
+  "onfidoTheme": null
 };
 
 const startMockResponse = [

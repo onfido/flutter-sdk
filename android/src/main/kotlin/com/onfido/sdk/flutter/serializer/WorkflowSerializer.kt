@@ -25,5 +25,10 @@ fun Any.deserializeWorkflowConfig(): WorkflowConfig {
         val features = EnterpriseFeatures.buildFromMap(it)
         builder.withEnterpriseFeatures(features)
     }
+
+    val theme = this["onfidoTheme"] as? String
+    if (theme != null) {
+        builder.withTheme(getTheme(theme))
+    }
     return builder.build()
 }

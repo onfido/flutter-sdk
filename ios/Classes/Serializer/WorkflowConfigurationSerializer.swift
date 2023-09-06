@@ -24,9 +24,19 @@ extension WorkflowConfiguration {
             withCustomLocalization(withTableName: fileName, in: Bundle.self.main)
         }
 
+        var appearance = Appearance()
         if let iosAppearance = dictionary["iosAppearance"] as? NSDictionary {
-            withAppearance(Appearance.from(dictionary: iosAppearance))
+            appearance = appearance.withAttributes(from: iosAppearance)
         }
+
+        if
+            #available(iOS 12.0, *),
+            let theme = dictionary["onfidoTheme"] as? String
+        {
+            appearance.setUserInterfaceStyle(.init(theme))
+        }
+
+        withAppearance(appearance)
 
         if let shouldUseMediaCallback = dictionary["shouldUseMediaCallback"] as? Bool, shouldUseMediaCallback {
             withMediaCallback(mediaCallback: CustomMediaCallback())

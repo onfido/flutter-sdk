@@ -131,7 +131,8 @@ Once you have an added the SDK as a dependency, and you have a SDK token, you ca
 ```dart
 final Onfido onfido = Onfido(
   sdkToken: apiToken,
-  iosLocalizationFileName: "onfido_ios_localisation"
+  iosLocalizationFileName: "onfido_ios_localisation", //Optional
+  onfidoTheme: OnfidoTheme.AUTOMATIC //Optional
 );
 ```
 
@@ -139,6 +140,11 @@ final Onfido onfido = Onfido(
 
 * **`sdkToken`**: Required.  This is the JWT sdk token obtained by making a call to the SDK token API.  See section [Configuring SDK with Tokens](#3-configure-the-sdk-with-token).
 * **`iosLocalizationFileName`**: Optional. This is the file name for configuring the localisation for iOS only. See section [Language Customisation](#language-customisation) for the details.
+* **`onfidoTheme`**: Optional. The theme in which Onfido SDK is displayed. By default, the user's active device theme will be
+  automatically applied to the Onfido SDK. However, you can opt out from dynamic theme switching at run time
+  and instead set a theme statically at the build time as shown below. In this case, the flow will always be in displayed
+  in the selected theme regardless of the user's device theme.
+    * Valid values in `OnfidoTheme`: `AUTOMATIC`, `LIGHT`, `DARK`.
 
 ### 2. Start the flow
 ```dart
@@ -184,7 +190,8 @@ startOnfido() async {
           * `withCaptureFallback` (Optional, FaceCapture): An alternative FaceCapture method (Photo or Video) to use as a fallback if the Motion variant is not supported on the user's device due to platform-specific factors:
               * Android: Device capabilities, Google Play Services availability, and the MLKit Face Detection module can affect support for the Motion variant.
               * iOS: Minimum device and OS requirements can limit support, such as Motion not being supported on devices older than iPhone 7, on iOS older than 12, or on iPads.
-  
+
+
 #### 2.1.1 Android Project Prerequisites
 
 NFC dependencies are not included in the SDK to avoid increasing the SDK size when the NFC feature is disabled. To use the NFC feature, you need to include the following dependencies (with the specified versions) in your build script:
@@ -299,15 +306,53 @@ For more information on how to configure NFC and the list of supported documents
 
 ## Language Customisation
 
-The SDK supports and maintains the following 7 languages:
+The SDK supports and maintains the following 44 languages:
 
- - English (en) 🇬🇧
- - Spanish (es) 🇪🇸
- - French (fr) 🇫🇷
- - German (de) 🇩🇪
- - Italian (it) 🇮🇹
- - Portuguese (pt) 🇵🇹
- - Dutch (nl) 🇳🇱
+- Arabic: ar
+- Armenian: hy
+- Bulgarian: bg
+- Chinese (Simplified): zh_rCN (Android), zh-Hans (iOS)
+- Chinese (Traditional): zh_rTW (Android), zh-Hant (iOS)
+- Croatian: hr
+- Czech: cs
+- Danish: da🇰
+- Dutch: nl🇱
+- English (United Kingdom): en_rGB
+- English (United States): en_rUS
+- Estonian: et
+- Finnish: fi
+- French (Canadian): fr_rCA
+- French: fr
+- German: de
+- Greek: el
+- Hebrew: iw
+- Hindi: hi
+- Hungarian: hu
+- Indonesian: in
+- Italian: it
+- Japanese: ja
+- Korean: ko
+- Latvian: lv
+- Lithuanian: lt
+- Malay: ms
+- Norwegian bokmål: nb
+- Norwegian nynorsk: nn
+- Persian: fa
+- Polish: pl
+- Portuguese (Brazil): pt_rBR
+- Portuguese: pt
+- Romanian: ro
+- Russian: ru
+- Serbian: sr
+- Slovak: sk
+- Slovenian: sl
+- Spanish (Latin America): es_rUS
+- Spanish: es
+- Swedish: sv
+- Thai: th
+- Turkish: tr
+- Ukrainian: uk
+- Vietnamese: vi
 
 However, you can add your own translations.
 
@@ -335,11 +380,10 @@ final Onfido onfido = Onfido(
 The SDK supports the customisation of colors and fonts used in the SDK flow.
 
 ### Android
- - There is no configuration needed on Flutter SDK to enable it. 
-See [UI Customisation section on Android SDK](https://github.com/onfido/onfido-android-sdk#ui-customization) for more details.
- - Starting from Flutter version 4.0.0, dark mode is now automatically supported. By default, the user’s active device theme will be applied to the SDK flow.
-**Note:**
-Dark mode cannot yet be forced on or off in Flutter. The user’s device theme will always be applied.
+
+Starting from Flutter version 4.1.0, dark mode and UI theme customsizations are supported. You can customize the colors across fonts, icons, buttons, etc. and other appearance attributes by overriding Onfido themes (OnfidoActivityTheme and OnfidoDarkTheme) in your themes.xml or styles.xml files. There is no additional configuration needed on the Flutter SDK to enable these Android customisations. 
+
+Please see the [UI Customization section](https://github.com/onfido/onfido-android-sdk#ui-customization) of the Android SDK for full customisation options and implementation details. 
 
 ### iOS
 You can use the `IOSAppearance` object to customise the iOS application.
@@ -349,7 +393,6 @@ For example:
 final Onfido onfido = Onfido(
   iosAppearance: IOSAppearance(
       fontBold: "<Font-Name>",
-      supportDarkMode: false,
       fontRegular: "<Font-Name>",
       secondaryTitleColor: Colors.yourColor,
       primaryColor: Colors.yourColor,
@@ -357,9 +400,17 @@ final Onfido onfido = Onfido(
       primaryTitleColor: Colors.yourColor,
       bubbleErrorBackgroundColor: Colors.yourColor,
       primaryBackgroundPressedColor: Colors.yourColor,
-      secondaryBackgroundPressedColor: Colors.yourColor),
+      secondaryBackgroundPressedColor: Colors.yourColor,
+      backgroundColor: BackgroundColor(Colors.yourLightColor, Colors.yourDarkColor)
+  )
 );
 ```
+
+#### Dark Mode
+
+The `onfidoTheme` parameter allows you to force light or dark mode via `DARK` and `LIGHT` respectively, or follow the system's interface style with `AUTOMATIC` (the default value).
+
+Note: The usage of `supportDarkMode` in `IOSAppearance` is now deprecated. Please use `onfidoTheme` instead.
 
 ## Error handling
 

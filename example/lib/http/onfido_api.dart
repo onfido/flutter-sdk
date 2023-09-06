@@ -20,10 +20,9 @@ class OnfidoApi {
     "Content-Type": "application/json"
   };
 
-  Future<String> getWorkflowRunId(String applicantId) async {
-    final workflowId = dotenv.get("WORKFLOW_ID");
+  Future<String> getWorkflowRunId(String applicantId, String workflowId) async {
     if (workflowId.isEmpty) {
-      throw Exception('Missing workflow id, please check your .env file');
+      throw Exception('Missing workflow id, please check your .env file or enter it manually');
     }
 
     final body = jsonEncode(

@@ -21,9 +21,19 @@ extension OnfidoConfig {
             onfidoBuilder.withCustomLocalization(andTableName: fileName)
         }
 
+        var appearance = Appearance()
         if let iosAppearance = dictionary["iosAppearance"] as? NSDictionary {
-            onfidoBuilder.withAppearance(Appearance.from(dictionary: iosAppearance))
+            appearance = appearance.withAttributes(from: iosAppearance)
         }
+
+        if
+            #available(iOS 12.0, *),
+            let theme = dictionary["onfidoTheme"] as? String
+        {
+            appearance.setUserInterfaceStyle(.init(theme))
+        }
+
+        onfidoBuilder.withAppearance(appearance)
 
         guard let flowSteps = dictionary["flowSteps"] as? NSDictionary else { return onfidoBuilder }
 
@@ -49,7 +59,7 @@ extension OnfidoConfig {
 
         if let shouldUseMediaCallback = dictionary["shouldUseMediaCallback"] as? Bool, shouldUseMediaCallback {
             onfidoBuilder.withMediaCallback(mediaCallback: CustomMediaCallback())
-         }
+        }
 
         guard let enterpriseFeatures = dictionary["enterpriseFeatures"] as? NSDictionary else { return onfidoBuilder }
         onfidoBuilder.withEnterpriseFeatures(EnterpriseFeatures.builder(with: enterpriseFeatures))
