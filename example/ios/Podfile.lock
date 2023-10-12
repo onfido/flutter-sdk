@@ -3,10 +3,10 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - Onfido (29.4.0)
+  - Onfido (29.5.1)
   - onfido_sdk (0.0.1):
     - Flutter
-    - Onfido (~> 29.4.0)
+    - Onfido (~> 29.5.0)
   - Toast (4.0.0)
 
 DEPENDENCIES:
@@ -30,8 +30,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
-  Onfido: aa8a948b1d67a89a7261316dfc1b050ead58776d
-  onfido_sdk: 4555170421969c2f1d0a1c5f21a450c35e987daf
+  Onfido: 9f2d7e79ee300783a0359a902accf1b6e10e8c26
+  onfido_sdk: 660c114ae36739e7a1b81e1bdda71014d2cd912e
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
 PODFILE CHECKSUM: b5c9e6f0565041472ddf8660fd13c905cedfd655
