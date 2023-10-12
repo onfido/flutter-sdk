@@ -17,8 +17,8 @@
       - [Handling responses](#3-handling-responses)
           - [Success handling](#success-handling)
           - [Error handling](#error-handling)
-      - [Custom callbacks](#4-custom-callbacks)
-          - [Media callbacks](#media-callbacks)
+  - [Custom callbacks](#4-custom-callbacks)
+      - [Media callbacks](#media-callbacks)
   - [Language Customisation](#language-customisation)
   - [UI Customisation](#ui-customisation)
   - [Going live](#going-live)
@@ -188,8 +188,8 @@ startOnfido() async {
       * `motion`:
           * `withAudio` (Optional, bool): Whether to capture audio during the motion sequence.
           * `withCaptureFallback` (Optional, FaceCapture): An alternative FaceCapture method (Photo or Video) to use as a fallback if the Motion variant is not supported on the user's device due to platform-specific factors:
-              * Android: Device capabilities, Google Play Services availability, and the MLKit Face Detection module can affect support for the Motion variant.
               * iOS: Minimum device and OS requirements can limit support, such as Motion not being supported on devices older than iPhone 7, on iOS older than 12, or on iPads.
+              * Android: Fallback is not used in Android anymore as Motion is supported in all devices and OS versions specified by the SDK.
 
 
 #### 2.1.1 Android Project Prerequisites
@@ -257,16 +257,16 @@ You will receive a `PlatformException` if something goes wrong and the SDK will 
 | `configuration` | When something happens before initializing the SDK, may be caused by invalid configuration. |
 
 
-### 4. Custom Callbacks
+## Custom Callbacks
 
-#### Media Callbacks (beta)
+### Media Callbacks
 
-### Introduction
+#### Introduction
 Onfido provides the possibility to integrate with our Smart Capture SDK, without the requirement of using this data only through the Onfido API. Media callbacks enable you to control the end user data collected by the SDK after the end user has submitted their captured media. As a result, you can leverage Onfido’s advanced on-device technology, including image quality validations, while still being able to handle end users’ data directly. This unlocks additional use cases, including compliance requirements and multi-vendor configurations, that require this additional flexibility.
 
 **This feature must be enabled for your account.** Please contact your Onfido Solution Engineer or Customer Success Manager.
 
-### Implementation
+#### Implementation
 To use this feature, implement the `OnfidoMediaCallback` interface and provide the callback for `OnfidoMediaResult` for documents, live photos and live videos.
 
 ```dart
