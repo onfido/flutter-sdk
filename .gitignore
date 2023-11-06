@@ -1,6 +1,7 @@
 .idea
 .DS_Store
 **/ci-cache/gradle
+flutter_junit_test_results.xml
 
 ### Flutter ###
 

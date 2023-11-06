@@ -1,10 +1,16 @@
 # Onfido Flutter SDK Migration Guide
 
+The guides below are provided to ease the transition of existing applications using the Onfido SDK from one version to another that introduces breaking API changes.
+
+If your migration involves upgrading across multiple SDK versions, be sure to read each individual guide in order to account for all relevant breaking changes.
+
 ## `3.3.0` -> `4.0.0`
 
-### Breaking Change
+### Breaking Changes
 
 The previous implementation used the `FaceCaptureType` enum to define the face capture method. The new implementation replaces the `FaceCaptureType` enum with the abstract `FaceCapture` class and its subclasses for different capture methods.
+
+Near Field Communication (NFC) is now enabled by default and offered to customers when both the document and the device support NFC. To disable NFC, please refer to our [NFC reference guide](https://developers.onfido.com/guide/document-report-nfc#flutter-1).
 
 ### Migration Steps
 

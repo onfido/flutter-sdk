@@ -62,124 +62,126 @@ class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
       appBar: AppBar(
         title: const Text('Onfido Workflow Sample'),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              const Text(
-                "Applicant Configuration",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
-                ),
-              ),
-              TextField(
-                controller: firstNameController,
-                decoration: const InputDecoration(
-                  labelText: 'First Name',
-                ),
-              ),
-              TextField(
-                controller: lastNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Last Name',
-                ),
-              ),
-              TextField(
-                controller: emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                ),
-              ),
-              TextField(
-                controller: workflowIdController,
-                keyboardType: TextInputType.text,
-                decoration: const InputDecoration(
-                  labelText: 'Workflow Id',
-                ),
-              ),
-              const SizedBox(height: 30.0),
-              const Text(
-                "General Configuration",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
-                ),
-              ),
-              const SizedBox(height: 30.0),
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Column(children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("Theme"),
-                        ElevatedButton(
-                          child: Row(
-                            children: [
-                              Text(describeEnum(onfidoTheme)),
-                              const SizedBox(width: 6),
-                              const Icon(Icons.arrow_drop_down, color: Colors.white),
-                            ],
-                          ),
-                          onPressed: () async => {showThemePicker(context)},
-                        ),
-                      ],
-                    )
-                  ])),
-              const SizedBox(height: 30.0),
-              const Text("Enterprise Settings",
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                const Text(
+                  "Applicant Configuration",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
-                  )),
-              TextField(
-                controller: coBrandTextController,
-                decoration: const InputDecoration(
-                  labelText: 'Cobranding',
+                  ),
                 ),
-              ),
-              CheckboxListTile(
-                title: const Text('Hide Logo Configuration'),
-                value: hideLogo,
-                onChanged: (bool? newValue) {
-                  setState(() {
-                    hideLogo = newValue!;
-                  });
-                },
-                contentPadding: EdgeInsets.zero,
-                controlAffinity: ListTileControlAffinity.leading,
-              ),
-              CheckboxListTile(
-                title: const Text('Use custom media callbacks'),
-                value: withMediaCallback,
-                onChanged: (bool? newValue) {
-                  setState(() {
-                    withMediaCallback = newValue!;
-                  });
-                },
-                contentPadding: EdgeInsets.zero,
-                controlAffinity: ListTileControlAffinity.leading,
-              ),
-              CheckboxListTile(
-                title: const Text('Disable mobile SDK analytics'),
-                value: disableMobileSDKAnalytics,
-                onChanged: (bool? newValue) {
-                  setState(() {
-                    disableMobileSDKAnalytics = newValue!;
-                  });
-                },
-                contentPadding: EdgeInsets.zero,
-                controlAffinity: ListTileControlAffinity.leading,
-              ),
-              const SizedBox(height: 30.0),
-              ElevatedButton(
-                child: const Text("Launch Workflow"),
-                onPressed: () async => {startWorkflow()},
-              ),
-            ],
+                TextField(
+                  controller: firstNameController,
+                  decoration: const InputDecoration(
+                    labelText: 'First Name',
+                  ),
+                ),
+                TextField(
+                  controller: lastNameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Last Name',
+                  ),
+                ),
+                TextField(
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                  ),
+                ),
+                TextField(
+                  controller: workflowIdController,
+                  keyboardType: TextInputType.text,
+                  decoration: const InputDecoration(
+                    labelText: 'Workflow Id',
+                  ),
+                ),
+                const SizedBox(height: 30.0),
+                const Text(
+                  "General Configuration",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  ),
+                ),
+                const SizedBox(height: 30.0),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Column(children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Theme"),
+                          ElevatedButton(
+                            child: Row(
+                              children: [
+                                Text(describeEnum(onfidoTheme)),
+                                const SizedBox(width: 6),
+                                const Icon(Icons.arrow_drop_down, color: Colors.white),
+                              ],
+                            ),
+                            onPressed: () async => {showThemePicker(context)},
+                          ),
+                        ],
+                      )
+                    ])),
+                const SizedBox(height: 30.0),
+                const Text("Enterprise Settings",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
+                    )),
+                TextField(
+                  controller: coBrandTextController,
+                  decoration: const InputDecoration(
+                    labelText: 'Cobranding',
+                  ),
+                ),
+                CheckboxListTile(
+                  title: const Text('Hide Logo Configuration'),
+                  value: hideLogo,
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      hideLogo = newValue!;
+                    });
+                  },
+                  contentPadding: EdgeInsets.zero,
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+                CheckboxListTile(
+                  title: const Text('Use custom media callbacks'),
+                  value: withMediaCallback,
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      withMediaCallback = newValue!;
+                    });
+                  },
+                  contentPadding: EdgeInsets.zero,
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+                CheckboxListTile(
+                  title: const Text('Disable mobile SDK analytics'),
+                  value: disableMobileSDKAnalytics,
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      disableMobileSDKAnalytics = newValue!;
+                    });
+                  },
+                  contentPadding: EdgeInsets.zero,
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+                const SizedBox(height: 30.0),
+                ElevatedButton(
+                  child: const Text("Launch Workflow"),
+                  onPressed: () async => {startWorkflow()},
+                ),
+              ],
+            ),
           ),
         ),
       ),
