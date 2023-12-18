@@ -25,5 +25,5 @@ func getFlutterViewController() -> FlutterViewController? {
 @objcMembers
 final class PluginMetadata: NSObject {
     let pluginPlatform = "flutter"
-    let pluginVersion = "4.3.0"     // add the current version
+    let pluginVersion = "4.4.0"     // add the current version
 }
