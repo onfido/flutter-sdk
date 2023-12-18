@@ -3,10 +3,10 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - Onfido (29.5.1)
+  - Onfido (29.6.0)
   - onfido_sdk (0.0.1):
     - Flutter
-    - Onfido (~> 29.5.1)
+    - Onfido (~> 29.6.0)
   - Toast (4.0.0)
 
 DEPENDENCIES:

@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.4.0] - 2023-12-15
+
+- Onfido flow is presented on iOS in the fullscreen mode instead of the modal mode
+- Update underlying Onfido native SDK versions:
+  - Android 19.5.+ (up from 19.4.+)
+  - iOS 29.6.+ (up from 29.5.+)
+
 ## [4.3.0] - 2023-11-06
 
 - Update underlying Onfido native SDK versions:

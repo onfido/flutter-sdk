@@ -40,8 +40,13 @@ struct StartBridge: BaseBridge {
                     result(FlutterError())
                 }
             })
+            
+            guard let viewController = getFlutterViewController() else { 
+                assertionFailure("There is no viewController to present Onfido flow")
+                return
+            }
 
-            getFlutterViewController()?.present(try onfidoFlow.run(), animated: true)
+            try onfidoFlow.run(from: viewController, presentationStyle: .fullScreen)
         } catch {
             result(FlutterError(code: "configuration", message: error.localizedDescription, details: "\(error)"))
         }
