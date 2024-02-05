@@ -1,4 +1,5 @@
 .git
+.bitrise
 build
 scripts
 .gitlab-ci.yml

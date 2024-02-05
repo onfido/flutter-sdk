@@ -1,66 +1,33 @@
 ---
+aliases:
+  - &start_wrapper_builds
+    build-router-start:
+      inputs:
+        - access_token: "${BITRISE_ACCESS_TOKEN}"
+        - environment_key_list: |-
+            API_TOKEN
+            WORKFLOW_ID
+        - workflows: |-
+            test-and-build
+
+  - &create_dot_env_file
+    script@1:
+      inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+            ./scripts/setup_env.sh
+
 format_version: "11"
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: flutter
-meta:
-  bitrise.io:
-    stack: osx-xcode-14.3.x-ventura
-    machine_type_id: g2-m1.4core
+
 workflows:
-  connect-openvpn:
-    steps:
-      - git::https://github.com/onfido/bitrise-step-open-vpn.git@0.0.3:
-          inputs:
-            - subnet1: 10.103.0.0
-            - subnet2: 10.105.0.0
-            - host: cvpn-endpoint-069dfbb854bc48233.prod.clientvpn.eu-west-1.amazonaws.com
-      - script@1:
-          title: Get GitLab IPs
-          inputs:
-            - content: |-
-                #!/usr/bin/env bash
-                # fail if any commands fails
-                set -e
-                # debug log
-                set -x
-
-                GITLAB_IPS=$(host gitlab.eu-west-1.mgmt.onfido.xyz 10.103.20.5 | grep 'has address' | cut -d ' ' -f 4 | grep .)
-
-                for IP in $GITLAB_IPS; do
-                  echo $IP gitlab.eu-west-1.mgmt.onfido.xyz | sudo tee -a /etc/hosts
-                done
-      - gitlab-status@0.12:
-          inputs:
-            - title: build:ios:bitrise
-            - private_token: "$GITLAB_ACCESS_TOKEN"
-            - preset_status: running
-            - api_base_url: https://gitlab.eu-west-1.mgmt.onfido.xyz/api/v4
-  notify-gitlab:
-    steps:
-      - gitlab-status@0.12:
-          inputs:
-            - title: build:ios:bitrise
-            - private_token: "$GITLAB_ACCESS_TOKEN"
-            - api_base_url: https://gitlab.eu-west-1.mgmt.onfido.xyz/api/v4
   test-and-build:
     envs:
       - BITRISE_FLUTTER_PROJECT_LOCATION: example/
-    before_run:
-      - connect-openvpn
-    after_run:
-      - notify-gitlab
     steps:
-      - activate-ssh-key@4: {}
-      - git-clone@8:
-          inputs:
-            - repository_url: git@gitlab.eu-west-1.mgmt.onfido.xyz:onfido/sdks/flutter-sdk.git
-      - script@1.2:
-          title: Create env variable with valid values
-          inputs:
-            - content: |-
-                #!/usr/bin/env bash
-                set -ex
-                ./scripts/setup_env.sh
+      - *create_dot_env_file
       - certificate-and-profile-installer@1: {}
       - flutter-installer@0: {}
       - cache-pull@2: {}
@@ -95,46 +62,24 @@ workflows:
             - output_tool: xcpretty
       - cache-push@2: {}
       - deploy-to-bitrise-io@2: {}
-  applause-build:
+
+  Applause-Build:
     envs:
       - API_TOKEN: "${APPLAUSE_API_TOKEN}"
       - WORKFLOW_ID: "${APPLAUSE_WORKFLOW_ID}"
     steps:
-      - build-router-start@0:
-          inputs:
-            - access_token: "${BITRISE_ACCESS_TOKEN}"
-            - environment_key_list: |-
-                API_TOKEN
-                WORKFLOW_ID
-            - workflows: test-and-build
-  applause-real-data-build:
+      - *start_wrapper_builds
+
+  Applause-Real-Data-Build:
     envs:
       - API_TOKEN: "${APPLAUSE_REAL_DATA_API_TOKEN}"
       - WORKFLOW_ID: "${APPLAUSE_REAL_DATA_WORKFLOW_ID}"
     steps:
-      - build-router-start@0:
-          inputs:
-            - access_token: "${BITRISE_ACCESS_TOKEN}"
-            - environment_key_list: |-
-                API_TOKEN
-                WORKFLOW_ID
-            - workflows: test-and-build
-  dogfooding-build:
+      - *start_wrapper_builds
+
+  Dogfooding-Build:
     envs:
       - API_TOKEN: "${DOGFOODING_API_TOKEN}"
       - WORKFLOW_ID: "${DOGFOODING_WORKFLOW_ID}"
     steps:
-      - build-router-start@0:
-          inputs:
-            - access_token: "${BITRISE_ACCESS_TOKEN}"
-            - environment_key_list: |-
-                API_TOKEN
-                WORKFLOW_ID
-            - workflows: test-and-build
-trigger_map:
-  - push_branch: develop
-    workflow: applause-build
-  - push_branch: master
-    workflow: applause-build
-  - pull_request_target_branch: "*"
-    workflow: applause-build
+      - *start_wrapper_builds
