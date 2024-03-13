@@ -7,7 +7,7 @@
     self = [super init];
     if (self) {
         _pluginPlatform = @"flutter";
-        _pluginVersion = @"4.5.0";
+        _pluginVersion = @"5.0.0";
     }
     return self;
 }

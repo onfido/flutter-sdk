@@ -3,10 +3,10 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - Onfido (29.7.0)
+  - Onfido (29.8.0)
   - onfido_sdk (0.0.1):
     - Flutter
-    - Onfido (~> 29.7.0)
+    - Onfido (~> 29.8.0)
   - Toast (4.0.0)
 
 DEPENDENCIES:
@@ -28,12 +28,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/onfido_sdk/ios"
 
 SPEC CHECKSUMS:
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
-  Onfido: 9f2d7e79ee300783a0359a902accf1b6e10e8c26
-  onfido_sdk: 985794c789ad1edee59f2a81500f98d1f6b5bdf0
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
+  Onfido: f51a30838087a71bfeb6a96b063aae9b42b7c93f
+  onfido_sdk: 353b657480378730a0ac8d033771e5a5f8be29cf
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
-PODFILE CHECKSUM: b5c9e6f0565041472ddf8660fd13c905cedfd655
+PODFILE CHECKSUM: 541cb0f42c52b0ee6f0d666392c4f0360bd83066
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.15.2

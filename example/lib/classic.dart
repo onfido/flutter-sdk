@@ -10,14 +10,15 @@ import 'http/onfido_api.dart';
 import 'model/document_type_with_any.dart';
 import 'model/media_callback.dart';
 
-class OnfidoChecksSample extends StatefulWidget {
-  const OnfidoChecksSample({super.key});
+class OnfidoClassic extends StatefulWidget {
+  const OnfidoClassic({super.key});
 
   @override
-  State<OnfidoChecksSample> createState() => _OnfidoChecksSampleState();
+  State<OnfidoClassic> createState() => _OnfidoClassicState();
 }
 
-class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
+class _OnfidoClassicState extends State<OnfidoClassic> {
+  TextEditingController customApiTokenController = TextEditingController(text: "");
   TextEditingController firstNameController = TextEditingController(text: "first");
   TextEditingController lastNameController = TextEditingController(text: "last");
   TextEditingController emailController = TextEditingController(text: "email@email.com");
@@ -45,6 +46,10 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
 
   startOnfido() async {
     try {
+      if (customApiTokenController.text.isNotEmpty) {
+        OnfidoApi.instance.setCustomApiToken(customApiTokenController.text);
+      }
+
       final applicant = await OnfidoApi.instance.createApplicant(
         firstNameController.text,
         lastNameController.text,
@@ -133,9 +138,6 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Onfido Checks'),
-      ),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -147,6 +149,12 @@ class _OnfidoChecksSampleState extends State<OnfidoChecksSample> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
+                  ),
+                ),
+                TextField(
+                  controller: customApiTokenController,
+                  decoration: const InputDecoration(
+                    labelText: 'Custom API Token',
                   ),
                 ),
                 TextField(
