@@ -37,7 +37,13 @@ struct StartStudioBridge: BaseBridge {
                 }
             })
 
-            getFlutterViewController()?.present(try onfidoFlow.run(), animated: true)
+            let vc = getFlutterViewController()
+            var modalPresentationStyle: UIModalPresentationStyle = .fullScreen
+            guard vc != nil else {
+                result(FlutterError(code: "exit", message: "getFlutterViewController returned nil", details: nil))
+                return
+            }
+            try onfidoFlow.run(from: vc!, presentationStyle: modalPresentationStyle)
         } catch {
             result(FlutterError(code: "configuration", message: error.localizedDescription, details: "\(error)"))
         }
