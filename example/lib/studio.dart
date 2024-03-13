@@ -9,14 +9,15 @@ import 'components/alert_dialog.dart';
 import 'http/onfido_api.dart';
 import 'model/media_callback.dart';
 
-class OnfidoWorkflowSample extends StatefulWidget {
-  const OnfidoWorkflowSample({super.key});
+class OnfidoStudio extends StatefulWidget {
+  const OnfidoStudio({super.key});
 
   @override
-  State<OnfidoWorkflowSample> createState() => _OnfidoWorkflowState();
+  State<OnfidoStudio> createState() => _OnfidoStudioState();
 }
 
-class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
+class _OnfidoStudioState extends State<OnfidoStudio> {
+  TextEditingController customApiTokenController = TextEditingController(text: "");
   TextEditingController firstNameController = TextEditingController(text: "first");
   TextEditingController lastNameController = TextEditingController(text: "last");
   TextEditingController emailController = TextEditingController(text: "email@email.com");
@@ -29,6 +30,10 @@ class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
 
   startWorkflow() async {
     try {
+      if (customApiTokenController.text.isNotEmpty) {
+        OnfidoApi.instance.setCustomApiToken(customApiTokenController.text);
+      }
+
       final applicant = await OnfidoApi.instance.createApplicant(
         firstNameController.text,
         lastNameController.text,
@@ -59,9 +64,6 @@ class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Onfido Workflow Sample'),
-      ),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -73,6 +75,12 @@ class _OnfidoWorkflowState extends State<OnfidoWorkflowSample> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
+                  ),
+                ),
+                TextField(
+                  controller: customApiTokenController,
+                  decoration: const InputDecoration(
+                    labelText: 'Custom API Token',
                   ),
                 ),
                 TextField(

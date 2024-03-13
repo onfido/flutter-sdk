@@ -16,7 +16,7 @@ The SDK communicates directly and dynamically with active workflows to show the 
 
 The SDK supports:
 
-* Dart 2.12 or higher
+* Dart 3.1.0 or higher
 * Flutter 1.20 or higher
 * Supports iOS 11+
 * Supports Android API level 21+

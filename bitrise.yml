@@ -10,6 +10,11 @@ aliases:
         - workflows: |-
             test-and-build
 
+  - &set_java_version
+    set-java-version@1:
+      inputs:
+        - set_java_version: "17"
+
   - &create_dot_env_file
     script@1:
       inputs:
@@ -27,6 +32,7 @@ workflows:
     envs:
       - BITRISE_FLUTTER_PROJECT_LOCATION: example/
     steps:
+      - *set_java_version
       - *create_dot_env_file
       - certificate-and-profile-installer@1: {}
       - flutter-installer@0: {}
@@ -70,16 +76,16 @@ workflows:
     steps:
       - *start_wrapper_builds
 
-  Applause-Real-Data-Build:
-    envs:
-      - API_TOKEN: "${APPLAUSE_REAL_DATA_API_TOKEN}"
-      - WORKFLOW_ID: "${APPLAUSE_REAL_DATA_WORKFLOW_ID}"
-    steps:
-      - *start_wrapper_builds
-
   Dogfooding-Build:
     envs:
       - API_TOKEN: "${DOGFOODING_API_TOKEN}"
       - WORKFLOW_ID: "${DOGFOODING_WORKFLOW_ID}"
+    steps:
+      - *start_wrapper_builds
+
+  Internal-Testing-Build:
+    envs:
+      - API_TOKEN: "${SDK_TESTS_API_TOKEN}"
+      - WORKFLOW_ID: "${SDK_TESTS_WORKFLOW_ID}"
     steps:
       - *start_wrapper_builds

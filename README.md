@@ -46,7 +46,7 @@ It offers a number of benefits to help you create the best identity verification
 
 ## Getting started
 
-* Dart 2.12 or higher
+* Dart 3.1.0 or higher
 * Flutter 1.20 or higher
 * Supports iOS 11+
 * Supports Android API level 21+
