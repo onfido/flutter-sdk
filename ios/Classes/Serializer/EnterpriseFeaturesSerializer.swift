@@ -16,7 +16,7 @@ extension EnterpriseFeatures {
             enterpriseBuilder.withHideOnfidoLogo(true)
         }
 
-        if let cobrandingText = dictionary["cobrandingText"] as? String {
+        if let cobrandingText = dictionary["cobrandingText"] as? String, !cobrandingText.isEmpty {
             enterpriseBuilder.withCobrandingText(cobrandingText)
         }
 

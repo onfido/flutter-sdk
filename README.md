@@ -3,48 +3,15 @@
 [![Build Status](https://app.bitrise.io/app/f903440a37a6c929/status.svg?token=arqCbpqUc8jvgj71_qQZoQ)](https://app.bitrise.io/app/f903440a37a6c929)
 
 ## Table of contents
-  - [Overview](#overview)
-  - [Getting started](#getting-started)
-      - [Obtain an API token](#1-obtain-an-api-token)
-          - [Regions](#1.1-regions)
-      - [Create an applicant](#2-create-an-applicant)
-      - [Configure the SDK with token](#3-configure-the-sdk-with-token)
-      - [Add the SDK dependency](#4-add-the-sdk-dependency)
-      - [Update your iOS Configuration files](#5-update-your-ios-configuration-files)
-  - [Usage](#usage)
-      - [Creating the SDK configuration](#1-creating-the-sdk-configuration)
-      - [Start the flow](#2-start-the-flow)
-      - [Handling responses](#3-handling-responses)
-          - [Success handling](#success-handling)
-          - [Error handling](#error-handling)
-  - [Custom callbacks](#4-custom-callbacks)
-      - [Media callbacks](#media-callbacks)
-  - [Language Customisation](#language-customisation)
-  - [UI Customisation](#ui-customisation)
-  - [Going live](#going-live)
-  - [More Information](#more-information)
-      - [Sample App](#sample-app)
-      - [Support](#support)
-      - [How is the Onfido Flutter SDK licensed?](#how-is-the-onfido-flutter-sdk-licensed)
-## Overview
 
-The Onfido Flutter SDK provides a drop-in set of screens and tools for Flutter applications to capture identity documents and selfie photos, videos and motion captures for the purpose of identity verification.
-
-It offers a number of benefits to help you create the best identity verification experience for your customers:
-
--   Carefully designed UI to guide your customers through the photo, video or motion capture process
--   Modular design to help you seamlessly integrate the photo, video or motion capture process into your application flow
--   Advanced image quality detection technology to ensure the quality of the captured images meets the requirement of the Onfido identity verification process, guaranteeing the best success rate
--   Direct image upload to the Onfido service, to simplify integration
-
-
-> ℹ️ 
-> 
-> If you are integrating using Onfido Studio please see our [Studio integration guide](ONFIDO_STUDIO.md)
-
-⚠️ Note: The SDK is only responsible for capturing and uploading  photos, videos and motion capture. You still need to access the [Onfido API](https://documentation.onfido.com/) to manage applicants and perform checks.
-
-## Getting started
+- [1. Overview](#overview)
+- [2. Adding the SDK dependency](#adding-the-sdk-dependency)
+- [3. Initializing the SDK](#initializing-the-sdk)
+- [4. Completing a session](#completing-a-session)
+- [Advanced flow customization](#advanced-flow-customization)
+- [Advanced callbacks](#advanced-callbacks)
+- [More information](#more-information)
+- [Raising support issues](#support)
 
 * Dart 3.1.0 or higher
 * Flutter 1.20 or higher
@@ -56,62 +23,59 @@ It offers a number of benefits to help you create the best identity verification
 
 In order to start integrating, you'll need an [API token](https://documentation.onfido.com/#api-tokens).
 
-You can use our [sandbox](https://documentation.onfido.com/#sandbox-testing) environment to test your integration. To use the sandbox, you'll need to generate a sandbox API token in your [Onfido Dashboard](https://onfido.com/dashboard/api/tokens).
+The Onfido Smart Capture SDKs provide a set of screens and functionalities that enable applications to implement user identity verification flows. Each SDK contains:
 
-⚠️ Note: You must never use API tokens in the frontend of your application or malicious users could discover them in your source code. You should only use them on your server.
+- Carefully designed UX to guide your customers through the different photo or video capture processes
+- Modular design to help you seamlessly integrate the different photo or video capture processes into your application's flow
+- Advanced image quality detection technology to ensure the quality of the captured images meets the requirement of the
+  Onfido identity verification process, guaranteeing the best success rate
+- Direct image upload to the Onfido service, to simplify integration
+- A suite of advanced fraud detection signals to protect against malicious users
 
-#### 1.1 Regions
+All Onfido Smart Capture SDKs are orchestrated using [Onfido Studio](https://developers.onfido.com/guide/onfido-studio-product) workflows, with only minor customization differences between the available platforms.
 
-Onfido offers region-specific environments. Refer to the [Regions](https://documentation.onfido.com/#regions) section in our API documentation for token format and API base URL information.
+### Environments and testing with the SDK
 
-### 2. Create an applicant
+Two environments exist to support the Onfido SDK integrations:
 
-To create an applicant from your backend server, make a request to the ['create applicant' endpoint](https://documentation.onfido.com/#create-applicant), using a valid API token.
+- 'sandbox' - to be used for testing with sample documents
+- 'live' - to be used only with real documents and in production apps
 
-**Note**: Different report types have different minimum requirements for applicant data. For a Document or Facial Similarity report the minimum applicant details required are `first_name` and `last_name`.
+The environment being used is determined by the API token that is used to generate the necessary [SDK token](#sdk-authentication).
 
-```shell
-$ curl https://api.onfido.com/v3/applicants \
-    -H 'Authorization: Token token=<YOUR_API_TOKEN>' \
-    -d 'first_name=John' \
-    -d 'last_name=Smith'
-```
+### Going Live
 
-The JSON response will return an `id` field containing a UUID that identifies the applicant. Once you pass the applicant ID to the SDK, documents, photos, videos and motion captures uploaded by that instance of the SDK will be associated with that applicant.
+Once you are satisfied with your integration and are ready to go live, please contact [client-support@onfido.com](mailto:client-support@onfido.com) to obtain a live API token. You will have to replace the sandbox token in your code with the live token.
 
-### 3. Configure the SDK with token
+Check that you have entered correct billing details inside your [Onfido Dashboard](https://onfido.com/dashboard/), before going live.
 
-You'll need to generate and include an SDK token every time you initialize the SDK.
+## Adding the SDK dependency
 
-To generate an SDK token, make a request to the ['generate SDK token' endpoint](https://documentation.onfido.com/#generate-web-sdk-token).
+The Flutter SDK supports:
 
-```shell
-$ curl https://api.onfido.com/v3/sdk_token \
-  -H 'Authorization: Token token=<YOUR_API_TOKEN>' \
-  -F 'applicant_id=<APPLICANT_ID>' \
-  -F 'application_id=<YOUR_APPLICATION_BUNDLE_IDENTIFIER>'
-```
+* Dart 3.1.0 or higher
+* Flutter 1.12 or higher
+* iOS 12+
+* Android API level 21+
+* iPads and tablets
 
-| Parameter           |  Notes   |
-| ------------ | --- |
-| `applicant_id` | **required** <br /> Specifies the applicant for the SDK instance. |
-| `application_id` | **required** <br /> The application ID (for iOS "application bundle ID") that was set up during development. For iOS, this is usually in the form `com.your-company.app-name`. Make sure to use a valid `application_id` or you'll receive a 401 error. |
+### Using pub.dev
 
-⚠️ SDK tokens expire after 90 minutes.
+The Flutter SDK is available on [pub.dev](https://pub.dev/packages/onfido_sdk/install) and you can include it in your project by running the following script from your project folder:
 
-### 4. Add the SDK dependency
 ```shell
 flutter pub add onfido_sdk
 ```
 
-### 5. Update your iOS Configuration files
+### Update your iOS Configuration files
 
-Change `ios/Podfile` to use version 11:
+Change `ios/Podfile` to use version 12:
 ```
-platform :ios, '11.0'
+platform :ios, '12.0'
 ```
 
-The SDK uses the device camera. You're required to have the following keys in your application's `ios/Runner/Info.plist` file:
+The Flutter SDK uses the device camera. You're required to have the following keys in your application's `ios/Runner/Info.plist` file:
+
 *  `NSCameraUsageDescription`
 *  `NSMicrophoneUsageDescription`
 
@@ -123,151 +87,206 @@ The SDK uses the device camera. You're required to have the following keys in yo
 ```
 **Note**: All keys will be required for app submission.
 
-## Usage
+### NFC capture using Onfido Studio
 
-### 1. Creating the SDK configuration
-Once you have an added the SDK as a dependency, and you have a SDK token, you can configure the SDK:
+Recent passports, national identity cards and residence permits contain a chip that can be accessed using Near Field Communication (NFC). The Onfido SDKs provide a set of screens and functionalities to extract this information, verify its authenticity and provide the resulting verification as part of a Document report.
 
-```dart
-final Onfido onfido = Onfido(
-  sdkToken: apiToken,
-  iosLocalizationFileName: "onfido_ios_localisation", //Optional
-  onfidoTheme: OnfidoTheme.AUTOMATIC //Optional
-);
-```
+From version 4.0.0 onwards, NFC is enabled by default for the Flutter SDK and offered to customers when both the document and the device support NFC.
 
-#### 1.1 Parameter details
+For more information on how to configure NFC and the list of supported documents, please refer to the [NFC for Document Report](https://developers.onfido.com/guide/document-report-nfc) guide.
 
-* **`sdkToken`**: Required.  This is the JWT sdk token obtained by making a call to the SDK token API.  See section [Configuring SDK with Tokens](#3-configure-the-sdk-with-token).
-* **`iosLocalizationFileName`**: Optional. This is the file name for configuring the localisation for iOS only. See section [Language Customisation](#language-customisation) for the details.
-* **`onfidoTheme`**: Optional. The theme in which Onfido SDK is displayed. By default, the user's active device theme will be
-  automatically applied to the Onfido SDK. However, you can opt out from dynamic theme switching at run time
-  and instead set a theme statically at the build time as shown below. In this case, the flow will always be in displayed
-  in the selected theme regardless of the user's device theme.
-    * Valid values in `OnfidoTheme`: `AUTOMATIC`, `LIGHT`, `DARK`.
+#### Disabling NFC
 
-### 2. Start the flow
-```dart
-startOnfido() async {
-  try {
-    final response = await onfido.start(
-      flowSteps: FlowSteps(
-        proofOfAddress: true,
-        welcome: true,
-        documentCapture: DocumentCapture(),
-        faceCapture: FaceCapture.photo(
-          withIntroScreen: _introScreen,
-        ),
-      ),
-    );
-    ... handle response
-  } catch (error) {
-    ... handle error
+NFC is enabled by default. To disable NFC, include the `disableNFC` parameter while configuring the `onfido` [initialization object](#build-a-configuration-object).
+
+For Android, a range of NFC library dependencies are included in the build automatically. In addition to configuring the `disableNFC` parameter, you must remove any libraries from the build process.
+
+Exclude dependencies required for NFC from your build:
+
+```gradle
+dependencies {
+  implementation 'com.onfido.sdk.capture:onfido-capture-sdk:x.y.z' {
+    exclude group: 'net.sf.scuba', module: 'scuba-sc-android'
+    exclude group: 'org.jmrtd', module: 'jmrtd'
+    exclude group: 'com.madgag.spongycastle', module: 'prov'
   }
 }
 ```
 
-#### 2.1 Parameter details
+If your application already uses the same libraries that the Onfido SDK needs for the NFC feature, you may encounter some dependency conflicts that will impact and could interfere with the NFC capture in our SDK. In such cases, we propose using the dependency resolution strategy below, by adding the following lines to your `build.gradle` file:
 
-* **`flowSteps`**: Required. This object is used to toggle individual screens on and off and set configurations inside the screens. 
-  * **`FlowSteps.welcome`**: Optional. This toggles the welcome screen on or off. If omitted, this screen does not appear in the flow.
-
-  * **`FlowSteps.proofOfAddress`**: Optional. In the Proof of Address step, a user picks the issuing country and type of document that proves their address before capturing the document with their phone camera or uploading it.
-
-  * **`FlowSteps.documentCapture`**: Optional. In the Document step, a user can pick the type of document to capture and its issuing country before capturing it with their phone camera. Document selection and country selection are both optional screens. These screens will only show to the end user if specific options are not configured to the SDK.
-    * **`DocumentCapture.documentType`**: Required if countryCode is specified. Valid values in `document_type.dart`.
-    * **`DocumentCapture.countryCode`**: Required if documentType is specified. Valid values in `country_code.dart`.
-      
-  * **`FlowSteps.faceCapture`**: Optional. In this step, a user can use the front camera to capture their face in the form of photo, video, or motion capture. You can create a `FaceCapture` object using the corresponding factory constructors: `FaceCapture.photo()`, `FaceCapture.video()`, or `FaceCapture.motion()`. Each capture method can have additional configurations. If any of these optional parameters are not provided, the default values will be used in each platform. Please refer to the respective platform documentation for details on the default behaviors of these parameters. 
-      * `photo`:
-          * `withIntroScreen` (Optional, bool): Whether to show an introduction screen before the photo capture.
-      * `video`:
-          * `withIntroVideo` (Optional, bool): Whether to show video guidance on the introduction screen before the video capture.
-          * `withConfirmationVideoPreview` (Optional, bool) (Android only): Whether to show a preview of the captured video for user confirmation.
-          * `withManualLivenessCapture` (Optional, bool) (iOS only): Whether to enable manual capture during the video recording.
-      * `motion`:
-          * `withAudio` (Optional, bool): Whether to capture audio during the motion sequence.
-          * `withCaptureFallback` (Optional, FaceCapture): An alternative FaceCapture method (Photo or Video) to use as a fallback if the Motion variant is not supported on the user's device due to platform-specific factors:
-              * iOS: Minimum device and OS requirements can limit support, such as Motion not being supported on devices older than iPhone 7, on iOS older than 12, or on iPads.
-              * Android: Fallback is not used in Android anymore as Motion is supported in all devices and OS versions specified by the SDK.
-
-
-#### 2.1.1 Android Project Prerequisites
-
-NFC dependencies are not included in the SDK to avoid increasing the SDK size when the NFC feature is disabled. To use the NFC feature, you need to include the following dependencies (with the specified versions) in your build script:
-
-```
-implementation "net.sf.scuba:scuba-sc-android:0.0.23"
-implementation "org.jmrtd:jmrtd:0.7.34"
-implementation "com.madgag.spongycastle:prov:1.58.0.0"
+```gradle
+implementation ("com.onfido.sdk:onfido-<variant>:19.1.0"){
+     exclude group: "org.bouncycastle"
+ }
+ implementation ("the other library that conflicts with Onfido on BouncyCastle") {
+     exclude group: "org.bouncycastle"
+ }
+ 
+ implementation "org.bouncycastle:bcprov-jdk15to18:1.69"
+ implementation "org.bouncycastle:bcutil-jdk15to18:1.69"
 ```
 
-You also need to add the following Proguard rules to your `proguard-rules.pro` file:
+## Initializing the SDK
 
-```
--keep class org.jmrtd.** { *; }
--keep class net.sf.scuba.** {*;}
--keep class org.bouncycastle.** {*;}
--keep class org.spongycastle.** {*;}
--keep class org.ejbca.** {*;}
+The Flutter SDK has multiple initialization and customization options that provide flexibility to your integration, while remaining easy to integrate.
 
--dontwarn kotlin.time.jdk8.DurationConversionsJDK8Kt
--dontwarn org.ejbca.**
--dontwarn org.bouncycastle.**
--dontwarn org.spongycastle.**
+### Defining a workflow
 
--dontwarn module-info
--dontwarn org.jmrtd.**
--dontwarn net.sf.scuba.**
-```
+Onfido Studio is the platform used to create highly reusable identity verification workflows for use with the Onfido SDKs. For an introduction to working with workflows, please refer to our [Getting Started guide](https://developers.onfido.com/guide/general-introduction), or the Onfido Studio [product guide](https://developers.onfido.com/guide/onfido-studio-product).
 
-### 3. Handling responses
+SDK sessions are orchestrated by a session-specific `workflow_run_id`, itself derived from a `workflow_id`, the unique identifier of a given workflow.
 
-#### Success handling
-When the user has reached the end of the flow, you will receive the response with `[OnfidoResult]` and you can now [create a check]() on your backend server.
+For details on how to generate a `workflow_run_id`, please refer to the `POST /workflow_runs/` endpoint definition in the Onfido [API reference](https://documentation.onfido.com/#workflow-runs).
 
-`[OnfidoResult]` is a list with multiple results. The results are different objects, each with its own associated value (also known as payload). This object, `OnfidoResult`, can have the following values:
+<Callout type="warning">
+
+> **Note** that in the context of the SDK, the `workflow_run_id` property is referred to as `workflowRunId`.
+
+</Callout>
+
+#### Applicant ID reuse
+
+When defining workflows and creating identity verifications, we highly recommend saving the `applicant_id` against a specific user for potential reuse. This helps to keep track of users should you wish to run multiple identity verifications on the same individual, or in scenarios where a user returns to and resumes a verification flow.
+
+### SDK authentication
+
+The SDK is authenticated using SDK tokens. As each SDK token must be specific to a given applicant and session, a new token must be generated each time you initialize the Flutter SDK.
+
+| Parameter | Notes |
+|------|------|
+| `applicant_id` | **required** <br /> Specifies the applicant for the SDK instance. |
+| `application_id` | **required** <br /> The application ID (for iOS "application bundle ID") that was set up during development. For iOS, this is usually in the form `com.your-company.app-name`. Make sure to use a valid `application_id` or you'll receive a 401 error. |
+
+It's important to note that SDK tokens expire after **90 minutes**.
+
+For details on how to generate SDK tokens, please refer to the `POST /sdk_token/` endpoint definition in the Onfido [API reference](https://documentation.onfido.com/#generate-sdk-token).
+
+**Note**: You must never use API tokens in the frontend of your application as malicious users could discover them in your source code. You should only use them on your server.
+
+### Build a configuration object
+
+To use the SDK, you need to obtain an instance of the client object, using your generated SDK token. You can also pass in a range of optional configuration parameters to customize the SDK flow.
 
 ```dart
-OnfidoResult(
-  document: DocumentResult(
-    front: DocumentSideResult(id: "id"),
-    typeSelected: "passport",
-    countrySelected: null,
-  ),
-  face: FaceResult(
-    id: "id",
-    variant: FaceCaptureType.video,
-  ),
-  proofOfAddress: ProofOfAddressResult(
-    id: "id",
-    type: "bank_building_society_statement",
-    issuingCountry: "BRA",
-  ),
+final Onfido onfido = Onfido(
+  sdkToken: "<YOUR_SDK_TOKEN>",
+  iosLocalizationFileName: "onfido_ios_localisation", // Optional
+  onfidoTheme: OnfidoTheme.AUTOMATIC, // Optional
+  disableNFC: "true" // Optional
 );
 ```
 
-#### Error handling
-You will receive a `PlatformException` if something goes wrong and the SDK will reject the promise falling into the catch block. The failure can be triggered during the initialisation, user leaving the SDK flow without completing it and run time exceptions.
+#### Parameter details
 
-| Error Code | Notes |
-| ----- | ------ |
-| `exit` | When the user has left the SDK flow without completing. |
-| `error` | When something happens in run time, e.g. camera permission denied by the user. |
-| `configuration` | When something happens before initializing the SDK, may be caused by invalid configuration. |
+* **`sdkToken`**: **Required**.  This is the SDK token obtained by making a call to the SDK token API, as [documented above](#sdk-authentication).
 
+* **`iosLocalizationFileName`**: **Optional**. This is the file name for configuring custom language localization for iOS only. See the section on [language localization](#language-localization) for more details.
 
-## Custom Callbacks
+* **`onfidoTheme`**: **Optional**. The theme in which the Onfido SDK is displayed. By default, the user's active device theme will be
+  automatically applied to the Onfido SDK. However, you can opt out from dynamic theme switching at run time
+  and instead set a theme statically at the build time. In this case, the flow will always be in displayed
+  in the selected theme regardless of the user's device theme.
+    * Valid values in `OnfidoTheme`: `AUTOMATIC`, `LIGHT`, `DARK`.
+
+* **`disableNFC`**: **Optional**. Set this parameter to `true` to disable NFC. 
+
+### Start the flow
+
+You can then start the flow by calling `startWorkflow`, passing in a `workflowRunId`.
+
+```dart
+await onfido.startWorkflow('workflowRunId');
+// listen for the response
+```
+
+### Styling customization
+
+For both iOS and Android, the Flutter SDK supports the customization of colors, fonts and strings used in the SDK flow.
+
+### Appearance and Colors
+
+#### Android
+
+The customization of UI attributes for Android in the Flutter SDK is implemented in the same way as our native Android SDK.
+
+Starting from version 4.1.0, the Flutter SDK also supports [dark mode](https://documentation.onfido.com/sdk/android/#dark-theme) for Android.
+
+Please refer to the [Android SDK reference](https://documentation.onfido.com/sdk/android/#ui-customization) documentation for implementation details, as well as the [SDK customization guide](https://developers.onfido.com/guide/sdk-customization#flutter) for a complete list and visualizations of available attributes.
+
+#### iOS
+
+For iOS, you can use the `IOSAppearance` object to customize your application.
+
+For example: 
+
+```dart
+final Onfido onfido = Onfido(
+  iosAppearance: IOSAppearance(
+      fontBold: "<Font-Name>",
+      fontRegular: "<Font-Name>",
+      secondaryTitleColor: Colors.yourColor,
+      primaryColor: Colors.yourColor,
+      buttonCornerRadius: 10,
+      primaryTitleColor: Colors.yourColor,
+      bubbleErrorBackgroundColor: Colors.yourColor,
+      primaryBackgroundPressedColor: Colors.yourColor,
+      secondaryBackgroundPressedColor: Colors.yourColor,
+      backgroundColor: BackgroundColor(Colors.yourLightColor, Colors.yourDarkColor),
+      onfidoTheme: "DARK"
+  )
+);
+```
+
+##### Dark Mode
+
+Starting from version 4.1.0, the Flutter SDK supports dark mode customization for iOS.
+
+The `onfidoTheme` property in the `IOSAppearance` object allows you to force light or dark mode via `DARK` and `LIGHT` respectively, or follow the system's interface style with `AUTOMATIC` (the default value).
+
+**Note:**: The usage of `supportDarkMode` in `IOSAppearance` is deprecated from version 4.1.0. Please use `onfidoTheme` instead.
+
+### Language localization
+
+The Flutter SDK supports and maintains translations for over 40 languages, available for use with both Android and iOS.
+
+The SDK will detect and use the end user's device language setting. If the device's language is not supported by Onfido, the SDK will default to English (`en_US`).
+
+For a complete list of the languages Onfido supports, refer to our [SDK customization guide](https://developers.onfido.com/guide/sdk-customization#language-localization).
+
+#### Custom languages for Android
+
+You can also provide a custom translation for a specific language or locale that Onfido does not currently support, by having an additional XML strings file inside your resources folder for the desired locale. See our [Android localization documentation](https://documentation.onfido.com/sdk/android/#language-localization) for more details.
+
+#### Custom languages for iOS
+
+For iOS, you can also provide a custom translation for a specific language or locale that Onfido does not currently support. To configure this on the Flutter SDK:
+
+1. Add this statement to your [configuration object](#build-a-configuration-object).
+
+```dart
+final Onfido onfido = Onfido(
+  ...
+  iosLocalizationFileName: '<Your .strings file name in iOS app bundle>'
+);
+```
+
+2. Navigate to the iOS folder ```cd ios```, and open your XCode workspace.
+3. Follow the instructions for [iOS Localisation](https://medium.com/lean-localization/ios-localization-tutorial-938231f9f881) to add a new custom language or override existing translations.
+4. You can find the keys that need to be translated in the [iOS SDK repo](https://github.com/onfido/onfido-ios-sdk/blob/master/localization/Localizable_EN.strings).
+
+## Completing a session
 
 ### Media Callbacks
 
 #### Introduction
+
 Onfido provides the possibility to integrate with our Smart Capture SDK, without the requirement of using this data only through the Onfido API. Media callbacks enable you to control the end user data collected by the SDK after the end user has submitted their captured media. As a result, you can leverage Onfido’s advanced on-device technology, including image quality validations, while still being able to handle end users’ data directly. This unlocks additional use cases, including compliance requirements and multi-vendor configurations, that require this additional flexibility.
 
 **This feature must be enabled for your account.** Please contact your Onfido Solution Engineer or Customer Success Manager.
 
 #### Implementation
-To use this feature, implement the `OnfidoMediaCallback` interface and provide the callback for `OnfidoMediaResult` for documents, live photos and live videos.
+To use this feature, implement the `OnfidoMediaCallback` interface and provide the callback for `OnfidoMediaResult` for documents, live photos and live videos:
 
 ```dart
 class MediaCallback implements OnfidoMediaCallback {
@@ -292,177 +311,154 @@ final Onfido onfido = Onfido(
 );    
 ```
 
+### Generating verification reports
 
-## NFC Capture
+While the SDK is responsible for capturing and uploading the user's media and data, identity verification reports themselves are generated based on workflows created using [Onfido Studio](https://developers.onfido.com/guide/onfido-studio-product).
 
-Recent passports, national identity cards and residence permits contain a chip that can be accessed using Near Field Communication (NFC).
+For a step-by-step walkthrough of creating an identity verification using Onfido Studio and our SDKs, please refer to our [Quick Start Guide](https://developers.onfido.com/guide/quick-start-guide).
 
-The Onfido SDKs provide a set of screens and functionalities to extract this information, verify its authenticity and provide the results as part of a Document report.
+If your application initializes the Onfido Flutter SDK using the options defined in the [Advanced customization](#advanced-flow-customization) section of this document, you may [create checks](https://documentation.onfido.com/#create-check) and [retrieve report results](https://documentation.onfido.com/#retrieve-report) manually using the Onfido API.
+You may also configure [webhooks](https://documentation.onfido.com/#webhooks) to be notified asynchronously when the report results have been generated.
 
-With version 4.0.0 of the Onfido Flutter SDK, NFC is enabled by default and offered to customer when both the document and the device support NFC.
+## Advanced flow customization
 
-For more information on how to configure NFC and the list of supported documents, please refer to the [NFC for Document Report](https://developers.onfido.com/guide/document-report-nfc) guide.
+This section on 'Advanced customization' refers to the process of initializing the Onfido Flutter SDK without the use of Onfido Studio. This process requires a manual definition of the verification steps and their configuration.
 
+While building the configuration object is done in exactly the same way as [documented above](#build-a-configuration-object), the `flowSteps` parameter used to manually define the steps of the identity verification journey in the `start` function is mutually exclusive of the `startWorkflow` function and the `workflowRunId` parameter.
 
-## Language Customisation
+**Note** that this initialization process is **not recommended** as the majority of new features are exclusively released for Studio workflows.
 
-The SDK supports and maintains the following 44 languages:
+### Manually starting the flow
 
-- Arabic: ar
-- Armenian: hy
-- Bulgarian: bg
-- Chinese (Simplified): zh_rCN (Android), zh-Hans (iOS)
-- Chinese (Traditional): zh_rTW (Android), zh-Hant (iOS)
-- Croatian: hr
-- Czech: cs
-- Danish: da🇰
-- Dutch: nl🇱
-- English (United Kingdom): en_rGB
-- English (United States): en_rUS
-- Estonian: et
-- Finnish: fi
-- French (Canadian): fr_rCA
-- French: fr
-- German: de
-- Greek: el
-- Hebrew: iw
-- Hindi: hi
-- Hungarian: hu
-- Indonesian: in
-- Italian: it
-- Japanese: ja
-- Korean: ko
-- Latvian: lv
-- Lithuanian: lt
-- Malay: ms
-- Norwegian bokmål: nb
-- Norwegian nynorsk: nn
-- Persian: fa
-- Polish: pl
-- Portuguese (Brazil): pt_rBR
-- Portuguese: pt
-- Romanian: ro
-- Russian: ru
-- Serbian: sr
-- Slovak: sk
-- Slovenian: sl
-- Spanish (Latin America): es_rUS
-- Spanish: es
-- Swedish: sv
-- Thai: th
-- Turkish: tr
-- Ukrainian: uk
-- Vietnamese: vi
-
-However, you can add your own translations.
-
-### Android
-By default, custom localisation is enabled on Android. There is no configuration needed on Flutter SDK to enable it.
-You could also provide custom translation for a locale that we don’t currently support, by having an additional XML strings file inside your resources folder for the desired locale. See [Localisation section of Android SDK repo](https://github.com/onfido/onfido-android-sdk#4-localisation) for the details.
-
-### iOS
-You can also provide a custom translation for a locale that Onfido doesn't currently support.
-There is a simple configuration needed on the Flutter SDK to enable custom localisation.
-
-1. Add this statement to your configuration object.
 ```dart
-final Onfido onfido = Onfido(
-  ...
-  iosLocalizationFileName: '<Your .strings file name in iOS app bundle>'
-);
+startOnfido() async {
+  try {
+    final response = await onfido.start(
+      flowSteps: FlowSteps(
+        proofOfAddress: true,
+        welcome: true,
+        documentCapture: DocumentCapture(),
+        faceCapture: FaceCapture.photo(
+          withIntroScreen: _introScreen,
+        ),
+      ),
+    );
+    ... handle response
+  } catch (error) {
+    ... handle error
+  }
+}
 ```
-2. Navigate to the iOS folder ```cd ios```, and open your XCode workspace.
-3. Follow the instructions for [iOS Localisation](https://medium.com/lean-localization/ios-localization-tutorial-938231f9f881) to add a new custom language or override existing translations.
-4. You can find the keys that need to be translated in the [iOS SDK repo](https://github.com/onfido/onfido-ios-sdk/blob/master/localization/Localizable_EN.strings).
 
+#### Parameter details
 
-## UI Customisation
-The SDK supports the customisation of colors and fonts used in the SDK flow.
+* **`flowSteps`**: **Required**. This object is used to toggle on or off the individual screens a user will see during the verification flow, and to set configurations for each screen. 
+  * **`FlowSteps.welcome`**: **Optional**. This toggles the welcome screen on or off. If omitted, this screen does not appear in the flow. Valid values are `true` or `false`.
 
-### Android
+  * **`FlowSteps.proofOfAddress`**: **Optional**. This toggles the proof of address screen on or off, where a user selects the issuing country and type of document that verifies their address before capturing the document with their phone camera, or uploading it. Valid values are `true` or `false`.
 
-Starting from Flutter version 4.1.0, dark mode and UI theme customsizations are supported. You can customize the colors across fonts, icons, buttons, etc. and other appearance attributes by overriding Onfido themes (OnfidoActivityTheme and OnfidoDarkTheme) in your themes.xml or styles.xml files. There is no additional configuration needed on the Flutter SDK to enable these Android customisations. 
+  * **`FlowSteps.documentCapture`**: **Optional**. In the Document step, a user can select the type of document to capture and its issuing country before capturing it with their phone camera. Document type selection and country selection are dynamic screens, and will be automatically hidden where the end user is not required to choose which document should be captured.
+    * **`DocumentCapture.documentType`**: Required if `countryCode` is specified. Valid values can be found in the `document_type.dart` modal.
+    * **`DocumentCapture.countryCode`**: Required if `documentType` is specified. Valid values can be found in the `country_code.dart` modal.
+      
+  * **`FlowSteps.faceCapture`**: **Optional**. In this step, a user can use the front camera to capture their face in the form of a photo, video, or motion capture. You can create a `FaceCapture` object using the corresponding factory constructors: `FaceCapture.photo()`, `FaceCapture.video()`, or `FaceCapture.motion()`. Each capture method can have additional configurations. If any of these optional parameters are not provided, the default values will be used in each platform. Please refer to the respective platform documentation for details on the default behaviors of these parameters. 
+      * `photo`:
+          * `withIntroScreen` (**Optional**): Whether to show an introduction screen before the photo capture.
+      * `video`:
+          * `withIntroVideo` (**Optional**): Whether to show video guidance on the introduction screen before the video capture.
+          * `withConfirmationVideoPreview` (**Optional**, Android only): Whether to show a preview of the captured video for user confirmation.
+          * `withManualLivenessCapture` (**Optional**, iOS only): Whether to enable manual capture during the video recording.
+      * `motion`:
+          * `withAudio` (**Optional**): Whether to capture audio during the motion sequence.
+          * `withCaptureFallback` (**Optional**, FaceCapture): An alternative FaceCapture method (Photo or Video) to use as a fallback if the Motion variant is not supported on the user's device due to platform-specific factors:
+              * iOS: Minimum device and OS requirements can limit support, such as Motion not being supported on devices older than iPhone 7, on iOS older than 12, or on iPads.
+              * Android: From version 4.2.0 of the Flutter SDK, fallback is not used in Android anymore as Motion is supported in all devices and OS versions specified by the SDK.
 
-Please see the [UI Customization section](https://github.com/onfido/onfido-android-sdk#ui-customization) of the Android SDK for full customisation options and implementation details. 
+## Advanced callbacks
 
-### iOS
-You can use the `IOSAppearance` object to customise the iOS application.
+### Success Response
 
-For example: 
+When the user has reached the end of the flow, you will receive the response with `[OnfidoResult]`, a list with multiple results. 
+
+The results are different objects, each with its own associated value (also known as payload). The `OnfidoResult` object can have the following values:
+
 ```dart
-final Onfido onfido = Onfido(
-  iosAppearance: IOSAppearance(
-      fontBold: "<Font-Name>",
-      fontRegular: "<Font-Name>",
-      secondaryTitleColor: Colors.yourColor,
-      primaryColor: Colors.yourColor,
-      buttonCornerRadius: 10,
-      primaryTitleColor: Colors.yourColor,
-      bubbleErrorBackgroundColor: Colors.yourColor,
-      primaryBackgroundPressedColor: Colors.yourColor,
-      secondaryBackgroundPressedColor: Colors.yourColor,
-      backgroundColor: BackgroundColor(Colors.yourLightColor, Colors.yourDarkColor)
-  )
+OnfidoResult(
+  document: DocumentResult(
+    front: DocumentSideResult(id: "id"),
+    typeSelected: "passport",
+    countrySelected: null,
+  ),
+  face: FaceResult(
+    id: "id",
+    variant: FaceCaptureType.video,
+  ),
+  proofOfAddress: ProofOfAddressResult(
+    id: "id",
+    type: "bank_building_society_statement",
+    issuingCountry: "BRA",
+  ),
 );
 ```
 
-#### Dark Mode
+### Error Response
 
-The `onfidoTheme` parameter allows you to force light or dark mode via `DARK` and `LIGHT` respectively, or follow the system's interface style with `AUTOMATIC` (the default value).
+You will receive a `PlatformException` if an error occurs, and the SDK will reject the promise falling into the catch block. The failure can be triggered during the initialization, by run time exceptions, or by the user leaving the SDK without completing the flow.
 
-Note: The usage of `supportDarkMode` in `IOSAppearance` is now deprecated. Please use `onfidoTheme` instead.
+| Error Code | Notes |
+| ----- | ------ |
+| `configuration` | When something happens before initializing the SDK, may be caused by invalid configuration. |
+| `error` | When something happens in run time, e.g. camera permission denied by the user. |
+| `exit` | When the user has left the SDK flow without completing. |
 
-## Error handling
-
-The `Error` object returned as part of `PlatformException` which translate the errors from native side to Dart. You can identify the type of the error from the error message
+The `Error` object returned as part of `PlatformException` translates the errors from the native side to Dart. You can identify the type of the error from the error message:
 
 ```dart
-    // This happens if the user denies permission to the SDK during the flow
     PlatformException(error, The operation couldn’t be completed. (Onfido.OnfidoFlowError error 2.), cameraPermission, null)
-    
-    // This happens when the SDK tries to save capture to disk, maybe due to a lack of space
+      // Occurs if the user denies permission to the SDK during the flow
+
     PlatformException(error, The operation couldn’t be completed. (Onfido.OnfidoFlowError error 2.), failedToWriteToDisk, null)
+      // Occurs when the SDK tries to save capture to disk, maybe due to a lack of space
 
-    // This happens when the user denies permission for microphone usage by the app during the flow
     PlatformException(error, The operation couldn’t be completed. (Onfido.OnfidoFlowError error 2.), microphonePermission, null)
+      // Occurs when the user denies permission for microphone usage by the app during the flow
 
-    // This happens when the SDK receives an error from an API call see [https://documentation.onfido.com/#errors](https://documentation.onfido.com/#errors) for more information
     PlatformException(error, The operation couldn’t be completed. (Onfido.OnfidoFlowError error 2.), upload, null)
+      // Occurs when the SDK receives an error from an [API call](https://documentation.onfido.com/#errors)
 
-    // This happens when an unexpected error occurs. Please contact [ios-sdk@onfido.com](mailto:ios-sdk@onfido.com?Subject=ISSUE%3A) when this happens
-    PlatformException(error, The operation couldn’t be completed. (Onfido.OnfidoFlowError error 2.), exception, null)
+    PlatformException(error, The operation couldn’t be completed. (<platform_specific_error>), exception, null)
+      // Occurs when an unexpected error occurs. Please contact [ios-sdk@onfido.com](mailto:ios-sdk@onfido.com?Subject=ISSUE%3A) or [android-sdk@onfido.com](mailto:android-sdk@onfido.com?Subject=ISSUE%3A) when this happens
 
-    // This happens when you are using an older version of the iOS SDK and trying to access a new functionality from workflow. You can fix this by updating the SDK
     PlatformException(error, The operation couldn’t be completed. (Onfido.OnfidoFlowError error 2.), versionInsufficient, null)
+      // Occurs when you are using an older version of the iOS SDK and trying to access a new functionality from the workflow. You can fix this by updating the SDK
 
-    // The flow was exited prematurely by the user. The reason can be `.userExit` or `.consentDenied`
     PlatformException(exit, "User canceled the flow", null, null)
+      // The flow was exited prematurely by the user. The reason can be `.userExit` or `.consentDenied`
 ```
 
+### Handling callbacks
 
-## Going live
+When the Onfido SDK session concludes, a range of callback functions may be triggered.
 
-Once you are happy with your integration and are ready to go live, please contact [client-support@onfido.com](mailto:client-support@onfido.com) to obtain live versions of the API token and the mobile SDK token. You will have to replace the sandbox tokens in your code with the live tokens.
-
-A few things to check before you go live:
-
-* Make sure you have entered correct billing details inside your [Onfido Dashboard](https://onfido.com/dashboard/)
+For documentation regarding handling callbacks, please refer to our native [iOS](https://documentation.onfido.com/sdk/ios/#handling-callbacks-1) and [Android](https://documentation.onfido.com/sdk/android/#handling-callbacks-1) documentation.
 
 ## More Information
 
 ### Sample App
 
-We have included sample app to show how to integrate with the Onfido Flutter SDK. See the `SampleApp` directory for more information.
+We have included a sample app to show how to integrate with the Onfido Flutter SDK. See the `SampleApp` directory for more information.
 
-### Support
+## Support
 
 Should you encounter any technical issues during integration, please contact Onfido's Customer Support team via [email](mailto:support@onfido.com), including the word ISSUE: at the start of the subject line. 
 
 Alternatively, you can search the support documentation available via the customer experience portal, [public.support.onfido.com](http://public.support.onfido.com).
 
-Previous versions of the SDK will be supported for a month after a new major version release. Note that when the support period has expired for an SDK version, no bug fixes will be provided, but the SDK will keep functioning (until further notice).
+We recommend you update your SDK to the latest version release as frequently as possible. Customers on newer versions of the Onfido SDK consistently see better performance across user onboarding and fraud mitigation, so we strongly advise keeping your SDK integration up-to-date.
 
-Copyright 2023 Onfido, Ltd. All rights reserved.
+You can review our full SDK versioning policy [here](https://developers.onfido.com/guide/sdk-version-releases).
 
-### How is the Onfido Flutter SDK licensed?
+Copyright 2024 Onfido, Ltd. All rights reserved.
+
+## How is the Onfido Flutter SDK licensed?
 The Onfido Flutter SDK is available under the MIT license.
