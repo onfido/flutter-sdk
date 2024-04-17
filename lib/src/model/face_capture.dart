@@ -19,6 +19,8 @@ abstract class FaceCapture {
 
   factory FaceCapture.motion({
     bool? withAudio,
+    @Deprecated(
+        'Motion is now supported on all devices. There is no need to provide a capture fallback as it will not be applied.')
     FaceCapture? withCaptureFallback,
   }) = _Motion;
 
