@@ -4,6 +4,19 @@ The guides below are provided to ease the transition of existing applications us
 
 If your migration involves upgrading across multiple SDK versions, be sure to read each individual guide in order to account for all relevant breaking changes.
 
+## `5.1.0` -> `6.0.0`
+
+### Breaking Changes
+
+- Motion is now supported on all devices. Motion capture fallback configuration has therefore been removed.
+- `supportDarkMode` and `bubbleErrorBackgroundColor` properties have been removed from `IOSAppearance`
+
+
+### Migration Steps
+
+- If you currently set `withCaptureFallback` on `FaceCapture.motion`, then you should be aware that this configuration is no longer available, so you can safely remove it from your integration code.
+- Please use `onfidoTheme` instead of `supportDarkMode`.
+
 ## `3.3.0` -> `4.0.0`
 
 ### Breaking Changes

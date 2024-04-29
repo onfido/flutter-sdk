@@ -21,11 +21,9 @@ const startMockRequestBody = {
     'secondaryTitleColor': '#0a141e0a',
     'primaryBackgroundPressedColor': null,
     'secondaryBackgroundPressedColor': null,
-    'bubbleErrorBackgroundColor': null,
     'buttonCornerRadius': null,
     'fontRegular': 'avenir',
     'fontBold': 'avenir-heavy',
-    'supportDarkMode': false,
     'backgroundColor': {'dark': '#1e140a0a', 'light': '#0a141e0a'}
   },
   'enterpriseFeatures': {'hideOnfidoLogo': true, 'cobrandingText': 'text', 'disableMobileSDKAnalytics': false},
@@ -44,11 +42,9 @@ const startStudioMockRequestBody = {
     'secondaryTitleColor': '#0a141e0a',
     'primaryBackgroundPressedColor': null,
     'secondaryBackgroundPressedColor': null,
-    'bubbleErrorBackgroundColor': null,
     'buttonCornerRadius': null,
     'fontRegular': 'avenir',
     'fontBold': 'avenir-heavy',
-    'supportDarkMode': false,
     'backgroundColor': {'dark': '#1e140a0a', 'light': '#0a141e0a'}
   },
   "enterpriseFeatures": null,

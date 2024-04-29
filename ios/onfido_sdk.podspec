@@ -15,7 +15,7 @@ A new Flutter plugin project.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'Onfido', '~> 29.9.1'
+  s.dependency 'Onfido', '~> 30.0.0'
   s.platform = :ios, '11.0'
 
   # Flutter.framework does not contain a i386 slice.

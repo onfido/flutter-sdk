@@ -63,10 +63,10 @@ PODS:
     - nanopb/encode (= 2.30910.0)
   - nanopb/decode (2.30910.0)
   - nanopb/encode (2.30910.0)
-  - Onfido (29.9.1)
+  - Onfido (30.0.0)
   - onfido_sdk (0.0.1):
     - Flutter
-    - Onfido (~> 29.9.1)
+    - Onfido (~> 30.0.0)
   - PromisesObjC (2.4.0)
   - Toast (4.0.0)
 
@@ -104,7 +104,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/onfido_sdk/ios"
 
 SPEC CHECKSUMS:
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
   GoogleMLKit: 2bd0dc6253c4d4f227aad460f69215a504b2980e
@@ -118,11 +118,11 @@ SPEC CHECKSUMS:
   MLKitVision: 8baa5f46ee3352614169b85250574fde38c36f49
   mobile_scanner: 38dcd8a49d7d485f632b7de65e4900010187aef2
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
-  Onfido: 645e2bc29038242ce08fe82b82924a1e3e269465
-  onfido_sdk: 07c6bd099ac62d937c08aa4f3387950cfa54c72f
+  Onfido: c6f161967f23fdbfcc00abe8c9a5553ef682064a
+  onfido_sdk: 56a48e02304f94a3c80166b77781ffead7d989f2
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
-PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
+PODFILE CHECKSUM: 541cb0f42c52b0ee6f0d666392c4f0360bd83066
 
 COCOAPODS: 1.15.2

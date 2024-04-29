@@ -139,20 +139,6 @@ private fun getMotionCaptureStepBuilder(
         motionCaptureStepBuilder.withAudio(it)
     }
 
-    (faceCapture["withCaptureFallback"] as? Map<*, *>)?.let { captureFallback ->
-        (captureFallback["type"] as? String)?.let { type ->
-            when (type) {
-                "photo" -> motionCaptureStepBuilder.withCaptureFallback(
-                    getPhotoCaptureStepBuilder(faceStepBuilder, captureFallback)
-                )
-                "video" -> motionCaptureStepBuilder.withCaptureFallback(
-                    getVideoCaptureStepBuilder(faceStepBuilder, captureFallback)
-                )
-                else -> Unit// No fallback
-            }
-        }
-    }
-
     return motionCaptureStepBuilder
 }
 
