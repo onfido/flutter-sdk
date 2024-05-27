@@ -19,7 +19,7 @@
 * Supports Android API level 21+
 * Supports iPads and tablets
 
-### 1. Obtain an API token
+## Obtain an API token
 
 In order to start integrating, you'll need an [API token](https://documentation.onfido.com/#api-tokens).
 
