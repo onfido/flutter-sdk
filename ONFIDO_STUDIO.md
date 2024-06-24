@@ -1,5 +1,5 @@
 ## Overview
-[Onfido Studio](https://developers.onfido.com/guide/onfido-studio-product) is a drag and drop interface enabling you to build an optimised route to verify each end user, by defining and configuring different paths, as well as incorporating a combination of signals, in a single identity verification flow.
+[Onfido Studio](https://documentation.onfido.com/getting-started/onfido-studio-product) is a drag and drop interface enabling you to build an optimised route to verify each end user, by defining and configuring different paths, as well as incorporating a combination of signals, in a single identity verification flow.
 
 ## Integrating with Flutter SDK
 The Onfido Flutter SDK provides a drop-in set of screens and tools for Flutter applications to capture identity documents and selfie photos and videos for the purpose of identity verification.
@@ -53,7 +53,7 @@ The SDK uses the device camera. You're required to have the following keys in yo
 
 ### 3. Build a configuration object
 
-To initiaise the SDK, you must provide a `workflowRunId`, obtained by [creating a workflow run](https://documentation.onfido.com/#create-workflow-run), and an `sdkToken`, obtained by [generating an SDK token](https://documentation.onfido.com/#generate-sdk-token). 
+To initiaise the SDK, you must provide a `workflowRunId`, obtained by [creating a workflow run](https://documentation.onfido.com/api/latest#create-workflow-run), and an `sdkToken`, obtained by [generating an SDK token](https://documentation.onfido.com/api/latest#generate-sdk-token). 
 
 ```dart
 final Onfido onfido = Onfido(
@@ -88,10 +88,10 @@ try {
 
 | ATTRIBUTE        | NOTES           |
 | ------------- |-------------|
-| .success    | The end user completed all interactive tasks in the workflow. If you have configured [webhooks](https://documentation.onfido.com/#webhooks), a notification will be sent to your backend confirming the workflow run has finished. You do not need to create a check using your backend as this is handled directly by the Workflow.  |
+| .success    | The end user completed all interactive tasks in the workflow. If you have configured [webhooks](https://documentation.onfido.com/api/latest#webhooks), a notification will be sent to your backend confirming the workflow run has finished. You do not need to create a check using your backend as this is handled directly by the Workflow.  |
 | .error(Error)      | An unexpected error occurred.      |
 
 
 ### Customizing the SDK
 
-Onfido Studio uses the same appearance and localization objects as a standard integration. You can see how to create them here: [Appearance](https://github.com/onfido/flutter-sdk#ui-customisation) and [Localization](https://github.com/onfido/flutter-sdk#5-localization).
+Onfido Studio uses the same appearance and localization objects as a standard integration. You can see how to create them here: [Appearance](https://documentation.onfido.com/sdk/flutter/#appearance-and-colors) and [Localization](https://documentation.onfido.com/sdk/flutter/#language-localization).

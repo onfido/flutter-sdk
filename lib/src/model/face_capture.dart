@@ -19,9 +19,6 @@ abstract class FaceCapture {
 
   factory FaceCapture.motion({
     bool? withAudio,
-    @Deprecated(
-        'Motion is now supported on all devices. There is no need to provide a capture fallback as it will not be applied.')
-    FaceCapture? withCaptureFallback,
   }) = _Motion;
 
   FaceCaptureType get type => _type;
@@ -69,11 +66,9 @@ class _Video extends FaceCapture {
 
 class _Motion extends FaceCapture {
   final bool? withAudio;
-  final FaceCapture? withCaptureFallback;
 
   _Motion({
     this.withAudio,
-    this.withCaptureFallback,
   }) : super._(FaceCaptureType.motion);
 
   @override
@@ -81,7 +76,6 @@ class _Motion extends FaceCapture {
     return {
       'type': describeEnum(_type),
       'withAudio': withAudio,
-      'withCaptureFallback': withCaptureFallback?.toJson(),
     };
   }
 }

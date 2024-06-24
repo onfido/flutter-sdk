@@ -13,15 +13,7 @@
 - [More information](#more-information)
 - [Raising support issues](#support)
 
-* Dart 3.1.0 or higher
-* Flutter 1.20 or higher
-* Supports iOS 11+
-* Supports Android API level 21+
-* Supports iPads and tablets
-
-## Obtain an API token
-
-In order to start integrating, you'll need an [API token](https://documentation.onfido.com/#api-tokens).
+## Overview
 
 The Onfido Smart Capture SDKs provide a set of screens and functionalities that enable applications to implement user identity verification flows. Each SDK contains:
 
@@ -32,7 +24,7 @@ The Onfido Smart Capture SDKs provide a set of screens and functionalities that 
 - Direct image upload to the Onfido service, to simplify integration
 - A suite of advanced fraud detection signals to protect against malicious users
 
-All Onfido Smart Capture SDKs are orchestrated using [Onfido Studio](https://developers.onfido.com/guide/onfido-studio-product) workflows, with only minor customization differences between the available platforms.
+All Onfido Smart Capture SDKs are orchestrated using [Onfido Studio](https://documentation.onfido.com/getting-started/onfido-studio-product) workflows, with only minor customization differences between the available platforms.
 
 ### Environments and testing with the SDK
 
@@ -53,11 +45,11 @@ Check that you have entered correct billing details inside your [Onfido Dashboar
 
 The Flutter SDK supports:
 
-* Dart 3.1.0 or higher
-* Flutter 1.12 or higher
-* iOS 12+
-* Android API level 21+
-* iPads and tablets
+- Dart 3.1.0 or higher
+- Flutter 1.20 or higher
+- iOS 13+
+- Supports Android API level 21+
+- Supports iPads and tablets
 
 ### Using pub.dev
 
@@ -93,7 +85,7 @@ Recent passports, national identity cards and residence permits contain a chip t
 
 From version 4.0.0 onwards, NFC is enabled by default for the Flutter SDK and offered to customers when both the document and the device support NFC.
 
-For more information on how to configure NFC and the list of supported documents, please refer to the [NFC for Document Report](https://developers.onfido.com/guide/document-report-nfc) guide.
+For more information on how to configure NFC and the list of supported documents, please refer to the [NFC for Document Report](https://documentation.onfido.com/guide/document-report-nfc) guide.
 
 #### Disabling NFC
 
@@ -133,11 +125,11 @@ The Flutter SDK has multiple initialization and customization options that provi
 
 ### Defining a workflow
 
-Onfido Studio is the platform used to create highly reusable identity verification workflows for use with the Onfido SDKs. For an introduction to working with workflows, please refer to our [Getting Started guide](https://developers.onfido.com/guide/general-introduction), or the Onfido Studio [product guide](https://developers.onfido.com/guide/onfido-studio-product).
+Onfido Studio is the platform used to create highly reusable identity verification workflows for use with the Onfido SDKs. For an introduction to working with workflows, please refer to our [Getting Started guide](https://documentation.onfido.com/getting-started/general-introduction), or the Onfido Studio [product guide](https://documentation.onfido.com/getting-started/onfido-studio-product).
 
 SDK sessions are orchestrated by a session-specific `workflow_run_id`, itself derived from a `workflow_id`, the unique identifier of a given workflow.
 
-For details on how to generate a `workflow_run_id`, please refer to the `POST /workflow_runs/` endpoint definition in the Onfido [API reference](https://documentation.onfido.com/#workflow-runs).
+For details on how to generate a `workflow_run_id`, please refer to the `POST /workflow_runs/` endpoint definition in the Onfido [API reference](https://documentation.onfido.com/api/latest#workflow-runs).
 
 <Callout type="warning">
 
@@ -160,7 +152,7 @@ The SDK is authenticated using SDK tokens. As each SDK token must be specific to
 
 It's important to note that SDK tokens expire after **90 minutes**.
 
-For details on how to generate SDK tokens, please refer to the `POST /sdk_token/` endpoint definition in the Onfido [API reference](https://documentation.onfido.com/#generate-sdk-token).
+For details on how to generate SDK tokens, please refer to the `POST /sdk_token/` endpoint definition in the Onfido [API reference](https://documentation.onfido.com/api/latest#generate-sdk-token).
 
 **Note**: You must never use API tokens in the frontend of your application as malicious users could discover them in your source code. You should only use them on your server.
 
@@ -212,7 +204,7 @@ The customization of UI attributes for Android in the Flutter SDK is implemented
 
 Starting from version 4.1.0, the Flutter SDK also supports [dark mode](https://documentation.onfido.com/sdk/android/#dark-theme) for Android.
 
-Please refer to the [Android SDK reference](https://documentation.onfido.com/sdk/android/#ui-customization) documentation for implementation details, as well as the [SDK customization guide](https://developers.onfido.com/guide/sdk-customization#flutter) for a complete list and visualizations of available attributes.
+Please refer to the [Android SDK reference](https://documentation.onfido.com/sdk/android/#ui-customization) documentation for implementation details, as well as the [SDK customization guide](https://documentation.onfido.com/sdk/sdk-customization#flutter) for a complete list and visualizations of available attributes.
 
 #### iOS
 
@@ -229,7 +221,6 @@ final Onfido onfido = Onfido(
       primaryColor: Colors.yourColor,
       buttonCornerRadius: 10,
       primaryTitleColor: Colors.yourColor,
-      bubbleErrorBackgroundColor: Colors.yourColor,
       primaryBackgroundPressedColor: Colors.yourColor,
       secondaryBackgroundPressedColor: Colors.yourColor,
       backgroundColor: BackgroundColor(Colors.yourLightColor, Colors.yourDarkColor),
@@ -244,15 +235,13 @@ Starting from version 4.1.0, the Flutter SDK supports dark mode customization fo
 
 The `onfidoTheme` property in the `IOSAppearance` object allows you to force light or dark mode via `DARK` and `LIGHT` respectively, or follow the system's interface style with `AUTOMATIC` (the default value).
 
-**Note:**: The usage of `supportDarkMode` in `IOSAppearance` is deprecated from version 4.1.0. Please use `onfidoTheme` instead.
-
 ### Language localization
 
 The Flutter SDK supports and maintains translations for over 40 languages, available for use with both Android and iOS.
 
 The SDK will detect and use the end user's device language setting. If the device's language is not supported by Onfido, the SDK will default to English (`en_US`).
 
-For a complete list of the languages Onfido supports, refer to our [SDK customization guide](https://developers.onfido.com/guide/sdk-customization#language-localization).
+For a complete list of the languages Onfido supports, refer to our [SDK customization guide](https://documentation.onfido.com/sdk/sdk-customization#language-localization).
 
 #### Custom languages for Android
 
@@ -313,12 +302,12 @@ final Onfido onfido = Onfido(
 
 ### Generating verification reports
 
-While the SDK is responsible for capturing and uploading the user's media and data, identity verification reports themselves are generated based on workflows created using [Onfido Studio](https://developers.onfido.com/guide/onfido-studio-product).
+While the SDK is responsible for capturing and uploading the user's media and data, identity verification reports themselves are generated based on workflows created using [Onfido Studio](https://documentation.onfido.com/getting-started/onfido-studio-product).
 
-For a step-by-step walkthrough of creating an identity verification using Onfido Studio and our SDKs, please refer to our [Quick Start Guide](https://developers.onfido.com/guide/quick-start-guide).
+For a step-by-step walkthrough of creating an identity verification using Onfido Studio and our SDKs, please refer to our [Quick Start Guide](https://documentation.onfido.com/getting-started/quick-start-guide).
 
-If your application initializes the Onfido Flutter SDK using the options defined in the [Advanced customization](#advanced-flow-customization) section of this document, you may [create checks](https://documentation.onfido.com/#create-check) and [retrieve report results](https://documentation.onfido.com/#retrieve-report) manually using the Onfido API.
-You may also configure [webhooks](https://documentation.onfido.com/#webhooks) to be notified asynchronously when the report results have been generated.
+If your application initializes the Onfido Flutter SDK using the options defined in the [Advanced customization](#advanced-flow-customization) section of this document, you may [create checks](https://documentation.onfido.com/api/latest#create-check) and [retrieve report results](https://documentation.onfido.com/#retrieve-report) manually using the Onfido API.
+You may also configure [webhooks](https://documentation.onfido.com/api/latest#webhooks) to be notified asynchronously when the report results have been generated.
 
 ## Advanced flow customization
 
@@ -370,9 +359,6 @@ startOnfido() async {
           * `withManualLivenessCapture` (**Optional**, iOS only): Whether to enable manual capture during the video recording.
       * `motion`:
           * `withAudio` (**Optional**): Whether to capture audio during the motion sequence.
-          * `withCaptureFallback` (**Optional**, FaceCapture): An alternative FaceCapture method (Photo or Video) to use as a fallback if the Motion variant is not supported on the user's device due to platform-specific factors:
-              * iOS: Minimum device and OS requirements can limit support, such as Motion not being supported on devices older than iPhone 7, on iOS older than 12, or on iPads.
-              * Android: From version 4.2.0 of the Flutter SDK, fallback is not used in Android anymore as Motion is supported in all devices and OS versions specified by the SDK.
 
 ## Advanced callbacks
 
@@ -456,7 +442,7 @@ Alternatively, you can search the support documentation available via the custom
 
 We recommend you update your SDK to the latest version release as frequently as possible. Customers on newer versions of the Onfido SDK consistently see better performance across user onboarding and fraud mitigation, so we strongly advise keeping your SDK integration up-to-date.
 
-You can review our full SDK versioning policy [here](https://developers.onfido.com/guide/sdk-version-releases).
+You can review our full SDK versioning policy [here](https://documentation.onfido.com/sdk/sdk-version-releases).
 
 Copyright 2024 Onfido, Ltd. All rights reserved.
 

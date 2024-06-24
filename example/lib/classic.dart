@@ -1,7 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_picker/flutter_picker.dart';
 import 'package:onfido_sdk/onfido_sdk.dart';
 import 'package:onfido_sdk_example/components/alert_dialog.dart';
 
@@ -41,7 +41,6 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
   bool _confirmationVideoPreview = false;
   bool _manualLivenessCapture = false;
   bool _audio = false;
-  FaceCaptureType? _motionCaptureFallback;
   OnfidoTheme _onfidoTheme = OnfidoTheme.AUTOMATIC;
 
   startOnfido() async {
@@ -105,7 +104,6 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
       case FaceCaptureType.motion:
         return FaceCapture.motion(
           withAudio: _audio,
-          withCaptureFallback: configureMotionCaptureFallback(),
         );
     }
   }
@@ -122,17 +120,6 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
       withConfirmationVideoPreview: _confirmationVideoPreview,
       withManualLivenessCapture: _manualLivenessCapture,
     );
-  }
-
-  FaceCapture? configureMotionCaptureFallback() {
-    switch (_motionCaptureFallback) {
-      case FaceCaptureType.photo:
-        return configurePhotoCapture();
-      case FaceCaptureType.video:
-        return configureVideoCapture();
-      default:
-        return null;
-    }
   }
 
   @override
@@ -405,24 +392,6 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
                               visible: _faceCaptureType == FaceCaptureType.motion,
                               child: Column(
                                 children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text("Capture Fallback"),
-                                      ElevatedButton(
-                                        child: Row(
-                                          children: [
-                                            Text(_motionCaptureFallback != null
-                                                ? describeEnum(_motionCaptureFallback!)
-                                                : "None"),
-                                            const SizedBox(width: 6),
-                                            const Icon(Icons.arrow_drop_down, color: Colors.white),
-                                          ],
-                                        ),
-                                        onPressed: () async => {showMotionCaptureFallbackPicker(context)},
-                                      ),
-                                    ],
-                                  ),
                                   SwitchListTile(
                                     title: const Text(
                                       "Audio",
@@ -458,86 +427,58 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
   }
 
   showFaceCapturePicker(BuildContext context) {
-    Picker picker = Picker(
-        adapter: PickerDataAdapter<FaceCaptureType>(
-          pickerData: FaceCaptureType.values,
-        ),
-        selecteds: [FaceCaptureType.values.indexOf(_faceCaptureType)],
-        changeToFirst: false,
-        hideHeader: false,
-        onConfirm: (Picker picker, List value) {
-          setState(() {
-            _faceCaptureType = picker.getSelectedValues().first!;
-          });
-        });
-
-    picker.showModal(context);
+    _showPickerDialog(
+        FaceCaptureType.values.map((e) => e.name).toList(), FaceCaptureType.values.indexOf(_faceCaptureType),
+        (selectedItem) {
+      _faceCaptureType = FaceCaptureType.values[selectedItem];
+    });
   }
 
   showThemePicker(BuildContext context) {
-    Picker picker = Picker(
-        adapter: PickerDataAdapter<OnfidoTheme>(pickerData: OnfidoTheme.values),
-        selecteds: [OnfidoTheme.values.indexOf(_onfidoTheme)],
-        changeToFirst: false,
-        hideHeader: false,
-        onConfirm: (Picker picker, List value) {
-          setState(() {
-            _onfidoTheme = picker.getSelectedValues().first!;
-          });
-        });
-
-    picker.showModal(context);
-  }
-
-  showMotionCaptureFallbackPicker(BuildContext context) {
-    Picker picker = Picker(
-        adapter: PickerDataAdapter<FaceCaptureType>(
-          pickerData: FaceCaptureType.values.where((type) => type != FaceCaptureType.motion).toList(),
-        ),
-        selecteds: [_motionCaptureFallback != null ? FaceCaptureType.values.indexOf(_motionCaptureFallback!) : 0],
-        changeToFirst: false,
-        hideHeader: false,
-        onConfirm: (Picker picker, List value) {
-          setState(() {
-            _motionCaptureFallback = picker.getSelectedValues().first!;
-          });
-        });
-
-    picker.showModal(context);
+    _showPickerDialog(OnfidoTheme.values.map((e) => e.name).toList(), OnfidoTheme.values.indexOf(_onfidoTheme),
+        (selectedItem) {
+      _onfidoTheme = OnfidoTheme.values[selectedItem];
+    });
   }
 
   showDocumentPicker(BuildContext context) {
-    Picker picker = Picker(
-        adapter: PickerDataAdapter<DocumentTypes>(
-          pickerData: DocumentTypes.values,
-        ),
-        selecteds: [DocumentTypes.values.indexOf(_documentType)],
-        changeToFirst: false,
-        hideHeader: false,
-        onConfirm: (Picker picker, List value) {
-          setState(() {
-            _documentType = picker.getSelectedValues().first!;
-          });
-        });
-
-    picker.showModal(context);
+    _showPickerDialog(DocumentTypes.values.map((e) => e.name).toList(), DocumentTypes.values.indexOf(_documentType),
+        (selectedItem) {
+      _documentType = DocumentTypes.values[selectedItem];
+    });
   }
 
   showCountryPicker(BuildContext context) {
-    Picker picker = Picker(
-        adapter: PickerDataAdapter<CountryCode>(
-          pickerData: CountryCode.values,
-        ),
-        selecteds: [CountryCode.values.indexOf(_countryCode)],
-        changeToFirst: false,
-        hideHeader: false,
-        onConfirm: (Picker picker, List value) {
-          setState(() {
-            _countryCode = picker.getSelectedValues().first!;
-          });
-        });
+    _showPickerDialog(CountryCode.values.map((e) => e.name).toList(), CountryCode.values.indexOf(_countryCode),
+        (selectedItem) {
+      _countryCode = CountryCode.values[selectedItem];
+    });
+  }
 
-    picker.showModal(context);
+  _showPickerDialog(List<String> itemList, int initialItem, Function(int) itemSelected) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return CupertinoPicker(
+            magnification: 1.22,
+            squeeze: 1.2,
+            useMagnifier: true,
+            itemExtent: 32.0,
+            // This sets the initial item.
+            scrollController: FixedExtentScrollController(
+              initialItem: initialItem,
+            ),
+            // This is called when selected item is changed.
+            onSelectedItemChanged: (int selectedItem) {
+              setState(() {
+                itemSelected(selectedItem);
+              });
+            },
+            children: List<Widget>.generate(itemList.length, (int index) {
+              return Center(child: Text(itemList[index]));
+            }),
+          );
+        });
   }
 
   _showDialog(String title, String message) {

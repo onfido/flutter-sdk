@@ -12,8 +12,6 @@ class IOSAppearance {
   final int? buttonCornerRadius;
   final String? fontRegular;
   final String? fontBold;
-  final bool? supportDarkMode;
-  final Color? bubbleErrorBackgroundColor;
   final BackgroundColor? backgroundColor;
 
   IOSAppearance(
@@ -25,8 +23,6 @@ class IOSAppearance {
       this.buttonCornerRadius,
       this.fontRegular,
       this.fontBold,
-      this.supportDarkMode,
-      this.bubbleErrorBackgroundColor,
       this.backgroundColor});
 
   Map<String, dynamic> toJson() {
@@ -36,12 +32,10 @@ class IOSAppearance {
     data['secondaryTitleColor'] = ColorSerializer.serialize(secondaryTitleColor);
     data['primaryBackgroundPressedColor'] = ColorSerializer.serialize(primaryBackgroundPressedColor);
     data['secondaryBackgroundPressedColor'] = ColorSerializer.serialize(secondaryBackgroundPressedColor);
-    data['bubbleErrorBackgroundColor'] = ColorSerializer.serialize(bubbleErrorBackgroundColor);
 
     data['buttonCornerRadius'] = buttonCornerRadius;
     data['fontRegular'] = fontRegular;
     data['fontBold'] = fontBold;
-    data['supportDarkMode'] = supportDarkMode;
     data['backgroundColor'] = backgroundColor?.toJson();
 
     return data;

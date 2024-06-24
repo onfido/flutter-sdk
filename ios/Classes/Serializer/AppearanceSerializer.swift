@@ -13,10 +13,6 @@ extension Appearance {
         fontBold = dictionary["fontBold"] as? String
         fontRegular = dictionary["fontRegular"] as? String
 
-        if let supportDarkMode = dictionary["supportDarkMode"] as? Bool {
-            self.supportDarkMode = supportDarkMode
-        }
-
         if
             let backgroundColor = dictionary["backgroundColor"] as? NSDictionary,
             let lightColor = extractColor("light", from: backgroundColor),
@@ -47,10 +43,6 @@ extension Appearance {
 
         if let primaryTitleColor = extractColor("primaryTitleColor", from: dictionary) {
             self.primaryTitleColor = primaryTitleColor
-        }
-
-        if let bubbleErrorBackgroundColor = extractColor("bubbleErrorBackgroundColor", from: dictionary) {
-            self.bubbleErrorBackgroundColor = bubbleErrorBackgroundColor
         }
 
         return self
