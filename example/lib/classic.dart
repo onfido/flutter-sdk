@@ -41,7 +41,6 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
   bool _confirmationVideoPreview = false;
   bool _manualLivenessCapture = false;
   bool _audio = false;
-  FaceCaptureType? _motionCaptureFallback;
   OnfidoTheme _onfidoTheme = OnfidoTheme.AUTOMATIC;
 
   startOnfido() async {
@@ -105,7 +104,6 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
       case FaceCaptureType.motion:
         return FaceCapture.motion(
           withAudio: _audio,
-          withCaptureFallback: configureMotionCaptureFallback(),
         );
     }
   }
@@ -122,17 +120,6 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
       withConfirmationVideoPreview: _confirmationVideoPreview,
       withManualLivenessCapture: _manualLivenessCapture,
     );
-  }
-
-  FaceCapture? configureMotionCaptureFallback() {
-    switch (_motionCaptureFallback) {
-      case FaceCaptureType.photo:
-        return configurePhotoCapture();
-      case FaceCaptureType.video:
-        return configureVideoCapture();
-      default:
-        return null;
-    }
   }
 
   @override
@@ -405,24 +392,6 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
                               visible: _faceCaptureType == FaceCaptureType.motion,
                               child: Column(
                                 children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text("Capture Fallback"),
-                                      ElevatedButton(
-                                        child: Row(
-                                          children: [
-                                            Text(_motionCaptureFallback != null
-                                                ? describeEnum(_motionCaptureFallback!)
-                                                : "None"),
-                                            const SizedBox(width: 6),
-                                            const Icon(Icons.arrow_drop_down, color: Colors.white),
-                                          ],
-                                        ),
-                                        onPressed: () async => {showMotionCaptureFallbackPicker(context)},
-                                      ),
-                                    ],
-                                  ),
                                   SwitchListTile(
                                     title: const Text(
                                       "Audio",
@@ -483,23 +452,6 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
         onConfirm: (Picker picker, List value) {
           setState(() {
             _onfidoTheme = picker.getSelectedValues().first!;
-          });
-        });
-
-    picker.showModal(context);
-  }
-
-  showMotionCaptureFallbackPicker(BuildContext context) {
-    Picker picker = Picker(
-        adapter: PickerDataAdapter<FaceCaptureType>(
-          pickerData: FaceCaptureType.values.where((type) => type != FaceCaptureType.motion).toList(),
-        ),
-        selecteds: [_motionCaptureFallback != null ? FaceCaptureType.values.indexOf(_motionCaptureFallback!) : 0],
-        changeToFirst: false,
-        hideHeader: false,
-        onConfirm: (Picker picker, List value) {
-          setState(() {
-            _motionCaptureFallback = picker.getSelectedValues().first!;
           });
         });
 

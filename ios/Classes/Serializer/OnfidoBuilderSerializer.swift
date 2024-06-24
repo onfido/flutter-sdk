@@ -132,26 +132,9 @@ fileprivate func getVideoStepConfiguration(faceCapture: NSDictionary) -> VideoSt
 
 fileprivate func getMotionStepConfiguration(faceCapture: NSDictionary) -> MotionStepConfiguration? {
     let recordAudio: Bool? = faceCapture["withAudio"] as? Bool
-    var captureFallback: MotionStepCaptureFallback? = nil
 
-    if let fallbackDictionary = faceCapture["withCaptureFallback"] as? NSDictionary,
-       let fallbackType = fallbackDictionary["type"] as? String {
-        switch fallbackType {
-        case "photo":
-            captureFallback = MotionStepCaptureFallback(photoFallbackWithConfiguration: getPhotoStepConfiguration(faceCapture: fallbackDictionary))
-        case "video":
-            captureFallback = MotionStepCaptureFallback(videoFallbackWithConfiguration: getVideoStepConfiguration(faceCapture: fallbackDictionary))
-        default:
-            break // No fallback
-        }
-    }
-
-    if let recordAudio = recordAudio, let captureFallback = captureFallback {
-        return MotionStepConfiguration(captureFallback: captureFallback, recordAudio: recordAudio)
-    } else if let recordAudio = recordAudio {
+    if let recordAudio = recordAudio {
         return MotionStepConfiguration(recordAudio: recordAudio)
-    } else if let captureFallback = captureFallback {
-        return MotionStepConfiguration(captureFallback: captureFallback)
     }
 
     return nil

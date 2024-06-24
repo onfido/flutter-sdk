@@ -229,7 +229,6 @@ final Onfido onfido = Onfido(
       primaryColor: Colors.yourColor,
       buttonCornerRadius: 10,
       primaryTitleColor: Colors.yourColor,
-      bubbleErrorBackgroundColor: Colors.yourColor,
       primaryBackgroundPressedColor: Colors.yourColor,
       secondaryBackgroundPressedColor: Colors.yourColor,
       backgroundColor: BackgroundColor(Colors.yourLightColor, Colors.yourDarkColor),
@@ -243,8 +242,6 @@ final Onfido onfido = Onfido(
 Starting from version 4.1.0, the Flutter SDK supports dark mode customization for iOS.
 
 The `onfidoTheme` property in the `IOSAppearance` object allows you to force light or dark mode via `DARK` and `LIGHT` respectively, or follow the system's interface style with `AUTOMATIC` (the default value).
-
-**Note:**: The usage of `supportDarkMode` in `IOSAppearance` is deprecated from version 4.1.0. Please use `onfidoTheme` instead.
 
 ### Language localization
 
@@ -370,9 +367,6 @@ startOnfido() async {
           * `withManualLivenessCapture` (**Optional**, iOS only): Whether to enable manual capture during the video recording.
       * `motion`:
           * `withAudio` (**Optional**): Whether to capture audio during the motion sequence.
-          * `withCaptureFallback` (**Optional**, FaceCapture): An alternative FaceCapture method (Photo or Video) to use as a fallback if the Motion variant is not supported on the user's device due to platform-specific factors:
-              * iOS: Minimum device and OS requirements can limit support, such as Motion not being supported on devices older than iPhone 7, on iOS older than 12, or on iPads.
-              * Android: From version 4.2.0 of the Flutter SDK, fallback is not used in Android anymore as Motion is supported in all devices and OS versions specified by the SDK.
 
 ## Advanced callbacks
 

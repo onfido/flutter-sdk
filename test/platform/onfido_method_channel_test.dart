@@ -82,7 +82,6 @@ IOSAppearance mockIosAppearance() {
       primaryColor: const Color(0x0012c4b4),
       secondaryTitleColor: const Color.fromARGB(10, 20, 30, 10),
       fontRegular: 'avenir',
-      supportDarkMode: false,
       fontBold: 'avenir-heavy',
       backgroundColor: BackgroundColor(const Color.fromARGB(10, 20, 30, 10), const Color.fromARGB(30, 20, 10, 10)));
 }
