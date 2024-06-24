@@ -1,9 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_picker/picker.dart';
-import 'package:onfido_sdk/onfido_sdk.dart';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:onfido_sdk/onfido_sdk.dart';
 
 import 'components/alert_dialog.dart';
 import 'http/onfido_api.dart';
@@ -201,17 +200,28 @@ class _OnfidoStudioState extends State<OnfidoStudio> {
   }
 
   showThemePicker(BuildContext context) {
-    Picker picker = Picker(
-        adapter: PickerDataAdapter<OnfidoTheme>(pickerData: OnfidoTheme.values),
-        selecteds: [OnfidoTheme.values.indexOf(onfidoTheme)],
-        changeToFirst: false,
-        hideHeader: false,
-        onConfirm: (Picker picker, List value) {
-          setState(() {
-            onfidoTheme = picker.getSelectedValues().first!;
-          });
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return CupertinoPicker(
+            magnification: 1.22,
+            squeeze: 1.2,
+            useMagnifier: true,
+            itemExtent: 32.0,
+            // This sets the initial item.
+            scrollController: FixedExtentScrollController(
+              initialItem: OnfidoTheme.values.indexOf(onfidoTheme),
+            ),
+            // This is called when selected item is changed.
+            onSelectedItemChanged: (int selectedItem) {
+              setState(() {
+                onfidoTheme = OnfidoTheme.values[selectedItem];
+              });
+            },
+            children: List<Widget>.generate(OnfidoTheme.values.length, (int index) {
+              return Center(child: Text(OnfidoTheme.values[index].name));
+            }),
+          );
         });
-
-    picker.showModal(context);
   }
 }

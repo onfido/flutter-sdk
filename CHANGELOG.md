@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.1.0] - 2024-06-17
+
+- Update underlying Onfido native SDK versions:
+  - Android 20.4.+ (up from 20.2.+)
+  - iOS 30.2.+ (up from 30.0.+)
+
 ## [6.0.0] - 2024-04-24
 
 - Motion capture fallback configuration has been removed: Motion is supported on all devices as of 5.1.0

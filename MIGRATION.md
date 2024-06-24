@@ -23,7 +23,7 @@ If your migration involves upgrading across multiple SDK versions, be sure to re
 
 The previous implementation used the `FaceCaptureType` enum to define the face capture method. The new implementation replaces the `FaceCaptureType` enum with the abstract `FaceCapture` class and its subclasses for different capture methods.
 
-Near Field Communication (NFC) is now enabled by default and offered to customers when both the document and the device support NFC. To disable NFC, please refer to our [NFC reference guide](https://developers.onfido.com/guide/document-report-nfc#flutter-1).
+Near Field Communication (NFC) is now enabled by default and offered to customers when both the document and the device support NFC. To disable NFC, please refer to our [NFC reference guide](https://documentation.onfido.com/guide/document-report-nfc#flutter-1).
 
 ### Migration Steps
 

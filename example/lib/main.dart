@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:onfido_sdk_example/classic.dart';
-import 'package:onfido_sdk_example/exploratory.dart';
 import 'package:onfido_sdk_example/studio.dart';
 
 void main() async {
@@ -37,13 +36,12 @@ class _MyAppState extends State<MyApp> {
               tabs: [
                 Tab(text: "Classic"),
                 Tab(text: "Studio"),
-                Tab(text: "Exploratory"),
               ],
             ),
             title: const Text('Flutter SDK'),
           ),
           body: const TabBarView(
-            children: [OnfidoClassic(), OnfidoStudio(), QRCodeScanner()],
+            children: [OnfidoClassic(), OnfidoStudio()],
           ),
         ),
       ),

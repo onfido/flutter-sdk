@@ -18,8 +18,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  mobile_scanner: ^4.0.0
-
   http: ^0.13.3
 
   onfido_sdk:
@@ -34,7 +32,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_dotenv: ^5.0.2
-  flutter_picker: ^2.0.5
 
   fluttertoast: ^8.2.2
 
