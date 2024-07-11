@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.2.0] - 2024-07-11
+
+- Align with SDK requirements for minimum support for iOS 13+
+- Add Kosovo to the list of countries
+- Update underlying Onfido native SDK versions:
+  - Android 20.5.+ (up from 20.4.+)
+  - iOS 30.3.+ (up from 30.2.+)
+
 ## [6.1.0] - 2024-06-17
 
 - Update underlying Onfido native SDK versions:

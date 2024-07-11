@@ -33,9 +33,9 @@ flutter pub add onfido_sdk
 ```
 
 ### 2. Update your iOS configuration files
-Change `ios/Podfile` to use version 11:
+Change `ios/Podfile` to use version 13:
 ```
-platform :ios, '11.0'
+platform :ios, '13.0'
 ```
 
 The SDK uses the device camera. You're required to have the following keys in your application's `ios/Runner/Info.plist` file:

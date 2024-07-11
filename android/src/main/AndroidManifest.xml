@@ -8,7 +8,7 @@
 
         <meta-data
             android:name="onfido_integration_version"
-            android:value="6.1.0" />
+            android:value="6.2.0" />
 
   </application>
 </manifest>
