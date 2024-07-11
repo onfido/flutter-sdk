@@ -3,16 +3,19 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - Onfido (30.2.0)
+  - Onfido (30.3.0)
   - onfido_sdk (0.0.1):
     - Flutter
-    - Onfido (~> 30.2.0)
+    - Onfido (~> 30.3.0)
   - Toast (4.0.0)
+  - webview_flutter_wkwebview (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - onfido_sdk (from `.symlinks/plugins/onfido_sdk/ios`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
   trunk:
@@ -26,14 +29,17 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
   onfido_sdk:
     :path: ".symlinks/plugins/onfido_sdk/ios"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
-  Onfido: 3872c7cde032a5737b461f7880b4167311a4e2bf
-  onfido_sdk: 3a34c28aaf18e08961505ec80906a882dc2f466b
+  Onfido: f2827394d4b92821cf13007b4fa99094f06e29ed
+  onfido_sdk: e8ab3031ba138b557a04701a35d664022654286f
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  webview_flutter_wkwebview: be0f0d33777f1bfd0c9fdcb594786704dbf65f36
 
-PODFILE CHECKSUM: 541cb0f42c52b0ee6f0d666392c4f0360bd83066
+PODFILE CHECKSUM: 2df34406235323a1c0746085252b416658715cea
 
 COCOAPODS: 1.15.2

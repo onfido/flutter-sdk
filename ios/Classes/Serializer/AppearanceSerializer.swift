@@ -54,7 +54,6 @@ private func extractColor(_ colorName: String, from dictionary: NSDictionary) ->
     return UIColor(unsafeHex: color)
 }
 
-@available(iOS 12.0, *)
 extension UIUserInterfaceStyle {
     init(_ stringRepresentation: String) {
         switch stringRepresentation {

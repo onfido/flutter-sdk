@@ -180,6 +180,7 @@ enum CountryCode {
   PRT,
   PRI,
   QAT,
+  RKS,
   ROU,
   RUS,
   RWA,

@@ -18,6 +18,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  webview_flutter: 4.8.0
+
   http: ^0.13.3
 
   onfido_sdk:
