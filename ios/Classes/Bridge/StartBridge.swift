@@ -31,7 +31,8 @@ struct StartBridge: BaseBridge {
                     result(serialized)
 
                 case .error(let error):
-                    result(FlutterError(code: "error", message: error.localizedDescription, details: nil))
+                    let errorDetails = StartBridge.extractDetails(from: error)
+                    result(FlutterError(code: "error", message: error.localizedDescription, details: errorDetails))
 
                 case .cancel:
                     result(FlutterError(code: "exit", message: "User canceled the flow", details: nil))

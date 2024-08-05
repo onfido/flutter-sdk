@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:onfido_sdk/onfido_sdk.dart';
+import 'package:onfido_sdk/src/model/nfc_options.dart';
 import 'package:onfido_sdk/src/serializer/serializer.dart';
 
 class MethodChannelOnfido extends OnfidoPlatform {
@@ -26,6 +27,7 @@ class MethodChannelOnfido extends OnfidoPlatform {
       OnfidoMediaCallback? mediaCallback,
       EnterpriseFeatures? enterpriseFeatures,
       bool? disableNFC,
+      NFCOptions? nfcOption,
       OnfidoTheme? onfidoTheme}) async {
     final arguments = StartOptionsSerializer.serialize(
         sdkToken: sdkToken,
@@ -35,6 +37,7 @@ class MethodChannelOnfido extends OnfidoPlatform {
         iosLocalizationFileName: iosLocalizationFileName,
         enterpriseFeatures: enterpriseFeatures,
         disableNFC: disableNFC,
+        nfcOption: nfcOption,
         onfidoTheme: onfidoTheme);
 
     _mediaCallback = mediaCallback;

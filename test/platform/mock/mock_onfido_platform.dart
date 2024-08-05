@@ -12,6 +12,7 @@ class MockOnfidoPlatform with MockPlatformInterfaceMixin implements OnfidoPlatfo
   late String? startIosLocalizationFileName;
   late EnterpriseFeatures? startEnterpriseFeatures;
   late bool? withNFCDisabled;
+  late NFCOptions? withNfcOption;
   late OnfidoMediaCallback? customMediaCallback;
   late OnfidoTheme? theme;
 
@@ -19,10 +20,11 @@ class MockOnfidoPlatform with MockPlatformInterfaceMixin implements OnfidoPlatfo
   Future<List<OnfidoResult>> start(
       {required String sdkToken,
       required FlowSteps flowSteps,
-      IOSAppearance? iosAppearance,
       String? iosLocalizationFileName,
+      IOSAppearance? iosAppearance,
       EnterpriseFeatures? enterpriseFeatures,
       bool? disableNFC,
+      NFCOptions? nfcOption,
       OnfidoMediaCallback? mediaCallback,
       OnfidoTheme? onfidoTheme}) {
     startCount++;
@@ -31,6 +33,7 @@ class MockOnfidoPlatform with MockPlatformInterfaceMixin implements OnfidoPlatfo
     startIosLocalizationFileName = iosLocalizationFileName;
     startEnterpriseFeatures = enterpriseFeatures;
     withNFCDisabled = disableNFC;
+    withNfcOption = nfcOption;
     customMediaCallback = mediaCallback;
     theme = onfidoTheme;
     return Future.value(startResult!);

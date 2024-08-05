@@ -54,7 +54,11 @@ extension OnfidoConfig {
         }
 
         if let disableNFC = dictionary["disableNFC"] as? Bool, disableNFC {
-            onfidoBuilder.disableNFC()
+            onfidoBuilder.withNFC(.off)
+        }
+
+        if let nfcOption = dictionary["nfcOption"] as? String {
+            onfidoBuilder.withNFC(getNFCConfiguration(nfcOption))
         }
 
         if let shouldUseMediaCallback = dictionary["shouldUseMediaCallback"] as? Bool, shouldUseMediaCallback {

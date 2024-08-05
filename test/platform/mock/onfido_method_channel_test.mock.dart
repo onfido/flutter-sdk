@@ -28,6 +28,7 @@ const startMockRequestBody = {
   },
   'enterpriseFeatures': {'hideOnfidoLogo': true, 'cobrandingText': 'text', 'disableMobileSDKAnalytics': false},
   'disableNFC': false,
+  'nfcOption': "OPTIONAL",
   "onfidoTheme": "LIGHT"
 };
 

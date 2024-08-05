@@ -9,6 +9,7 @@ import com.onfido.android.sdk.capture.ui.options.FlowStep
 import com.onfido.android.sdk.capture.ui.options.stepbuilder.DocumentCaptureStepBuilder
 import com.onfido.sdk.flutter.helpers.CustomMediaCallback
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import com.onfido.android.sdk.capture.model.NFCOptions
 
 internal fun Any?.deserializeOnfidoBuilder(
     context: Context,
@@ -94,7 +95,12 @@ internal fun Any?.deserializeOnfidoBuilder(
     builder.withEnterpriseFeatures(features)
 
     if (this["disableNFC"] as? Boolean == true) {
-        builder.disableNFC()
+        builder.withNFC(NFCOptions.Disabled)
+    }
+
+    val nfcOption = this["nfcOption"] as? String
+    if (nfcOption != null) {
+        builder.withNFC(getNFCOption(nfcOption))
     }
 
     val withMediaCallback = this["shouldUseMediaCallback"] as? Boolean ?: false

@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [7.0.0] - 2024-07-29
+- Bumped Android target SDK version to 34. This update indirectly means that Java version 17 is required to build the project. Details: https://developer.android.com/build/jdks
+- Added `nfcOption` parameter for configuring NFC
+- Added missing detail property to platform exceptions caused by flow errors
+- Deprecated `disableNFC` parameter (Use `nfcOption` with `NFCOptions.Disabled` value instead)
+- Updated underlying Onfido native SDK versions:
+  - Android 21.0.+ (up from 20.5.+)
+  - iOS 30.4.+ (up from 30.3.+)
+
 ## [6.2.0] - 2024-07-11
 
 - Align with SDK requirements for minimum support for iOS 13+

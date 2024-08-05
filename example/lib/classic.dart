@@ -28,7 +28,7 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
   bool _welcomeStep = true;
   bool _proofOfAddressStep = false;
 
-  bool _disableNFC = false;
+  NFCOptions _nfcOption = NFCOptions.OPTIONAL;
 
   bool _enableDocCapture = false;
   DocumentTypes _documentType = DocumentTypes.nationalIdentityCard;
@@ -64,7 +64,7 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
           enterpriseFeatures: EnterpriseFeatures(
             hideOnfidoLogo: _hideOnfidoLogo,
           ),
-          disableNFC: _disableNFC,
+          nfcOption: _nfcOption,
           onfidoTheme: _onfidoTheme);
 
       final response = await onfido.start(
@@ -180,15 +180,26 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
                     });
                   },
                 ),
-                LabeledCheckbox(
-                  label: 'Disable NFC',
-                  value: _disableNFC,
-                  onChanged: (bool newValue) {
-                    setState(() {
-                      _disableNFC = newValue;
-                    });
-                  },
-                ),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Column(children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("NFC Options"),
+                          ElevatedButton(
+                            child: Row(
+                              children: [
+                                Text(_nfcOption.name),
+                                const SizedBox(width: 6),
+                                const Icon(Icons.arrow_drop_down, color: Colors.white),
+                              ],
+                            ),
+                            onPressed: () async => {showNFCOptionsPicker(context)},
+                          ),
+                        ],
+                      )
+                    ])),
                 LabeledCheckbox(
                   label: 'Use custom media callbacks',
                   value: _withMediaCallback,
@@ -438,6 +449,13 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
     _showPickerDialog(OnfidoTheme.values.map((e) => e.name).toList(), OnfidoTheme.values.indexOf(_onfidoTheme),
         (selectedItem) {
       _onfidoTheme = OnfidoTheme.values[selectedItem];
+    });
+  }
+
+  showNFCOptionsPicker(BuildContext context) {
+    _showPickerDialog(NFCOptions.values.map((e) => e.name).toList(), NFCOptions.values.indexOf(_nfcOption),
+        (selectedItem) {
+      _nfcOption = NFCOptions.values[selectedItem];
     });
   }
 

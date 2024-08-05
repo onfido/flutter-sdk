@@ -87,11 +87,11 @@ From version 4.0.0 onwards, NFC is enabled by default for the Flutter SDK and of
 
 For more information on how to configure NFC and the list of supported documents, please refer to the [NFC for Document Report](https://documentation.onfido.com/guide/document-report-nfc) guide.
 
-#### Disabling NFC
+#### Disabling NFC and excluding dependencies
 
-NFC is enabled by default. To disable NFC, include the `disableNFC` parameter while configuring the `onfido` [initialization object](#build-a-configuration-object).
+NFC is enabled by default. To disable NFC, include the `nfcOption` parameter with `NFCOptions.Disabled` while configuring the `onfido` [initialization object](#build-a-configuration-object).
 
-For Android, a range of NFC library dependencies are included in the build automatically. In addition to configuring the `disableNFC` parameter, you must remove any libraries from the build process.
+For Android, a range of NFC library dependencies are included in the build automatically. In addition to configuring the `nfcOption` parameter, you must remove any libraries from the build process.
 
 Exclude dependencies required for NFC from your build:
 
@@ -143,16 +143,9 @@ When defining workflows and creating identity verifications, we highly recommend
 
 ### SDK authentication
 
-The SDK is authenticated using SDK tokens. As each SDK token must be specific to a given applicant and session, a new token must be generated each time you initialize the Flutter SDK.
+The SDK is authenticated using SDK tokens. Onfido Studio generates and exposes SDK tokens in the workflow run payload returned by the API when a workflow run is [created](https://documentation.onfido.com/#create-workflow-run).
 
-| Parameter | Notes |
-|------|------|
-| `applicant_id` | **required** <br /> Specifies the applicant for the SDK instance. |
-| `application_id` | **required** <br /> The application ID (for iOS "application bundle ID") that was set up during development. For iOS, this is usually in the form `com.your-company.app-name`. Make sure to use a valid `application_id` or you'll receive a 401 error. |
-
-It's important to note that SDK tokens expire after **90 minutes**.
-
-For details on how to generate SDK tokens, please refer to the `POST /sdk_token/` endpoint definition in the Onfido [API reference](https://documentation.onfido.com/api/latest#generate-sdk-token).
+SDK tokens for Studio can only be used together with the specific workflow run they are generated for, and remain valid for a period of five weeks.
 
 **Note**: You must never use API tokens in the frontend of your application as malicious users could discover them in your source code. You should only use them on your server.
 
@@ -180,8 +173,12 @@ final Onfido onfido = Onfido(
   and instead set a theme statically at the build time. In this case, the flow will always be in displayed
   in the selected theme regardless of the user's device theme.
     * Valid values in `OnfidoTheme`: `AUTOMATIC`, `LIGHT`, `DARK`.
-
 * **`disableNFC`**: **Optional**. Set this parameter to `true` to disable NFC. 
+	* **DEPRECATED**. Use `nfcOption` parameter to manage NFC settings
+* **`nfcOption`**: **Optional**. To configure NFC. There are three NFC options:
+  * `DISABLED`: NFC reading will not be asked of end-users
+  * `OPTIONAL` (Default): NFC reading will be attempted, if possible
+  * `REQUIRED`: NFC reading will be enforced, preventing end-users from completing the flow without a successful reading
 
 ### Start the flow
 
@@ -316,6 +313,21 @@ This section on 'Advanced customization' refers to the process of initializing t
 While building the configuration object is done in exactly the same way as [documented above](#build-a-configuration-object), the `flowSteps` parameter used to manually define the steps of the identity verification journey in the `start` function is mutually exclusive of the `startWorkflow` function and the `workflowRunId` parameter.
 
 **Note** that this initialization process is **not recommended** as the majority of new features are exclusively released for Studio workflows.
+
+### Manual SDK authentication
+
+The SDK is authenticated using SDK tokens. As each SDK token must be specific to a given applicant and session, a new token must be generated each time you initialize the Flutter SDK.
+
+| Parameter | Notes |
+|------|------|
+| `applicant_id` | **required** <br /> Specifies the applicant for the SDK instance. |
+| `application_id` | **required** <br /> The application ID (for iOS "application bundle ID") that was set up during development. For iOS, this is usually in the form `com.your-company.app-name`, or `com.example.yourapp` for Android. Make sure to use a valid `application_id` or you'll receive a 401 error. |
+
+It's important to note that manually generated SDK tokens in Flutter expire after **90 minutes** and cannot be renewed. SDK tokens generated in Onfido Studio when creating workflow runs are **not** affected by this limit.
+
+For details on how to manually generate SDK tokens, please refer to the `POST /sdk_token/` endpoint definition in the Onfido [API reference](https://documentation.onfido.com/#generate-sdk-token).
+
+**Note**: You must never use API tokens in the frontend of your application as malicious users could discover them in your source code. You should only use them on your server.
 
 ### Manually starting the flow
 
