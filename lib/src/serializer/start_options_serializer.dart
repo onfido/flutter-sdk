@@ -10,6 +10,7 @@ class StartOptionsSerializer {
       EnterpriseFeatures? enterpriseFeatures,
       String? iosLocalizationFileName,
       bool? disableNFC,
+      NFCOptions? nfcOption,
       OnfidoTheme? onfidoTheme}) {
     return {
       'sdkToken': sdkToken,
@@ -17,6 +18,7 @@ class StartOptionsSerializer {
       'iosAppearance': iosAppearance?.toJson(),
       'iosLocalizationFileName': iosLocalizationFileName,
       'disableNFC': disableNFC,
+      'nfcOption': nfcOption?.name,
       'shouldUseMediaCallback': shouldUseMediaCallback,
       'enterpriseFeatures': enterpriseFeatures?.toJson(),
       'onfidoTheme': onfidoTheme == null ? null : describeEnum(onfidoTheme)

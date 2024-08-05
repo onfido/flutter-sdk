@@ -42,6 +42,7 @@ void main() {
             faceCapture: FaceCapture.video(),
           ),
           disableNFC: false,
+          nfcOption: NFCOptions.OPTIONAL,
           onfidoTheme: OnfidoTheme.LIGHT);
 
       expect(callCounter, 1);
