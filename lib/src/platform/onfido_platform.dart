@@ -1,5 +1,4 @@
 import 'package:onfido_sdk/onfido_sdk.dart';
-import 'package:onfido_sdk/src/model/nfc_options.dart';
 
 import 'onfido_method_channel.dart';
 

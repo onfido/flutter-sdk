@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:onfido_sdk/onfido_sdk.dart';
@@ -219,7 +218,7 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
                           ElevatedButton(
                             child: Row(
                               children: [
-                                Text(describeEnum(_onfidoTheme)),
+                                Text(_onfidoTheme.name),
                                 const SizedBox(width: 6),
                                 const Icon(Icons.arrow_drop_down, color: Colors.white),
                               ],
@@ -278,7 +277,7 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
                                 ElevatedButton(
                                   child: Row(
                                     children: [
-                                      Text(describeEnum(_documentType)),
+                                      Text(_documentType.name),
                                       const SizedBox(width: 6),
                                       const Icon(Icons.arrow_drop_down, color: Colors.white),
                                     ],
@@ -294,7 +293,7 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
                                 ElevatedButton(
                                   child: Row(
                                     children: [
-                                      Text(describeEnum(_countryCode)),
+                                      Text(_countryCode.name),
                                       const SizedBox(width: 6),
                                       const Icon(Icons.arrow_drop_down, color: Colors.white),
                                     ],
@@ -332,7 +331,7 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
                                 ElevatedButton(
                                   child: Row(
                                     children: [
-                                      Text(describeEnum(_faceCaptureType)),
+                                      Text(_faceCaptureType.name),
                                       const SizedBox(width: 6),
                                       const Icon(Icons.arrow_drop_down, color: Colors.white),
                                     ],

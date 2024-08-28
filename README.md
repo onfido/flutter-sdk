@@ -232,6 +232,41 @@ Starting from version 4.1.0, the Flutter SDK supports dark mode customization fo
 
 The `onfidoTheme` property in the `IOSAppearance` object allows you to force light or dark mode via `DARK` and `LIGHT` respectively, or follow the system's interface style with `AUTOMATIC` (the default value).
 
+### Co-branding
+
+The Onfido Flutter SDK allows for two co-branding options that affect the display of the Onfido logo at the bottom of the Onfido screens.
+
+#### Text co-branding
+
+- **`cobrandingText {String}` - optional**
+
+  The most effective way to add your brand to the footer watermark is by use of the `cobrandingText` property under `enterpriseFeatures`. This property takes a string as a value.
+
+**Please note**: Text co-branding must be enabled by Onfido. Please [contact](mailto:client-support@onfido.com) your Solutions Engineer or Customer Success Manager to activate the feature.
+
+#### Hide Onfido logo
+
+- **`hideOnfidoLogo {Boolean}` - optional**
+
+  As an alternative to `cobrandingText`, you can also choose to hide the Onfido logo from the footer watermark. This feature makes use of the `hideOnfidoLogo` property under `enterpriseFeatures`. This property takes a boolean as a value.
+
+**Please note**: Logo co-branding must be enabled by Onfido. Please [contact](mailto:client-support@onfido.com) your Solutions Engineer or Customer Success Manager to activate the feature.
+
+
+#### Add co-branding to the SDK config
+
+To apply these co-branding options, add the properties to the `enterpriseFeatures` object in the configuration object:
+
+```dart
+final Onfido onfido = Onfido(
+    sdkToken: "<YOUR_SDK_TOKEN>",
+    enterpriseFeatures: EnterpriseFeatures(
+      hideOnfidoLogo: "<TRUE/FALSE>",
+      cobrandingText: "<YOUR_TEXT_HERE>"
+    )
+);
+```
+
 ### Language localization
 
 The Flutter SDK supports and maintains translations for over 40 languages, available for use with both Android and iOS.
@@ -425,7 +460,7 @@ The `Error` object returned as part of `PlatformException` translates the errors
       // Occurs when the SDK receives an error from an [API call](https://documentation.onfido.com/#errors)
 
     PlatformException(error, The operation couldn’t be completed. (<platform_specific_error>), exception, null)
-      // Occurs when an unexpected error occurs. Please contact [ios-sdk@onfido.com](mailto:ios-sdk@onfido.com?Subject=ISSUE%3A) or [android-sdk@onfido.com](mailto:android-sdk@onfido.com?Subject=ISSUE%3A) when this happens
+      // Occurs when an unexpected error occurs. Please contact [support@onfido.com](mailto:support@onfido.com) should this happen
 
     PlatformException(error, The operation couldn’t be completed. (Onfido.OnfidoFlowError error 2.), versionInsufficient, null)
       // Occurs when you are using an older version of the iOS SDK and trying to access a new functionality from the workflow. You can fix this by updating the SDK
@@ -448,7 +483,7 @@ We have included a sample app to show how to integrate with the Onfido Flutter S
 
 ## Support
 
-Should you encounter any technical issues during integration, please contact Onfido's Customer Support team via [email](mailto:support@onfido.com), including the word ISSUE: at the start of the subject line. 
+Should you encounter any technical issues during integration, please contact Onfido's Customer Support team via [email](mailto:support@onfido.com). 
 
 Alternatively, you can search the support documentation available via the customer experience portal, [public.support.onfido.com](http://public.support.onfido.com).
 

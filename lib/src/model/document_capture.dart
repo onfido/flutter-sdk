@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 import 'country_code.dart';
 import 'document_type.dart';
 
@@ -11,8 +9,8 @@ class DocumentCapture {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['documentType'] = documentType == null ? null : describeEnum(documentType!);
-    data['countryCode'] = countryCode == null ? null : describeEnum(countryCode!);
+    data['documentType'] = documentType?.name;
+    data['countryCode'] = countryCode?.name;
     return data;
   }
 }

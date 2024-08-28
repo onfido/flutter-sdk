@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:onfido_sdk/onfido_sdk.dart';
@@ -127,7 +126,7 @@ class _OnfidoStudioState extends State<OnfidoStudio> {
                           ElevatedButton(
                             child: Row(
                               children: [
-                                Text(describeEnum(onfidoTheme)),
+                                Text(onfidoTheme.name),
                                 const SizedBox(width: 6),
                                 const Icon(Icons.arrow_drop_down, color: Colors.white),
                               ],

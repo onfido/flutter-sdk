@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 import 'face_capture_type.dart';
 
 abstract class FaceCapture {
@@ -36,7 +34,7 @@ class _Photo extends FaceCapture {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'type': describeEnum(_type),
+      'type': _type.name,
       'withIntroScreen': withIntroScreen,
     };
   }
@@ -56,7 +54,7 @@ class _Video extends FaceCapture {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'type': describeEnum(_type),
+      'type': _type.name,
       'withIntroVideo': withIntroVideo,
       'withConfirmationVideoPreview': withConfirmationVideoPreview,
       'withManualLivenessCapture': withManualLivenessCapture
@@ -74,7 +72,7 @@ class _Motion extends FaceCapture {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'type': describeEnum(_type),
+      'type': _type.name,
       'withAudio': withAudio,
     };
   }

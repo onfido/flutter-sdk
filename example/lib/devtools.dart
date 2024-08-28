@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:onfido_sdk/onfido_sdk.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:convert';
-import 'dart:io' show Platform;
 
 import 'model/media_callback.dart';
 
@@ -50,7 +49,7 @@ class _DevtoolsState extends State<Devtools> {
     final Onfido onfido = Onfido(
         sdkToken: studioConfig.sdkToken!,
         iosLocalizationFileName: "onfido_ios_localisation",
-        mediaCallback: studioConfig.shouldUseMediaCallbacks != null ? ExampleMediaCallback() : null,
+        mediaCallback: studioConfig.shouldUseMediaCallbacks != false ? ExampleMediaCallback() : null,
         enterpriseFeatures: EnterpriseFeatures(
             hideOnfidoLogo: studioConfig.hideLogo, disableMobileSDKAnalytics: studioConfig.disableMobileSdkAnalytics),
         onfidoTheme: studioConfig.theme);
@@ -63,9 +62,8 @@ class _DevtoolsState extends State<Devtools> {
         sdkToken: classicConfig.sdkToken!,
         mediaCallback: classicConfig.shouldUseMediaCallbacks != null ? ExampleMediaCallback() : null,
         enterpriseFeatures: EnterpriseFeatures(
-          hideOnfidoLogo: classicConfig.hideLogo,
-        ),
-        disableNFC: classicConfig.disableNFC,
+            hideOnfidoLogo: classicConfig.hideLogo, disableMobileSDKAnalytics: classicConfig.disableMobileSdkAnalytics),
+        nfcOption: classicConfig.disableNFC ?? true ? NFCOptions.DISABLED : NFCOptions.REQUIRED,
         onfidoTheme: classicConfig.theme);
 
     await onfido.start(
@@ -90,7 +88,7 @@ class _DevtoolsState extends State<Devtools> {
     if (testingConfiguration == null) {
       return {
         'disableNFC': false,
-        'disableMobileSdkAnalytics': parseDisableMobileSdkAnalytics(null),
+        'disableMobileSdkAnalytics': false,
         'shouldUseMediaCallbacks': false,
         'hideLogo': false,
         'logoCobrand': false,
@@ -98,24 +96,12 @@ class _DevtoolsState extends State<Devtools> {
     }
 
     return {
-      'disableNFC': testingConfiguration['DISABLE_NFC'] ?? false,
-      'disableMobileSdkAnalytics': parseDisableMobileSdkAnalytics(testingConfiguration['DISABLE_MOBILE_SDK_ANALYTICS']),
-      'shouldUseMediaCallbacks': testingConfiguration['ENABLE_MEDIA_CALLBACKS'] ?? false,
-      'hideLogo': testingConfiguration['ENABLE_HIDE_ONFIDO_LOGO'] ?? false,
-      'logoCobrand': testingConfiguration['ENABLE_LOGO_COBRAND'] ?? false,
+      'disableNFC': testingConfiguration['DISABLE_NFC'] != null ? true : false,
+      'disableMobileSdkAnalytics': testingConfiguration['DISABLE_MOBILE_SDK_ANALYTICS'] != null ? true : false,
+      'shouldUseMediaCallbacks': testingConfiguration['ENABLE_MEDIA_CALLBACKS'] != null ? true : false,
+      'hideLogo': testingConfiguration['ENABLE_HIDE_ONFIDO_LOGO'] != null ? true : false,
+      'logoCobrand': testingConfiguration['ENABLE_LOGO_COBRAND'] != null ? true : false,
     };
-  }
-
-  bool? parseDisableMobileSdkAnalytics(bool? disableMobileSdkAnalytics) {
-    bool? disableMobileSdkAnalyticsResult;
-
-    if (Platform.isAndroid) {
-      disableMobileSdkAnalyticsResult = disableMobileSdkAnalytics;
-    } else {
-      disableMobileSdkAnalyticsResult = disableMobileSdkAnalytics == null ? null : !disableMobileSdkAnalytics;
-    }
-
-    return disableMobileSdkAnalyticsResult;
   }
 
   Config parseClassicConfig(List<dynamic> steps) {
@@ -124,7 +110,7 @@ class _DevtoolsState extends State<Devtools> {
     dynamic captureDocument;
     bool proofOfAddress = false;
 
-    steps.forEach((step) {
+    for (var step in steps) {
       String stepType = step is Map ? step['type'] : step;
       switch (stepType) {
         case 'welcome':
@@ -142,7 +128,7 @@ class _DevtoolsState extends State<Devtools> {
         default:
           break;
       }
-    });
+    }
 
     return Config(
         flowSteps: Steps(
@@ -167,8 +153,8 @@ class _DevtoolsState extends State<Devtools> {
       }
 
       if (step['options']['requestedVariant'] == 'video') {
-        var withIntroVideo = step['options']['recordAudio'] as bool;
-        var withConfirmationVideoPreview = step['options']['showVideoConfirmation'] as bool;
+        var withIntroVideo = step['options']['showIntro'];
+        var withConfirmationVideoPreview = step['options']['showVideoConfirmation'];
 
         return FaceCapture.video(
             withIntroVideo: withIntroVideo, withConfirmationVideoPreview: withConfirmationVideoPreview);
@@ -214,7 +200,7 @@ class _DevtoolsState extends State<Devtools> {
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel(
-        '_devtools',
+        'FlutterWebView',
         onMessageReceived: (message) {
           var devtoolsConfig = json.decode(message.message);
           startFromDevtoolsConfig(devtoolsConfig);
