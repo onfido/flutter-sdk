@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:onfido_sdk/onfido_sdk.dart';
 
 class StartOptionsSerializer {
@@ -21,7 +20,7 @@ class StartOptionsSerializer {
       'nfcOption': nfcOption?.name,
       'shouldUseMediaCallback': shouldUseMediaCallback,
       'enterpriseFeatures': enterpriseFeatures?.toJson(),
-      'onfidoTheme': onfidoTheme == null ? null : describeEnum(onfidoTheme)
+      'onfidoTheme': onfidoTheme?.name
     };
   }
 }

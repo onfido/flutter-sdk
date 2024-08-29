@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:onfido_sdk/onfido_sdk.dart';
 
 /// convert dart code to dictionary to be passed to the paltform
@@ -18,7 +17,7 @@ class StartStudioSerializer {
       'iosLocalizationFileName': iosLocalizationFileName,
       'shouldUseMediaCallback': shouldUseMediaCallback,
       'enterpriseFeatures': enterpriseFeatures?.toJson(),
-      'onfidoTheme': onfidoTheme == null ? null : describeEnum(onfidoTheme)
+      'onfidoTheme': onfidoTheme?.name
     };
   }
 }

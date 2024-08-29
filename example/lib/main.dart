@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
               tabs: [
                 Tab(text: "Classic"),
                 Tab(text: "Studio"),
-                Tab(text: "Devtools"),
+                Tab(text: "DevTools"),
               ],
             ),
             title: const Text('Flutter SDK'),

@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:onfido_sdk/onfido_sdk.dart';
-import 'package:onfido_sdk/src/model/nfc_options.dart';
 import 'package:onfido_sdk/src/serializer/serializer.dart';
 
 class MethodChannelOnfido extends OnfidoPlatform {
