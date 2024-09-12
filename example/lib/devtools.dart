@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:onfido_sdk/onfido_sdk.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -214,10 +216,8 @@ class _DevtoolsState extends State<Devtools> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Devtools WebView'),
-      ),
       body: WebViewWidget(
+        gestureRecognizers: {}..add(Factory(() => VerticalDragGestureRecognizer())),
         controller: controller,
       ),
     );
