@@ -121,6 +121,9 @@ implementation ("com.onfido.sdk:onfido-<variant>:19.1.0"){
 
 ## Initializing the SDK
 
+> ⚠️ The following SDK initialization documentation applies to identity verification workflows orchestrated using Onfido Studio.
+> For integrations where the verification steps are manually defined and configured, please refer to the [Advanced flow customization](#advanced-flow-customization) section below.
+
 The Flutter SDK has multiple initialization and customization options that provide flexibility to your integration, while remaining easy to integrate.
 
 ### Defining a workflow

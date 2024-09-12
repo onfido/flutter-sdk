@@ -1,7 +1,7 @@
 group 'com.onfido.sdk.flutter'
 version '1.0'
 
-def onfidoSdkVersion = '21.1.+'
+def onfidoSdkVersion = '21.2.+'
 
 buildscript {
     ext.kotlin_version = '1.6.10'
