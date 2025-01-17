@@ -7,7 +7,7 @@
 
 import Foundation
 
-func getFlutterViewController() -> FlutterViewController? {
+func getFlutterViewController() -> UIViewController? {
     var window: UIWindow?
     if #available(iOS 13.0, *) {
         window = UIApplication
@@ -19,5 +19,5 @@ func getFlutterViewController() -> FlutterViewController? {
     } else {
         window = UIApplication.shared.windows.first { $0.isKeyWindow }
     }
-    return window?.rootViewController as? FlutterViewController
+    return window?.rootViewController as? UIViewController
 }
