@@ -3,10 +3,10 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - Onfido (32.1.1)
+  - Onfido (32.2.1)
   - onfido_sdk (0.0.1):
     - Flutter
-    - Onfido (~> 32.1.1)
+    - Onfido (~> 32.2.1)
   - Toast (4.1.1)
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
