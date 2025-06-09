@@ -56,13 +56,13 @@ class _OnfidoClassicState extends State<OnfidoClassic> {
 
       final applicantId = applicant.id!;
       final sdkToken = await OnfidoApi.instance.createSdkToken(applicantId);
+      final mediaCallbacks = _withMediaCallback ? ExampleMediaCallback() : null;
+      final enterpriseFeatures = _hideOnfidoLogo ? EnterpriseFeatures(hideOnfidoLogo: true) : null;
 
       final Onfido onfido = Onfido(
           sdkToken: sdkToken,
-          mediaCallback: _withMediaCallback ? ExampleMediaCallback() : null,
-          enterpriseFeatures: EnterpriseFeatures(
-            hideOnfidoLogo: _hideOnfidoLogo,
-          ),
+          mediaCallback: mediaCallbacks,
+          enterpriseFeatures: enterpriseFeatures,
           nfcOption: _nfcOption,
           onfidoTheme: _onfidoTheme);
 
