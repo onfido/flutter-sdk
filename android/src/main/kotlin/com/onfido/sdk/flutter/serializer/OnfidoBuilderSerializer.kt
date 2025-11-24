@@ -89,9 +89,10 @@ internal fun Any?.deserializeOnfidoBuilder(
 
     builder.withCustomFlow(steps.toTypedArray())
 
-    val enterpriseFeatures = this["enterpriseFeatures"] as? Map<*, *> ?: return builder
-    val features = EnterpriseFeatures.buildFromMap(enterpriseFeatures)
-    builder.withEnterpriseFeatures(features)
+    val enterpriseFeatures = this["enterpriseFeatures"] as? Map<*, *>
+    if (enterpriseFeatures != null) {
+        builder.withEnterpriseFeatures(EnterpriseFeatures.buildFromMap(enterpriseFeatures))
+    }
 
     val nfcOption = this["nfcOption"] as? String
     if (nfcOption != null) {
