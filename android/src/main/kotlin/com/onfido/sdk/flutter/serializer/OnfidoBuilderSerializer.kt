@@ -10,6 +10,7 @@ import com.onfido.android.sdk.capture.ui.options.stepbuilder.DocumentCaptureStep
 import com.onfido.sdk.flutter.helpers.CustomMediaCallback
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import com.onfido.android.sdk.capture.model.NFCOptions
+import java.util.Locale
 
 internal fun Any?.deserializeOnfidoBuilder(
     context: Context
@@ -20,6 +21,10 @@ internal fun Any?.deserializeOnfidoBuilder(
 
     (this["sdkToken"] as? String)?.let {
         builder.withSDKToken(it)
+    }
+
+    (this["locale"] as? String)?.takeIf { it.isNotBlank() }?.let { localeTag ->
+        builder.withLocale(Locale.forLanguageTag(localeTag))
     }
 
     val flowSteps = this["flowSteps"] as? Map<*, *>

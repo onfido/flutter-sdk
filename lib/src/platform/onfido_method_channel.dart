@@ -26,6 +26,7 @@ class MethodChannelOnfido extends OnfidoPlatform {
       {required String sdkToken,
       required FlowSteps flowSteps,
       String? iosLocalizationFileName,
+      String? locale,
       IOSAppearance? iosAppearance,
       OnfidoMediaCallback? mediaCallback,
       EnterpriseFeatures? enterpriseFeatures,
@@ -37,6 +38,7 @@ class MethodChannelOnfido extends OnfidoPlatform {
         iosAppearance: iosAppearance,
         shouldUseMediaCallback: mediaCallback != null,
         iosLocalizationFileName: iosLocalizationFileName,
+        locale: locale,
         enterpriseFeatures: enterpriseFeatures,
         nfcOption: nfcOption,
         onfidoTheme: onfidoTheme);
@@ -55,6 +57,7 @@ class MethodChannelOnfido extends OnfidoPlatform {
       OnfidoMediaCallback? mediaCallback,
       BiometricTokenCallback? biometricTokenCallback,
       String? iosLocalizationFileName,
+      String? locale,
       EnterpriseFeatures? enterpriseFeatures,
       OnfidoTheme? onfidoTheme}) async {
     final arguments = StartStudioSerializer.serialize(
@@ -64,6 +67,7 @@ class MethodChannelOnfido extends OnfidoPlatform {
         shouldUseMediaCallback: mediaCallback != null,
         shouldUseBiometricTokenCallback: biometricTokenCallback != null,
         iosLocalizationFileName: iosLocalizationFileName,
+        locale: locale,
         enterpriseFeatures: enterpriseFeatures,
         onfidoTheme: onfidoTheme);
 

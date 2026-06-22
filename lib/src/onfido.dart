@@ -14,6 +14,7 @@ class Onfido {
   Onfido(
       {required String sdkToken,
       String? iosLocalizationFileName,
+      String? locale,
       IOSAppearance? iosAppearance,
       EnterpriseFeatures? enterpriseFeatures,
       NFCOptions? nfcOption,
@@ -22,6 +23,7 @@ class Onfido {
       OnfidoTheme? onfidoTheme})
       : _sdkToken = sdkToken,
         _iOSLocalizationFileName = iosLocalizationFileName,
+        _locale = locale,
         _enterpriseFeatures = enterpriseFeatures,
         _iosAppearance = iosAppearance,
         _nfcOption = nfcOption,
@@ -31,6 +33,7 @@ class Onfido {
 
   final String _sdkToken;
   final String? _iOSLocalizationFileName;
+  final String? _locale;
   final EnterpriseFeatures? _enterpriseFeatures;
   final IOSAppearance? _iosAppearance;
   final NFCOptions? _nfcOption;
@@ -46,6 +49,7 @@ class Onfido {
         flowSteps: flowSteps,
         iosAppearance: _iosAppearance,
         iosLocalizationFileName: _iOSLocalizationFileName,
+        locale: _locale,
         enterpriseFeatures: _enterpriseFeatures,
         nfcOption: _nfcOption,
         mediaCallback: _mediaCallback,
@@ -61,6 +65,7 @@ class Onfido {
         mediaCallback: _mediaCallback,
         biometricTokenCallback: _biometricTokenCallback,
         iosLocalizationFileName: _iOSLocalizationFileName,
+        locale: _locale,
         enterpriseFeatures: _enterpriseFeatures,
         onfidoTheme: _onfidoTheme);
   }

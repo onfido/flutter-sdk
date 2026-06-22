@@ -17,9 +17,11 @@ extension OnfidoConfig {
             onfidoBuilder.withSDKToken(token)
         }
 
-        if let fileName = dictionary["iosLocalizationFileName"] as? String {
-            onfidoBuilder.withCustomLocalization(andTableName: fileName)
-        }
+        OnfidoLocalizationHelper.applyLocalization(
+            to: onfidoBuilder,
+            locale: dictionary["locale"] as? String,
+            customLocalizationFileName: dictionary["iosLocalizationFileName"] as? String
+        )
 
         var appearance = Appearance()
         if let iosAppearance = dictionary["iosAppearance"] as? NSDictionary {

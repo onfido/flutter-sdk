@@ -4,6 +4,7 @@ import com.onfido.workflow.WorkflowConfig
 import com.onfido.android.sdk.capture.EnterpriseFeatures
 import com.onfido.sdk.flutter.helpers.BiometricTokenCallbackBridge
 import com.onfido.sdk.flutter.helpers.CustomMediaCallback
+import java.util.Locale
 
 fun Any.deserializeWorkflowConfig(): WorkflowConfig {
     if (this !is Map<*, *>) throw Exception("Invalid arguments for start method")
@@ -15,6 +16,10 @@ fun Any.deserializeWorkflowConfig(): WorkflowConfig {
         ?: throw Exception("Invalid arguments for start method (workflow run ID")
 
     val builder = WorkflowConfig.Builder(sdkToken, workflowRunId)
+
+    (this["locale"] as? String)?.takeIf { it.isNotBlank() }?.let { localeTag ->
+        builder.withLocale(Locale.forLanguageTag(localeTag))
+    }
 
     val withMediaCallback = this["shouldUseMediaCallback"] as? Boolean ?: false
     if (withMediaCallback) {

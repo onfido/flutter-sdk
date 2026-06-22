@@ -8,6 +8,7 @@ class StartOptionsSerializer {
       bool? shouldUseMediaCallback,
       EnterpriseFeatures? enterpriseFeatures,
       String? iosLocalizationFileName,
+      String? locale,
       bool? disableNFC,
       NFCOptions? nfcOption,
       OnfidoTheme? onfidoTheme}) {
@@ -16,6 +17,7 @@ class StartOptionsSerializer {
       'flowSteps': flowSteps.toJson(),
       'iosAppearance': iosAppearance?.toJson(),
       'iosLocalizationFileName': iosLocalizationFileName,
+      'locale': locale,
       'nfcOption': nfcOption?.name,
       'shouldUseMediaCallback': shouldUseMediaCallback,
       'enterpriseFeatures': enterpriseFeatures?.toJson(),

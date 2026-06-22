@@ -20,9 +20,11 @@ extension WorkflowConfiguration {
         if let enterpriseFeatures = dictionary["enterpriseFeatures"] as? NSDictionary {
             withEnterpriseFeatures(EnterpriseFeatures.builder(with: enterpriseFeatures))
          }
-        if let fileName = dictionary["iosLocalizationFileName"] as? String {
-            withCustomLocalization(withTableName: fileName, in: Bundle.self.main)
-        }
+        OnfidoLocalizationHelper.applyLocalization(
+            to: self,
+            locale: dictionary["locale"] as? String,
+            customLocalizationFileName: dictionary["iosLocalizationFileName"] as? String
+        )
 
         var appearance = Appearance()
         if let iosAppearance = dictionary["iosAppearance"] as? NSDictionary {

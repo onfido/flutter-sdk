@@ -9,6 +9,7 @@ abstract class OnfidoPlatform {
       {required String sdkToken,
       required FlowSteps flowSteps,
       String? iosLocalizationFileName,
+      String? locale,
       IOSAppearance? iosAppearance,
       EnterpriseFeatures? enterpriseFeatures,
       NFCOptions? nfcOption,
@@ -22,6 +23,7 @@ abstract class OnfidoPlatform {
       OnfidoMediaCallback? mediaCallback,
       BiometricTokenCallback? biometricTokenCallback,
       String? iosLocalizationFileName,
+      String? locale,
       EnterpriseFeatures? enterpriseFeatures,
       OnfidoTheme? onfidoTheme});
 }
