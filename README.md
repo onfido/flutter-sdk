@@ -92,32 +92,41 @@ For more information on how to configure NFC and the list of supported documents
 
 NFC is enabled by default. To disable NFC, include the `nfcOption` parameter with `NFCOptions.Disabled` while configuring the `onfido` [initialization object](#build-a-configuration-object).
 
-For Android, a range of NFC library dependencies are included in the build automatically. In addition to configuring the `nfcOption` parameter, you must remove any libraries from the build process.
+For Android, a range of NFC library dependencies are included in the build automatically. In addition to configuring the `nfcOption` parameter, you can exclude those libraries from your app during the build process to reduce your application's size.
 
-Exclude dependencies required for NFC from your build:
+Add the following block in your project's `android/app/build.gradle` file:
 
-```gradle
-dependencies {
-  implementation 'com.onfido.sdk.capture:onfido-capture-sdk:x.y.z' {
-    exclude group: 'net.sf.scuba', module: 'scuba-sc-android'
-    exclude group: 'org.jmrtd', module: 'jmrtd'
-    exclude group: 'com.madgag.spongycastle', module: 'prov'
-  }
+```groovy
+configurations.all {
+    exclude group: 'org.jmrtd'
+    exclude group: 'net.sf.scuba'
+    exclude group: 'com.madgag.spongycastle'
 }
 ```
 
-If your application already uses the same libraries that the Onfido SDK needs for the NFC feature, you may encounter some dependency conflicts that will impact and could interfere with the NFC capture in our SDK. In such cases, we propose using the dependency resolution strategy below, by adding the following lines to your `build.gradle` file:
+If your application already uses the same libraries that the Onfido SDK needs for the NFC feature, you may encounter some dependency conflicts that will impact and could interfere with the NFC capture in our SDK. In such cases, we propose using the dependency resolution strategy below:
 
-```gradle
-implementation ("com.onfido.sdk:onfido-<variant>:19.1.0"){
-     exclude group: "org.bouncycastle"
- }
- implementation ("the other library that conflicts with Onfido on BouncyCastle") {
-     exclude group: "org.bouncycastle"
- }
- 
- implementation "org.bouncycastle:bcprov-jdk15to18:1.69"
- implementation "org.bouncycastle:bcutil-jdk15to18:1.69"
+```groovy
+dependencies {
+    implementation "org.bouncycastle:bcprov-jdk15to18:1.69"
+    implementation "org.bouncycastle:bcutil-jdk15to18:1.69"
+}
+configurations.all {
+    exclude group: 'org.bouncycastle', module: 'bcprov-jdk18on'
+    exclude group: 'org.bouncycastle', module: 'bcutil-jdk18on'
+}
+```
+
+You can run the following comamnd in the android directory of your project to see the dependency tree (including versions):
+
+```bash
+./gradlew :app:dependencies --configuration debugRuntimeClasspath
+```
+
+For a more targeted output, you can use the following command to see the details of a transitive dependency (e.g. which library pulls it in):
+
+```bash
+./gradlew :app:dependencyInsight --dependency org.bouncycastle --configuration debugRuntimeClasspath
 ```
 
 ## Initializing the SDK

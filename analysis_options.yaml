@@ -9,6 +9,14 @@
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
 
+# Both rules fire on code that predates the lints and is unchanged since v10.2.0.
+# The Color.alpha/red/green/blue replacements require Flutter 3.27+, which would
+# break the `flutter: ">=1.12.0"` constraint in pubspec.yaml.
+analyzer:
+  errors:
+    deprecated_member_use: ignore
+    unawaited_return_in_try_block: ignore
+
 linter:
   # The lint rules applied to this project can be customized in the
   # section below to disable rules from the `package:flutter_lints/flutter.yaml`

@@ -36,16 +36,24 @@ workflows:
       - *create_dot_env_file
       - certificate-and-profile-installer@1: {}
       - flutter-installer@0: {}
+      - script@1:
+          title: Disable Swift Package Manager
+          inputs:
+            - content: flutter config --no-enable-swift-package-manager
       - cache-pull@2: {}
+      - flutter-analyze@0: { }
       - script@1:
           title: Dart format
           inputs:
-            - content: dart format ./ --line-length 120 --fix --set-exit-if-changed
-      - flutter-analyze@0: {}
+            - content: dart format ./ --line-length 120 --set-exit-if-changed
       - script@1:
           title: Dart Analyze
           inputs:
-            - content: dart pub publish --dry-run
+            - content: |-
+                # flutter-analyze rewrites analysis_options.yaml, which makes the
+                # dry-run refuse to publish from a dirty tree
+                git checkout -- analysis_options.yaml
+                dart pub publish --dry-run
       - script@1:
           title: Reactivate JunitReport
           inputs:
@@ -64,12 +72,6 @@ workflows:
             - project_path: example/ios/Runner.xcworkspace
             - scheme: Runner
             - distribution_method: enterprise
-            - output_tool: xcpretty
-      - export-xcarchive:
-          title: Export app-store IPA
-          inputs:
-          - archive_path: $BITRISE_XCARCHIVE_PATH
-          - export_method: enterprise
       - cache-push@2: {}
       - deploy-to-bitrise-io@2: {}
 

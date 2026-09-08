@@ -1,3 +1,5 @@
+@file:OptIn(com.onfido.android.sdk.capture.internal.util.annotation.InternalOnfidoApi::class)
+
 package com.onfido.sdk.flutter.serializer
 
 import com.onfido.android.sdk.capture.utils.CountryCode
